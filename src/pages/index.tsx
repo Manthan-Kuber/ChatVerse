@@ -28,9 +28,9 @@ const Home: NextPage = () => {
           width={240}
           height={240}
           alt="logo"
-          className="mx-auto md:w-[320px] md:mb-4 "
+          className="mx-auto md:mb-4 md:w-[320px] "
         />
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-6xl ">
+        <h1 className="font-ubuntu text-5xl font-extrabold leading-normal text-gray-700 md:text-6xl">
           Chat<span className="text-lime-300">Verse</span>
         </h1>
         {/* {session ? (
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
         )} */}
         <div className="mt-4 flex gap-4 md:mt-8">
           <a
-            className="flex items-center gap-2 rounded-md border border-neutral-500 bg-neutral-800 px-3 py-1 font-semibold transition-all duration-200 hover:bg-neutral-700"
+            className="font flex items-center gap-2 rounded-md border border-neutral-500 bg-neutral-800 px-3 py-1 font-semibold transition-all duration-200 hover:bg-neutral-700"
             href="https://github.com/Manthan-Kuber/ChatVerse"
             target="_blank"
             rel="noreferer"
