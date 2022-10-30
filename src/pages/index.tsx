@@ -1,9 +1,9 @@
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { BsGithub } from "react-icons/bs";
+import ThemeButton from "../components/ThemeButton";
 
 const Home: NextPage = () => {
   // const { data: session } = useSession();
@@ -16,13 +16,8 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>ChatVerse</title>
-        <meta name="description" content="ChatVerse - a chat app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className="container mx-auto flex min-h-screen min-w-full flex-col items-center justify-center p-4  dark:bg-black dark:text-white">
+      <ThemeButton />
+      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4 ">
         <Image
           src="/undraw_group_chat_re_frmo.svg"
           width={240}
@@ -55,7 +50,7 @@ const Home: NextPage = () => {
         )} */}
         <div className="mt-4 flex gap-4 md:mt-8">
           <a
-            className="font flex items-center gap-2 rounded-md border border-neutral-500 bg-neutral-800 px-3 py-1 font-semibold transition-all duration-200 hover:bg-neutral-700"
+            className="font flex items-center gap-2 rounded-md border border-white bg-neutral-800 px-3 py-1 font-semibold text-white transition-all duration-200 hover:bg-neutral-700 dark:border-neutral-500"
             href="https://github.com/Manthan-Kuber/ChatVerse"
             target="_blank"
             rel="noreferer"
@@ -63,7 +58,7 @@ const Home: NextPage = () => {
             <BsGithub />
             Github
           </a>
-          <button className=" rounded-md  border border-neutral-500 bg-neutral-800 px-3 py-1 font-semibold transition-all duration-200 hover:bg-neutral-700">
+          <button className="rounded-md border border-white  bg-neutral-800 px-3 py-1 font-semibold text-white transition-all duration-200 hover:bg-neutral-700 dark:border-neutral-500">
             Get Started
           </button>
         </div>
