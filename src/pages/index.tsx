@@ -1,12 +1,18 @@
 import { type NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { BsGithub } from "react-icons/bs";
 
 const Home: NextPage = () => {
-  const { data: session } = useSession();
-  session && console.log(session);
-
-  const handleAuth = () => (session ? signOut() : signIn());
+  // const { data: session } = useSession();
+  // const { push, asPath } = useRouter();
+  // session && console.log(session);
+  // const handleAuth = () => {
+  //   if (!session) push(`/auth/signin?callbackUrl=${asPath}`);
+  //   else signOut({ redirect: false });
+  // };
 
   return (
     <>
@@ -16,27 +22,51 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto flex min-h-screen flex-col items-center justify-center p-4">
-        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-[5rem]">
+      <main className="container mx-auto flex min-h-screen min-w-full flex-col items-center justify-center p-4  dark:bg-black dark:text-white">
+        <Image
+          src="/undraw_group_chat_re_frmo.svg"
+          width={240}
+          height={240}
+          alt="logo"
+          className="mx-auto md:w-[320px] md:mb-4 "
+        />
+        <h1 className="text-5xl font-extrabold leading-normal text-gray-700 md:text-6xl ">
           Chat<span className="text-lime-300">Verse</span>
         </h1>
-        {session ? (
-          <h1 className="text-3xl font-bold ">
-            You are signed in as {session.user?.email}
-          </h1>
+        {/* {session ? (
+          <>
+            <h1 className="text-5xl font-bold md:text-3xl">
+              You are signed in as {session.user?.email}
+            </h1>
+            <p>{session.user?.name}</p>
+            <Image
+              src={`${session.user?.image}`}
+              alt={`${session.user?.name}'s profile pic`}
+              width={200}
+              height={200}
+            ></Image>
+          </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold ">
+            <h1 className="text-2xl font-bold md:text-3xl ">
               Not Signed In, Please Sign in
             </h1>
           </>
-        )}
-        <button
-          onClick={handleAuth}
-          className="text- mt-2 rounded-md border border-gray-700 px-2  pb-1 text-2xl font-semibold text-gray-500"
-        >
-          {session ? "SignOut" : "SignIn"}
-        </button>
+        )} */}
+        <div className="mt-4 flex gap-4 md:mt-8">
+          <a
+            className="flex items-center gap-2 rounded-md border border-neutral-500 bg-neutral-800 px-3 py-1 font-semibold transition-all duration-200 hover:bg-neutral-700"
+            href="https://github.com/Manthan-Kuber/ChatVerse"
+            target="_blank"
+            rel="noreferer"
+          >
+            <BsGithub />
+            Github
+          </a>
+          <button className=" rounded-md  border border-neutral-500 bg-neutral-800 px-3 py-1 font-semibold transition-all duration-200 hover:bg-neutral-700">
+            Get Started
+          </button>
+        </div>
       </main>
     </>
   );
