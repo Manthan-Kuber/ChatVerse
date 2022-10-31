@@ -2,26 +2,32 @@ import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
-
+import type { ReactElement, ReactNode } from "react";
+import type { NextPage } from "next";
+import type { AppProps } from "next/app";
 import "../styles/globals.css";
-import Head from "next/head";
-import { useRouter } from "next/router";
+import Layout from "../components/Layout";
 
-const MyApp: AppType<{ session: Session | null }> = ({
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
-}) => {
-  const { asPath } = useRouter();
-  return (
+}: AppPropsWithLayout ) => {
+  const getLayout = Component.getLayout ?? ((page) => page);
+  return getLayout(
     <>
-      <Head>
-        <title>ChatVerse - {asPath === "/" ? "Home" : asPath}</title>
-        <meta name="description" content="ChatVerse - a chat app" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <SessionProvider session={session}>
         <ThemeProvider attribute="class" enableSystem>
-          <Component {...pageProps} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ThemeProvider>
       </SessionProvider>
     </>
