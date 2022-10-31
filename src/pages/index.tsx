@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { BsGithub } from "react-icons/bs";
 import ChatVerseText from "../components/ChatVerseText";
-import Header from "../components/Header";
+
+
 
 const Home: NextPage = () => {
   // const { data: session } = useSession();

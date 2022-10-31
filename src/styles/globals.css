@@ -1,8 +1,9 @@
 @tailwind base;
 @tailwind components;
-
-.link-btn {
-    @apply rounded-md border border-black text-black dark:bg-neutral-800 px-3 py-1 font-semibold dark:text-white transition-all duration-200 dark:hover:bg-neutral-700 hover:bg-neutral-100 dark:border-neutral-500
-}
-
 @tailwind utilities;
+
+@layer components {
+    .link-btn {
+        @apply rounded-md border border-black text-black dark:bg-neutral-800 px-3 py-1 font-semibold dark:text-white transition-all duration-200 dark:hover:bg-neutral-700 hover:bg-neutral-100 dark:border-neutral-500
+    }
+}

@@ -4,10 +4,21 @@ import { useRouter } from "next/router";
 
 const Layout = ({ children }: { children: React.ReactElement }) => {
   const { pathname } = useRouter();
+  const getCurrTitle = () => {
+    switch (pathname) {
+      case "/":
+        return " - Home";
+      case "/auth/signin":
+        return " - SignIn";
+      default:
+        return "";
+    }
+  };
+  console.log(pathname);
   return (
     <>
       <Head>
-        <title>ChatVerse - {pathname === "/" ? "Home" : pathname}</title>
+        <title>ChatVerse {getCurrTitle()}</title>
         <meta name="description" content="ChatVerse - a chat app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

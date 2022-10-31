@@ -10,26 +10,29 @@ const Header = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
   const themeChanger = () => {
     if (!mounted) return null; //Render button only if component has mounted
     const currTheme = theme === "system" ? systemTheme : theme;
 
-    if (currTheme === "dark")
-      return (
-        <button>
-          <BsFillSunFill
-            className="h-7 w-7"
-            onClick={() => setTheme("light")}
-          />
-        </button>
+    const currIcon =
+      currTheme === "dark" ? (
+        <BsFillSunFill className="h-7 w-7" />
+      ) : (
+        <BsMoonFill className="h-7 w-7" />
       );
-    else
-      return (
-        <button>
-          <BsMoonFill className="h-7 w-7" onClick={() => setTheme("dark")} />
-        </button>
-      );
+
+    return (
+      <button
+        onClick={() =>
+          currTheme === "dark" ? setTheme("light") : setTheme("dark")
+        }
+      >
+        {currIcon}
+      </button>
+    );
   };
+
   return (
     <header className=" flex w-full items-center justify-between p-4">
       <ChatVerseText textSize="text-2xl" mdTextSize="md:text-3xl" />
