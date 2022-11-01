@@ -14,11 +14,11 @@ const Layout = ({ children }: { children: React.ReactElement }) => {
         return "";
     }
   };
-  console.log(pathname);
   return (
     <>
       <Head>
-        <title>ChatVerse {getCurrTitle()}</title>
+        {/* Title element should strictly have a single child */}
+        <title>{`ChatVerse ${getCurrTitle()}`}</title>
         <meta name="description" content="ChatVerse - a chat app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
