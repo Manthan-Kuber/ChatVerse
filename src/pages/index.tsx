@@ -58,7 +58,7 @@ const Home: NextPage = () => {
           </>
         )} */}
         <motion.div
-          className="mt-4 flex gap-4 md:mt-8"
+          className="mt-4 flex gap-4 md:mt-8 "
           variants={stagger}
           initial="initial"
           animate="animate"
