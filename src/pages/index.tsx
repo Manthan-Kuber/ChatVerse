@@ -23,7 +23,7 @@ const Home: NextPage = () => {
   return (
     <>
       <motion.section
-        className="container mx-auto flex min-h-full flex-grow flex-col items-center justify-center "
+        className="centered-section"
         key="main_section" //Required for exit animation
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

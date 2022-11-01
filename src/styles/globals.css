@@ -6,4 +6,17 @@
     .link-btn {
         @apply rounded-md border border-black text-black dark:bg-neutral-800 px-3 py-1 font-semibold dark:text-white transition-all duration-200 dark:hover:bg-neutral-700 hover:bg-neutral-100 dark:border-neutral-500
     }
+    .centered-section{
+        @apply container mx-auto flex min-h-full flex-grow flex-col items-center justify-center
+    }
 }
+
+
+@layer base {
+    html {
+      @apply font-ubuntu
+    }
+    li{
+        list-style: none;
+    }
+  }
