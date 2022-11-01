@@ -9,6 +9,9 @@ module.exports = {
       fontFamily: {
         ubuntu: ["Ubuntu", ...defaultTheme.fontFamily.sans],
       },
+      screens:{
+        xs:"380px"
+      }
     },
   },
   plugins: [],
