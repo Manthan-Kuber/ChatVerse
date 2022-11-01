@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { BsGithub } from "react-icons/bs";
 import ChatVerseText from "../components/ChatVerseText";
-
-
+import { motion } from "framer-motion";
+import { fadeInUp, stagger } from "../animations/animations";
+import { AnimatePresence } from "framer-motion";
 
 const Home: NextPage = () => {
   // const { data: session } = useSession();
@@ -17,9 +18,17 @@ const Home: NextPage = () => {
   //   else signOut({ redirect: false });
   // };
 
+  const MotionLink = motion(Link);
+
   return (
     <>
-      <section className="container mx-auto flex min-h-full flex-grow flex-col items-center justify-center ">
+      <motion.section
+        className="container mx-auto flex min-h-full flex-grow flex-col items-center justify-center "
+        key="main_section" //Required for exit animation
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
         <Image
           src="/undraw_group_chat_re_frmo.svg"
           width={240}
@@ -48,24 +57,33 @@ const Home: NextPage = () => {
             </h1>
           </>
         )} */}
-        <div className="mt-4 flex gap-4 md:mt-8">
-          <a
-            className="flex items-center gap-2 link-btn"
+        <motion.div
+          className="mt-4 flex gap-4 md:mt-8"
+          variants={stagger}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.a
+            className="link-btn flex items-center gap-2"
             href="https://github.com/Manthan-Kuber/ChatVerse"
             target="_blank"
             rel="noreferer"
+            variants={fadeInUp}
+            whileTap={{ scale: 0.95 }}
           >
             <BsGithub />
             Github
-          </a>
-          <Link
+          </motion.a>
+          <MotionLink
             className="link-btn"
             href="/auth/signin"
+            variants={fadeInUp}
+            whileTap={{ scale: 0.95 }}
           >
             Start Chatting
-          </Link>
-        </div>
-      </section>
+          </MotionLink>
+        </motion.div>
+      </motion.section>
     </>
   );
 };

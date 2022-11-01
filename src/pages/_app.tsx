@@ -7,6 +7,7 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import Layout from "../components/Layout";
+import { AnimatePresence } from "framer-motion";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,15 +20,17 @@ type AppPropsWithLayout = AppProps & {
 const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
-}: AppPropsWithLayout ) => {
+}: AppPropsWithLayout) => {
   const getLayout = Component.getLayout ?? ((page) => page);
   return getLayout(
     <>
       <SessionProvider session={session}>
         <ThemeProvider attribute="class" enableSystem>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <AnimatePresence mode="wait">
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </AnimatePresence>
         </ThemeProvider>
       </SessionProvider>
     </>
