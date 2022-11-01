@@ -6,6 +6,7 @@ import { BsTwitter } from "react-icons/bs";
 import { BsGithub } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
 import { FaDiscord } from "react-icons/fa";
+import { useRef } from "react";
 
 const SocialIconsList = [
   { id: 0, iconType: BsGoogle },
@@ -19,6 +20,7 @@ const SocialIconsList = [
 ));
 
 const Signin = () => {
+  const emailInputRef = useRef();
   return (
     <motion.section
       className="md:centered-section px-auto mx-auto mt-[25%] min-h-full w-[min(100%,473px)] md:mt-0"
@@ -39,6 +41,7 @@ const Signin = () => {
             inputName="email"
             label="Email"
             placeholder="Enter Your Email"
+            inputRef={emailInputRef}
           />
           <button
             className="mt-4 w-full rounded-lg bg-gradient-to-l from-lime-500 via-green-500 to-lime-500 px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200"

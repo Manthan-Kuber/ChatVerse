@@ -8,5 +8,6 @@ type InputProps = {
   inputName: string;
   type?: "email";
   label: string;
-  placeholder?:string;
+  placeholder?: string;
+  inputRef: MutableRefObject<undefined>;
 };
