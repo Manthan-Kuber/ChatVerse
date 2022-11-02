@@ -30,7 +30,7 @@ const Footer = () => {
       <ul className="mx-2 flex items-center gap-2">{techStackList}</ul>
       <span className="text-xs xs:text-sm  sm:text-lg">by</span>
       <a
-        className="ml-1 -mt-1 italic"
+        className="ml-1 italic"
         href="https://github.com/Manthan-Kuber"
         target="_blank"
         rel="noreferer"

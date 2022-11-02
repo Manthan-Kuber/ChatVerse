@@ -17,9 +17,9 @@ const Header = () => {
 
     const currIcon =
       currTheme === "dark" ? (
-        <BsFillSunFill className="h-7 w-7" />
+        <BsFillSunFill className="h-9 w-9 rounded-full p-2 transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-500 " />
       ) : (
-        <BsMoonFill className="h-7 w-7" />
+        <BsMoonFill className="h-9 w-9 rounded-full p-2 transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-500 " />
       );
 
     return (
