@@ -2,13 +2,12 @@ import { motion } from "framer-motion";
 import ChatVerseText from "../../components/ChatVerseText";
 import Input from "../../components/Input";
 import SocialIcon from "../../components/SocialIcon";
-import { BsTwitter } from "react-icons/bs";
-import { BsGithub } from "react-icons/bs";
-import { BsGoogle } from "react-icons/bs";
+import { BsTwitter, BsGithub, BsGoogle } from "react-icons/bs";
 import { FaDiscord } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Loader from "../../components/Loader";
 
 const SocialIconsList = [
   { id: 0, iconType: BsGoogle },
@@ -36,6 +35,7 @@ const Signin = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -43,6 +43,7 @@ const Signin = () => {
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data);
+    reset();
   };
 
   return (
@@ -52,12 +53,12 @@ const Signin = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <div className=" rounded-3xl p-4 md:border md:border-neutral-300 md:p-8">
+      <div className=" rounded-3xl p-4 md:p-8 md:shadow-lg  md:shadow-neutral-500 ">
         <ChatVerseText textSize="text-xl" mdTextSize="md:text-2xl" />
         <h2 className="text-md mt-2 mb-6 text-neutral-600 dark:text-white/50 md:text-lg">
           Start Chatting Now!
         </h2>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Input
             inputName="email"
             label="Email"
@@ -67,11 +68,13 @@ const Signin = () => {
             isError={!!errors.email?.message}
             errorMessage={errors.email?.message ? errors.email.message : ""}
           />
+          {/* disable button while loading */}
           <button
-            className="mt-4 w-full rounded-lg bg-gradient-to-l from-lime-500 via-green-500 to-lime-500 px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200"
+            className="mt-4 w-full rounded-lg bg-gradient-to-l from-lime-500 to-green-500  px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200 hover:from-lime-600 hover:to-green-600 "
             type="submit"
           >
-            Sign In
+            {/*Condition from useSession's loading prop */}
+            {false ? <Loader /> : "Sign In"}
           </button>
         </form>
         <div>
