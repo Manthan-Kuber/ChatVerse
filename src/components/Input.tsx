@@ -23,7 +23,7 @@ const Input = ({
               isError
                 ? "border-red-500 focus:border-red-500"
                 : "border-neutral-500 focus:border-lime-300"
-            } py-2 px-10 focus:border-transparent focus:outline-none
+            } py-2 px-10 focus:outline-none
             `}
             placeholder={placeholder}
             name={inputName}
