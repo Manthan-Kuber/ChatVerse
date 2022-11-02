@@ -4,10 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { BsGithub } from "react-icons/bs";
+import { AiOutlineRight } from "react-icons/ai";
 import ChatVerseText from "../components/ChatVerseText";
 import { motion } from "framer-motion";
 import { fadeInUp, stagger } from "../animations/animations";
-import { AnimatePresence } from "framer-motion";
 
 const Home: NextPage = () => {
   // const { data: session } = useSession();
@@ -75,12 +75,13 @@ const Home: NextPage = () => {
             Github
           </motion.a>
           <MotionLink
-            className="link-btn"
+            className="link-btn flex items-center gap-2"
             href="/auth/signin"
             variants={fadeInUp}
             whileTap={{ scale: 0.95 }}
           >
             Start Chatting
+            <AiOutlineRight className="animate-sideSway" />
           </MotionLink>
         </motion.div>
       </motion.section>
