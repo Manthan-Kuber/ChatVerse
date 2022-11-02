@@ -6,8 +6,10 @@ type ChatVerseTextProps = {
 
 type InputProps = {
   inputName: string;
-  type?: "email";
+  type?: "email" | "text";
   label: string;
   placeholder?: string;
-  inputRef: MutableRefObject<undefined>;
+  register: UseFormRegister<FieldValues>;
+  isError: boolean;
+  errorMessage:string;
 };

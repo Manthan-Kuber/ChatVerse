@@ -6,24 +6,48 @@ import { BsTwitter } from "react-icons/bs";
 import { BsGithub } from "react-icons/bs";
 import { BsGoogle } from "react-icons/bs";
 import { FaDiscord } from "react-icons/fa";
-import { useRef } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const SocialIconsList = [
   { id: 0, iconType: BsGoogle },
   { id: 1, iconType: FaDiscord },
   { id: 2, iconType: BsGithub },
   { id: 3, iconType: BsTwitter },
-].map(({ iconType }) => (
-  <li>
+].map(({ iconType, id }) => (
+  <li key={id}>
     <SocialIcon Icon={iconType} />
   </li>
 ));
 
+type FormValues = {
+  email: string;
+};
+
+const formSchema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Please enter your email" })
+    .email({ message: "Please enter a valid email" }),
+});
+
 const Signin = () => {
-  const emailInputRef = useRef();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    console.log(data);
+  };
+
   return (
     <motion.section
-      className="md:centered-section px-auto mx-auto mt-[25%] min-h-full w-[min(100%,473px)] md:mt-0"
+      className="md:centered-section px-auto mx-auto mt-[4%] min-h-full w-[min(100%,473px)] md:mt-0"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -33,15 +57,15 @@ const Signin = () => {
         <h2 className="text-md mt-2 mb-6 text-neutral-600 dark:text-white/50 md:text-lg">
           Start Chatting Now!
         </h2>
-        {/* <h3 className="mt-4  text-lg font-semibold tracking-wider md:text-xl ">
-          SignIn
-        </h3> */}
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Input
             inputName="email"
             label="Email"
             placeholder="Enter Your Email"
-            inputRef={emailInputRef}
+            register={register}
+            type="email"
+            isError={!!errors.email?.message}
+            errorMessage={errors.email?.message ? errors.email.message : ""}
           />
           <button
             className="mt-4 w-full rounded-lg bg-gradient-to-l from-lime-500 via-green-500 to-lime-500 px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200"
