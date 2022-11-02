@@ -7,7 +7,8 @@ const techStackList = [
   {
     id: 0,
     Icon: SiTypescript,
-    className: "text-[#3178c6] bg-white border-[0.5px] rounded-sm overflow-hidden",
+    className:
+      "text-[#3178c6] bg-white border-[0.5px] rounded-sm overflow-hidden",
   },
   {
     id: 1,
@@ -25,16 +26,16 @@ const techStackList = [
 const Footer = () => {
   return (
     <footer className="flex items-center justify-center p-5 text-lg md:text-xl ">
-      <span className="text-xs xs:text-sm  sm:text-base">Made with</span>
+      <span className="text-xs xs:text-sm  sm:text-lg">Made with</span>
       <ul className="mx-2 flex items-center gap-2">{techStackList}</ul>
-      <span className="text-xs xs:text-sm  sm:text-base">by</span>
+      <span className="text-xs xs:text-sm  sm:text-lg">by</span>
       <a
         className="ml-1 -mt-1 italic"
         href="https://github.com/Manthan-Kuber"
         target="_blank"
         rel="noreferer"
       >
-        <span className="text-xs xs:text-sm  sm:text-base">Manthan Kuber</span>
+        <span className="text-xs xs:text-sm  sm:text-lg">Manthan Kuber</span>
       </a>
     </footer>
   );
