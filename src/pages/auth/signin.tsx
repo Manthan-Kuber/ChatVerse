@@ -68,14 +68,19 @@ const Signin = () => {
             isError={!!errors.email?.message}
             errorMessage={errors.email?.message ? errors.email.message : ""}
           />
-          {/* disable button while loading */}
-          <button
-            className="mt-8 w-full rounded-lg bg-gradient-to-l from-lime-500 to-green-500  px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200 hover:from-lime-600 hover:to-green-600 "
-            type="submit"
-          >
-            {/*Condition from useSession's loading prop */}
-            {false ? <Loader /> : "Sign In"}
-          </button>
+          <div className="mt-8">
+            <p className="text-neutral-500 dark:text-white/70 text-center w-full text-sm ">
+              Sign In with a one-time link
+            </p>
+            {/* disable button while loading */}
+            <button
+              className="mt-2 w-full rounded-lg bg-gradient-to-l from-lime-500 to-green-500  px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200 hover:from-lime-600 hover:to-green-600 "
+              type="submit"
+            >
+              {/*Condition from useSession's loading prop */}
+              {false ? <Loader /> : "Sign In With Magic Link ✨"}
+            </button>
+          </div>
         </form>
         <div>
           <div className=" mt-8 flex items-center gap-2">
