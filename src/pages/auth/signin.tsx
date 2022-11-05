@@ -8,14 +8,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Loader from "../../components/Loader";
+import { signIn, useSession } from "next-auth/react";
 
 const SocialIconsList = [
-  { id: 0, iconType: BsGoogle },
-  { id: 1, iconType: FaDiscord },
-  { id: 2, iconType: BsGithub },
-  { id: 3, iconType: BsTwitter },
-].map(({ iconType, id }) => (
-  <li key={id}>
+  { id: 0, name: "google", iconType: BsGoogle },
+  { id: 1, name: "discord", iconType: FaDiscord },
+  { id: 2, name: "github", iconType: BsGithub },
+  // { id: 3, iconType: BsTwitter }, Change Later
+].map(({ iconType, id, name }) => (
+  <li key={id} onClick={() => signIn(name)}>
     <SocialIcon Icon={iconType} />
   </li>
 ));
@@ -41,9 +42,13 @@ const Signin = () => {
     resolver: zodResolver(formSchema),
   });
 
+  const { data: session } = useSession();
+  console.log(session);
+
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
     reset();
+    console.log(data);
+    signIn("email", { email: data });
   };
 
   return (
@@ -69,7 +74,7 @@ const Signin = () => {
             errorMessage={errors.email?.message ? errors.email.message : ""}
           />
           <div className="mt-8">
-            <p className="text-neutral-500 dark:text-white/70 text-center w-full text-sm ">
+            <p className="w-full text-center text-sm text-neutral-500 dark:text-white/70 ">
               Sign In with a one-time link
             </p>
             {/* disable button while loading */}
@@ -78,7 +83,7 @@ const Signin = () => {
               type="submit"
             >
               {/*Condition from useSession's loading prop */}
-              {false ? <Loader /> : "Sign In With Magic Link ✨"}
+              {false ? <Loader /> : "Sign In With Magic Link 🔮"}
             </button>
           </div>
         </form>
