@@ -3,9 +3,8 @@ import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import DiscordProvider from "next-auth/providers/discord";
 import EmailProvider from "next-auth/providers/email";
-// Prisma adapter for NextAuth, optional and can be removed
+// Prisma adapter for NextAuth, optional and can be remove (Needed for Email Auth)
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-
 import { env } from "../../../env/server.mjs";
 import { prisma } from "../../../server/db/client";
 
@@ -19,7 +18,6 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -35,10 +33,17 @@ export const authOptions: NextAuthOptions = {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
-    // EmailProvider({
-    //   server: env.EMAIL_SERVER,
-    //   from: env.EMAIL_FROM,
-    // }),
+    EmailProvider({
+      server: {
+        host: env.EMAIL_SERVER_HOST,
+        port: env.EMAIL_SERVER_PORT,
+        auth: {
+          user: env.EMAIL_SERVER_USER,
+          pass: env.EMAIL_SERVER_PASSWORD,
+        },
+      },
+      from: env.EMAIL_FROM,
+    }),
     // ...add more providers here
   ],
   pages: {

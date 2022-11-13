@@ -8,7 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Loader from "../../components/Loader";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 const SocialIconsList = [
   { id: 0, name: "google", iconType: BsGoogle },
@@ -42,13 +42,9 @@ const Signin = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const { data: session } = useSession();
-  console.log(session);
-
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
+  const onSubmit: SubmitHandler<FormValues> = ({ email }) => {
+    signIn("email", { email });
     reset();
-    console.log(data);
-    signIn("email", { email: data });
   };
 
   return (
