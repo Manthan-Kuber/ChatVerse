@@ -37,14 +37,15 @@ const Signin = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors,isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
 
-  const onSubmit: SubmitHandler<FormValues> = ({ email }) => {
-    signIn("email", { email });
-    reset();
+
+  const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
+    const res = await signIn("email", { email });
+    if (res?.ok) reset();
   };
 
   return (
@@ -70,17 +71,16 @@ const Signin = () => {
             errorMessage={errors.email?.message ? errors.email.message : ""}
           />
           <div className="mt-8">
-            <p className="w-full text-center text-sm text-neutral-500 dark:text-white/70 ">
-              Sign In with a one-time link
-            </p>
-            {/* disable button while loading */}
             <button
-              className="mt-2 w-full rounded-lg bg-gradient-to-l from-lime-500 to-green-500  px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200 hover:from-lime-600 hover:to-green-600 "
+              className="mt-2 w-full rounded-lg bg-gradient-to-l from-lime-500 to-green-500  px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200 hover:from-lime-600 hover:to-green-600 disabled:cursor-not-allowed disabled:from-lime-600 disabled:to-green-600"
               type="submit"
+              disabled={isSubmitting}
             >
-              {/*Condition from useSession's loading prop */}
-              {false ? <Loader /> : "Sign In With Magic Link 🔮"}
+              {isSubmitting ? <Loader /> : "Sign In With Magic Link 🔮"}
             </button>
+            <p className="w-full mt-2 text-center text-sm text-neutral-500 dark:text-white/70 ">
+              Please check spam folder as well for the email
+            </p>
           </div>
         </form>
         <div>
