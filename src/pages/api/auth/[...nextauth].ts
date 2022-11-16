@@ -11,9 +11,34 @@ import { prisma } from "../../../server/db/client";
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session({ session, user }) {
+    async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
+        if (!session.user.name && session.user.email) {
+          const email = session.user.email;
+          const placeholderName = email
+            .split("@")[0]
+            ?.toUpperCase()[0]
+            ?.concat(email.split("@")[0]?.substring(1)!);
+          await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              name: placeholderName,
+            },
+          });
+        }
+        if (!session.user.image)
+          await prisma.user.update({
+            where: {
+              id: user.id,
+            },
+            data: {
+              image:
+                "https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2662&q=80",
+            },
+          });
       }
       return session;
     },
