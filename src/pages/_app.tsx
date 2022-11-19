@@ -8,6 +8,7 @@ import Layout from "../components/Layout";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import Loader from "../components/Loader";
+import CustomHead from "../components/CustomHead";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -21,21 +22,18 @@ const MyApp = ({
   Component,
   pageProps: { session, ...pageProps },
 }: AppPropsWithLayout) => {
-  const getLayout = Component.getLayout ?? ((page) => page);
-  return getLayout(
+  const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>); //Default Layout if no per page layout
+  return (
     <>
+      <CustomHead />
       <SessionProvider session={session}>
         <ThemeProvider attribute="class" enableSystem>
           <AnimatePresence mode="wait">
-            <Layout>
-              {Component.auth ? (
-                <Auth>
-                  <Component {...pageProps} />
-                </Auth>
-              ) : (
-                <Component {...pageProps} />
-              )}
-            </Layout>
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
           </AnimatePresence>
         </ThemeProvider>
       </SessionProvider>
