@@ -9,6 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Loader from "../../components/Loader";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+
+const callbackUrl = "/chats";
 
 const SocialIconsList = [
   { id: 0, name: "google", iconType: BsGoogle },
@@ -16,7 +19,13 @@ const SocialIconsList = [
   { id: 2, name: "github", iconType: BsGithub },
   // { id: 3, iconType: BsTwitter }, Change Later
 ].map(({ iconType, id, name }) => (
-  <li key={id} onClick={() => signIn(name)}>
+  <li
+    key={id}
+    onClick={async () => {
+      const res = await signIn(name, { callbackUrl });
+      res?.ok && useRouter().push(callbackUrl);
+    }}
+  >
     <SocialIcon Icon={iconType} />
   </li>
 ));
@@ -37,15 +46,19 @@ const Signin = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors,isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
   });
 
+  const { push } = useRouter();
 
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
-    const res = await signIn("email", { email });
-    if (res?.ok) reset();
+    const res = await signIn("email", { email, callbackUrl });
+    if (res?.ok && res?.url) {
+      reset();
+      push(res.url);
+    }
   };
 
   return (
@@ -78,7 +91,7 @@ const Signin = () => {
             >
               {isSubmitting ? <Loader /> : "Sign In With Magic Link 🔮"}
             </button>
-            <p className="w-full mt-2 text-center text-sm text-neutral-500 dark:text-white/70 ">
+            <p className="mt-2 w-full text-center text-sm text-neutral-500 dark:text-white/70 ">
               Please check spam folder as well for the email
             </p>
           </div>

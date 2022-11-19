@@ -1,5 +1,6 @@
 import { useSession, signOut } from "next-auth/react";
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BsMoonFill, BsFillSunFill } from "react-icons/bs";
 import ChatVerseText from "./ChatVerseText";
@@ -37,11 +38,16 @@ const Header = () => {
 
   return (
     <header className=" flex w-full items-center justify-between p-4">
-      <ChatVerseText textSize="text-2xl" mdTextSize="md:text-3xl" />
+      <Link href="/">
+        <ChatVerseText textSize="text-2xl" mdTextSize="md:text-3xl" />
+      </Link>
       <div className="flex items-center ">
         {/* Logout button to be added here */}
         {/* If you need to redirect to another page but you want to avoid a page reload, you can try: const data = await signOut({redirect: false, callbackUrl: "/foo"}) where data.url is the validated URL you can redirect the user to without any flicker by using Next.js's useRouter().push(data.url) */}
+        {/* TODO Dropdown menu if needed */}
+        {/* TODO Styling for name */}
         {session && session.user?.name}
+        {/* TODO Change Logout Button Styles */}
         {session && (
           <button onClick={() => signOut({ redirect: false })}>Logout</button>
         )}

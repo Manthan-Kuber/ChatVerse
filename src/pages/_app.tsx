@@ -1,6 +1,4 @@
-import { type AppType } from "next/app";
-import { type Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import type { ReactElement, ReactNode } from "react";
 import type { NextPage } from "next";
@@ -8,13 +6,14 @@ import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import Layout from "../components/Layout";
 import { AnimatePresence } from "framer-motion";
+import { useRouter } from "next/router";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout;
+  Component: NextPageWithLayout & { auth: boolean; unauthorized: string };
 };
 
 const MyApp = ({
@@ -28,7 +27,13 @@ const MyApp = ({
         <ThemeProvider attribute="class" enableSystem>
           <AnimatePresence mode="wait">
             <Layout>
-              <Component {...pageProps} />
+              {Component.auth ? (
+                <Auth>
+                  <Component {...pageProps} />
+                </Auth>
+              ) : (
+                <Component {...pageProps} />
+              )}
             </Layout>
           </AnimatePresence>
         </ThemeProvider>
@@ -38,3 +43,20 @@ const MyApp = ({
 };
 
 export default MyApp;
+
+//TODO: Add redirect for authenticated user
+function Auth({ children }: { children: ReactNode }) {
+  const { status } = useSession();
+  const { replace } = useRouter();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (status === "unauthenticated") {
+    replace("/auth/signin");
+    return null;
+  }
+
+  return <>{children}</>;
+}
