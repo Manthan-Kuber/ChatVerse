@@ -7,6 +7,7 @@ import "../styles/globals.css";
 import Layout from "../components/Layout";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
+import Loader from "../components/Loader";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -44,13 +45,12 @@ const MyApp = ({
 
 export default MyApp;
 
-//TODO: Add redirect for authenticated user
 function Auth({ children }: { children: ReactNode }) {
   const { status } = useSession();
   const { replace } = useRouter();
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (status === "unauthenticated") {

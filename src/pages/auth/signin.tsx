@@ -8,7 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Loader from "../../components/Loader";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 
 const callbackUrl = "/chats";
@@ -22,7 +22,7 @@ const SocialIconsList = [
   <li
     key={id}
     onClick={async () => {
-      const res = await signIn(name, { callbackUrl });
+      const res = await signIn(name, { redirect: false, callbackUrl });
       res?.ok && useRouter().push(callbackUrl);
     }}
   >
@@ -51,10 +51,20 @@ const Signin = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const { push } = useRouter();
+  const { push, replace } = useRouter();
+  const { status } = useSession();
+
+  if (status === "loading") {
+    return <Loader />;
+  }
+
+  if (status === "authenticated") {
+    replace(callbackUrl);
+    return <></>;
+  }
 
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
-    const res = await signIn("email", { email, callbackUrl });
+    const res = await signIn("email", { redirect: false, email, callbackUrl });
     if (res?.ok && res?.url) {
       reset();
       push(res.url);
