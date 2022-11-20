@@ -7,7 +7,7 @@ import { BsGithub } from "react-icons/bs";
 import { AiOutlineRight } from "react-icons/ai";
 import ChatVerseText from "../components/ChatVerseText";
 import { motion } from "framer-motion";
-import { fadeInUp, stagger } from "../animations/animations";
+import { fadeInOut, fadeInUp, stagger } from "../animations/animations";
 
 const Home: NextPage = () => {
   // const { data: session } = useSession();
@@ -25,9 +25,10 @@ const Home: NextPage = () => {
       <motion.section
         className="centered-section"
         key="main_section" //Required for exit animation
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
+        variants={fadeInOut}
+        initial="initial"
+        animate="animate"
+        exit="exit"
       >
         <Image
           src="/undraw_group_chat_re_frmo.svg"

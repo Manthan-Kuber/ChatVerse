@@ -44,7 +44,6 @@ const Header = () => {
       <div className="flex items-center ">
         {/* Logout button to be added here */}
         {/* If you need to redirect to another page but you want to avoid a page reload, you can try: const data = await signOut({redirect: false, callbackUrl: "/foo"}) where data.url is the validated URL you can redirect the user to without any flicker by using Next.js's useRouter().push(data.url) */}
-        {/* TODO Dropdown menu if needed */}
         {/* TODO Styling for name */}
         {session && session.user?.name}
         {/* TODO Change Logout Button Styles */}
