@@ -22,8 +22,12 @@ const SocialIconsList = [
   <li
     key={id}
     onClick={async () => {
-      const res = await signIn(name, { redirect: false, callbackUrl });
-      res?.ok && useRouter().push(callbackUrl);
+      try {
+        const res = await signIn(name, { redirect: false, callbackUrl });
+        res?.ok && useRouter().push(callbackUrl);
+      } catch (err) {
+        console.log(err);
+      }
     }}
   >
     <SocialIcon Icon={iconType} />
@@ -64,10 +68,18 @@ const Signin = () => {
   }
 
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
-    const res = await signIn("email", { redirect: false, email, callbackUrl });
-    if (res?.ok && res?.url) {
-      reset();
-      push(res.url);
+    try {
+      const res = await signIn("email", {
+        redirect: false,
+        email,
+        callbackUrl,
+      });
+      if (res?.ok && res?.url) {
+        reset();
+        push(res.url);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 

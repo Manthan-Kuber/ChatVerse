@@ -6,6 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
 import { fadeInOut } from "../animations/animations";
 
+
+//TODO Add theme switcher somewhere
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
