@@ -4,8 +4,8 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
 import { AnimatePresence, motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
-import { fadeInOut } from "../animations/animations";
-
+import Sidebar from "../components/Sidebar";
+import Menu from "../components/Menu";
 
 //TODO Add theme switcher somewhere
 const chats = () => {
@@ -25,33 +25,15 @@ const chats = () => {
       )}
       <div className="sm:grid sm:grid-cols-[1fr_2fr]">
         {screenWidth && screenWidth >= 640 ? (
-          <section className="px-4">Chat Channels</section>
+          <section className="px-4">
+            <Sidebar />
+          </section>
         ) : (
           <AnimatePresence>
             {isOpen && (
-              <motion.div
-                key="sidebar"
-                variants={fadeInOut}
-                initial="initial"
-                animate="animate" //TODO Stagger children
-                exit="exit"
-                className="fixed z-10 min-h-screen w-full bg-white/10   backdrop-blur-sm"
-              >
-                <motion.section
-                  initial={{ x: -wByN(2 / 3)! }}
-                  animate={{
-                    x: 0,
-                    transition: {
-                      duration: 0.2,
-                      ease: "linear",
-                    },
-                  }}
-                  exit={{ x: -wByN(2 / 3)! }}
-                  className="min-h-screen w-2/3 bg-black px-4 "
-                >
-                  Chat Channels
-                </motion.section>
-              </motion.div>
+              <Menu menuWidth={-wByN(2 / 3)!}>
+                <Sidebar />
+              </Menu>
             )}
           </AnimatePresence>
         )}
