@@ -1,21 +1,24 @@
 import { motion } from "framer-motion";
 import { fadeInOut } from "../animations/animations";
+import { IoMdClose } from "react-icons/io";
 
 const Menu = ({
   children,
   menuWidth,
+  setIsOpen,
 }: {
   children: React.ReactNode;
   menuWidth: number;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
     <motion.div
       key="sidebar"
       variants={fadeInOut}
       initial="initial"
-      animate="animate" //TODO Stagger children
+      animate="animate"
       exit="exit"
-      className="fixed z-10 min-h-screen w-full bg-white/10   backdrop-blur-sm"
+      className="borde2 fixed top-0 z-10 min-h-screen w-full border-red-500 bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         initial={{ x: menuWidth }}
@@ -27,8 +30,15 @@ const Menu = ({
           },
         }}
         exit={{ x: menuWidth }}
-        className="min-h-screen w-2/3 bg-black px-4 "
+        className="min-h-screen w-8/12 bg-white p-4 px-4 dark:bg-neutral-900"
       >
+        <div className="flex justify-end">
+          <IoMdClose
+            size={28}
+            className="btn-hover"
+            onClick={() => setIsOpen(false)}
+          />
+        </div>
         {children}
       </motion.section>
     </motion.div>

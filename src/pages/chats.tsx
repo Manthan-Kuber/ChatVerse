@@ -2,8 +2,7 @@ import { ReactElement, useState } from "react";
 import Footer from "../components/Footer";
 import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
-import { AnimatePresence, motion } from "framer-motion";
-import { IoMdClose } from "react-icons/io";
+import { AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import Menu from "../components/Menu";
 
@@ -11,14 +10,13 @@ import Menu from "../components/Menu";
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
-  const MenuIcon = motion(isOpen ? IoMdClose : GiHamburgerMenu);
   const wByN = (n: number) => screenWidth && screenWidth * n;
   return (
     <div>
       {screenWidth && screenWidth < 640 && (
-        <div className="grid grid-cols-[auto_1fr] items-center gap-x-4 p-4 ">
+        <div className="grid grid-cols-[auto_1fr] items-center gap-x-4 p-4 shadow-md">
           <div>
-            <MenuIcon onClick={() => setIsOpen((prev) => !prev)} />
+            <GiHamburgerMenu className="btn-hover" size={28} onClick={() => setIsOpen((prev) => !prev)} />
           </div>
           <h2>Channel Name</h2>
         </div>
@@ -31,7 +29,7 @@ const chats = () => {
         ) : (
           <AnimatePresence>
             {isOpen && (
-              <Menu menuWidth={-wByN(2 / 3)!}>
+              <Menu setIsOpen={setIsOpen} menuWidth={-wByN(2 / 3)!}>
                 <Sidebar />
               </Menu>
             )}
