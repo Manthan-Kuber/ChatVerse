@@ -19,7 +19,7 @@ const Menu = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="borde2 fixed top-0 z-10 min-h-screen w-full border-red-500 bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
+      className="fixed top-0 z-10 min-h-screen w-full border-red-500 bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         initial={{ x: menuWidth }}
