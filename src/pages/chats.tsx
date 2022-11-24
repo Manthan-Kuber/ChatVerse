@@ -18,7 +18,7 @@ const chats = () => {
         {screenWidth && screenWidth < 640 && (
           <div>
             <GiHamburgerMenu
-              className="btn-hover"
+              className="btn-with-hover"
               onClick={() => setIsOpen((prev) => !prev)}
             />
           </div>
@@ -31,7 +31,7 @@ const chats = () => {
         )}
       </div>
 
-      <div className="sm:grid sm:grid-cols-[1fr_2fr]">
+      <div className="sm:mt-4 sm:grid sm:grid-cols-[1fr_2fr]">
         {screenWidth && screenWidth >= 640 ? (
           <section className="px-4">
             <Sidebar />
@@ -45,7 +45,7 @@ const chats = () => {
             )}
           </AnimatePresence>
         )}
-        <main className="px-4">Main section</main>
+        <main className="mt-4 px-4 sm:mt-0">Main section</main>
       </div>
     </div>
   );
