@@ -7,7 +7,7 @@ const Header = () => {
   const { data: session } = useSession();
 
   return (
-    <header className=" flex w-full items-center justify-between p-4">
+    <header className=" flex w-full max-w-7xl mx-auto items-center justify-between p-4">
       <Link href="/">
         <ChatVerseText textSize="text-2xl" mdTextSize="md:text-3xl" />
       </Link>
