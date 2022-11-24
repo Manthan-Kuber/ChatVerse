@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { fadeInOut } from "../animations/animations";
 import { IoMdClose } from "react-icons/io";
+import ThemeChanger from "./ThemeChanger";
 
 const Menu = ({
   children,
@@ -32,9 +33,9 @@ const Menu = ({
         exit={{ x: menuWidth }}
         className="min-h-screen w-8/12 bg-white p-4 px-4 dark:bg-neutral-900"
       >
-        <div className="flex justify-end">
+        <div className="flex items-center justify-between">
+          <ThemeChanger />
           <IoMdClose
-            size={28}
             className="btn-hover"
             onClick={() => setIsOpen(false)}
           />
