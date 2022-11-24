@@ -36,7 +36,7 @@ const Menu = ({
         <div className="flex items-center justify-between">
           <ThemeChanger />
           <IoMdClose
-            className="btn-hover"
+            className="btn-with-hover"
             onClick={() => setIsOpen(false)}
           />
         </div>

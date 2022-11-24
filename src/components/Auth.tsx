@@ -7,7 +7,7 @@ function Auth({ children }: { children: React.ReactNode }) {
   const { replace } = useRouter();
 
   if (status === "loading") {
-    return <Loader />;
+    return <Loader />; //TODO Add full screen loader here
   }
 
   if (status === "unauthenticated") {

@@ -22,7 +22,7 @@ const ThemeChanger = () => {
         currTheme === "dark" ? setTheme("light") : setTheme("dark")
       }
     >
-      <CurrIcon className="h-10 w-10 rounded-full p-2 transition-colors duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-500 " />
+      <CurrIcon className="btn-with-hover" />
     </button>
   );
 };

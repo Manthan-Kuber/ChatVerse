@@ -9,7 +9,7 @@
     .centered-section{
         @apply container mx-auto flex min-h-full flex-grow flex-col items-center justify-center
     }
-    .btn-hover{
+    .btn-with-hover{
         @apply h-10 w-10 cursor-pointer rounded-full p-2 transition-colors duration-200 hover:bg-neutral-300 dark:hover:bg-neutral-700
     }
 }
