@@ -26,7 +26,7 @@ const chats = () => {
             )}
           </AnimatePresence>
         )}
-        <main className=" sm:pt-0">Main section</main>
+        <main>Main section</main>
       </div>
     </>
   );

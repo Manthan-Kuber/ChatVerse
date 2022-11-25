@@ -1,8 +1,16 @@
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 
 const Sidebar = () => {
   const { data: session } = useSession();
+  const { push } = useRouter();
+
+  async function handleSignOut() {
+    const res = await signOut({ redirect: false, callbackUrl: "/auth/signin" });
+    push(res.url);
+  }
+
   return (
     <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-4 py-8 sm:border-x-2 ">
       <div className="flex items-center gap-4 rounded-lg bg-neutral-400 bg-opacity-10 p-4 backdrop-blur-lg">
@@ -33,9 +41,10 @@ const Sidebar = () => {
           )}
         </div>
       </div>
-      {/* Logout btn  */}
-      {/* TODO Signout on click */}
-      <button className="mx-auto flex w-full items-center justify-center gap-4 rounded-md border border-red-500 p-4 text-xl font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white">
+      <button
+        className="mx-auto flex w-full items-center justify-center gap-4 rounded-md border border-red-500 p-2 text-xl font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white"
+        onClick={handleSignOut}
+      >
         <span>Logout</span>
         <BiLogOut size={24} />
       </button>
