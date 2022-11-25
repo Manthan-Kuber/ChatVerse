@@ -1,38 +1,18 @@
 import { ReactElement, useState } from "react";
-import Footer from "../components/Footer";
-import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
 import { AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import Menu from "../components/Menu";
-import ThemeChanger from "../components/ThemeChanger";
+import ChatsHeader from "../components/ChatsHeader";
 
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const wByN = (n: number) => screenWidth && screenWidth * n;
   return (
-    <div>
-      <header className="p-4 shadow-md dark:shadow-neutral-500">
-        <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr] items-center gap-x-4">
-          {screenWidth && screenWidth < 640 && (
-            <div>
-              <GiHamburgerMenu
-                className="btn-with-hover"
-                onClick={() => setIsOpen((prev) => !prev)}
-              />
-            </div>
-          )}
-          <h2>Channel Name</h2>
-          {screenWidth && screenWidth >= 640 && (
-            <div className="flex justify-end">
-              <ThemeChanger />
-            </div>
-          )}
-        </div>
-      </header>
-
-      <div className="mx-auto max-w-7xl  px-4 sm:mt-4 sm:grid sm:grid-cols-[1fr_2fr]">
+    <>
+      <ChatsHeader setIsOpen={setIsOpen} />
+      <div className="mx-auto max-w-7xl  sm:grid sm:grid-cols-[1fr_2fr]">
         {screenWidth && screenWidth >= 640 ? (
           <section>
             <Sidebar />
@@ -46,21 +26,14 @@ const chats = () => {
             )}
           </AnimatePresence>
         )}
-        <main className="mt-4 sm:mt-0">Main section</main>
+        <main className=" sm:pt-0">Main section</main>
       </div>
-    </div>
+    </>
   );
 };
 export default chats;
 
 chats.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <>
-      <div className="grid min-h-screen grid-rows-[1fr_auto] ">
-        {page}
-        <Footer />
-      </div>
-    </>
-  );
+  return <div className="min-h-screen">{page}</div>;
 };
 chats.auth = true; // Protect the page using Auth Parent Component

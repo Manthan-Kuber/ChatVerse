@@ -19,7 +19,7 @@ const Menu = ({
       initial="initial"
       animate="animate"
       exit="exit"
-      className="fixed top-0 z-10 min-h-screen w-full bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
+      className="fixed top-0 left-0 z-10 min-h-screen w-full bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         initial={{ x: menuWidth }}
@@ -31,7 +31,7 @@ const Menu = ({
           },
         }}
         exit={{ x: menuWidth }}
-        className="min-h-screen w-8/12 bg-white p-4 dark:bg-neutral-900"
+        className="min-h-screen w-8/12 bg-white p-4 dark:bg-zinc-900"
       >
         <div className="flex items-center justify-between">
           <ThemeChanger />
