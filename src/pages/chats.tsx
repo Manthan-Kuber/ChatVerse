@@ -9,6 +9,7 @@ const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const wByN = (n: number) => screenWidth && screenWidth * n;
+  // TODO Add page transition animation 
   return (
     <>
       <div className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]">

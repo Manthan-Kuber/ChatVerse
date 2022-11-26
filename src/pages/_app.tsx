@@ -5,7 +5,6 @@ import type { NextPage } from "next";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import Layout from "../components/Layout";
-import { AnimatePresence } from "framer-motion";
 import CustomHead from "../components/CustomHead";
 import Auth from "../components/Auth";
 import { Toaster } from "react-hot-toast";
@@ -28,14 +27,12 @@ const MyApp = ({
       <CustomHead />
       <SessionProvider session={session}>
         <ThemeProvider attribute="class" enableSystem>
-          <AnimatePresence mode="wait">
-            <Toaster />
-            {Component.auth ? (
-              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-            ) : (
-              getLayout(<Component {...pageProps} />)
-            )}
-          </AnimatePresence>
+          <Toaster />
+          {Component.auth ? (
+            <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+          ) : (
+            getLayout(<Component {...pageProps} />)
+          )}
         </ThemeProvider>
       </SessionProvider>
     </>
