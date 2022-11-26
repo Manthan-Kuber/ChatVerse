@@ -54,7 +54,7 @@ const Sidebar = () => {
         </div>
       </div>
       <button
-        className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 text-xl font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white sm:mb-8"
+        className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 sm:text-lg font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white sm:mb-8"
         onClick={handleSignOut}
       >
         <span>SignOut</span>
