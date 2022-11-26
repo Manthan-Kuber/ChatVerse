@@ -11,8 +11,7 @@ const chats = () => {
   const wByN = (n: number) => screenWidth && screenWidth * n;
   return (
     <>
-      <ChatsHeader setIsOpen={setIsOpen} />
-      <div className="mx-auto max-w-7xl  sm:grid sm:grid-cols-[1fr_2fr]">
+      <div className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]">
         {screenWidth && screenWidth >= 640 ? (
           <section>
             <Sidebar />
@@ -26,7 +25,12 @@ const chats = () => {
             )}
           </AnimatePresence>
         )}
-        <main>Main section</main>
+        <div className="bg-neutral-50 dark:bg-[#1c1b22] sm:px-2 sm:pt-8">
+          <ChatsHeader setIsOpen={setIsOpen} />
+          <main className="min-h-[calc(100vh-3.5rem)] bg-neutral-200 px-4 dark:bg-zinc-900 sm:min-h-[calc(100vh-6.5rem)]">
+            Main section
+          </main>
+        </div>
       </div>
     </>
   );

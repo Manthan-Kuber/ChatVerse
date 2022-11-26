@@ -31,9 +31,9 @@ const Menu = ({
           },
         }}
         exit={{ x: menuWidth }}
-        className="min-h-screen w-8/12 bg-white py-4 dark:bg-zinc-900"
+        className="min-h-screen w-8/12 bg-white py-4 dark:bg-[#1c1b22]"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between px-2">
           <ThemeChanger />
           <IoMdClose
             className="btn-with-hover"

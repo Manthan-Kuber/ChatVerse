@@ -24,8 +24,7 @@ const Sidebar = () => {
   }
 
   return (
-    // TODO remove borders and replace with a lighter bg color
-    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-6 sm:border-x-2 ">
+    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between bg-neutral-50 px-2 py-8 dark:bg-[#1c1b22] sm:min-h-screen ">
       <div className="flex items-center gap-4 rounded-lg bg-neutral-400 bg-opacity-10 p-4 backdrop-blur-lg">
         {session && session.user && session.user.image ? (
           <img
@@ -55,7 +54,7 @@ const Sidebar = () => {
         </div>
       </div>
       <button
-        className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 text-xl font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white"
+        className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 text-xl font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white sm:mb-8"
         onClick={handleSignOut}
       >
         <span>SignOut</span>
