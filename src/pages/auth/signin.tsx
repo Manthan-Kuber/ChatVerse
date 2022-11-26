@@ -24,7 +24,7 @@ const SocialIconsList = [
     onClick={async () => {
       try {
         const res = await signIn(name, { redirect: false, callbackUrl });
-        res?.ok && useRouter().push(callbackUrl);
+        res && res.url && useRouter().push(res.url);
       } catch (err) {
         console.log(err);
       }
@@ -66,7 +66,6 @@ const Signin = () => {
     replace(callbackUrl);
     return <></>;
   }
-  //TODO Toasters on signin
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
     try {
       const res = await signIn("email", {

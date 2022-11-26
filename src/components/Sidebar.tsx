@@ -1,17 +1,30 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
+import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
 
-  async function handleSignOut() {
-    const res = await signOut({ redirect: false, callbackUrl: "/auth/signin" });
-    push(res.url);
+  function handleSignOut() {
+    const signOutPromise = signOut({
+      redirect: false,
+      callbackUrl: "/auth/signin",
+    });
+    toast.promise(signOutPromise, {
+      loading: "Signing Out...",
+      success: (data) => {
+        push(data.url);
+        return "Signed Out Successfully";
+      },
+      error: (err) =>
+        `Encountered an error while Signing Out: ${err.toString()}`,
+    });
   }
 
   return (
+    // TODO remove borders and replace with a lighter bg color
     <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-6 sm:border-x-2 ">
       <div className="flex items-center gap-4 rounded-lg bg-neutral-400 bg-opacity-10 p-4 backdrop-blur-lg">
         {session && session.user && session.user.image ? (
@@ -41,12 +54,11 @@ const Sidebar = () => {
           )}
         </div>
       </div>
-      {/* TODO Toasters on signout */}
       <button
         className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 text-xl font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white"
         onClick={handleSignOut}
       >
-        <span>Logout</span>
+        <span>SignOut</span>
         <BiLogOut size={24} />
       </button>
     </div>

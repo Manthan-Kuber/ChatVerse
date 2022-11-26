@@ -8,6 +8,7 @@ import Layout from "../components/Layout";
 import { AnimatePresence } from "framer-motion";
 import CustomHead from "../components/CustomHead";
 import Auth from "../components/Auth";
+import { Toaster } from "react-hot-toast";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -28,6 +29,7 @@ const MyApp = ({
       <SessionProvider session={session}>
         <ThemeProvider attribute="class" enableSystem>
           <AnimatePresence mode="wait">
+            <Toaster />
             {Component.auth ? (
               <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
             ) : (
