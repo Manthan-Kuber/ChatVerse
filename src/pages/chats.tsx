@@ -9,7 +9,7 @@ const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const wByN = (n: number) => screenWidth && screenWidth * n;
-  // TODO Add page transition animation 
+  // TODO Add page transition animation
   return (
     <>
       <div className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]">
@@ -28,7 +28,7 @@ const chats = () => {
         )}
         <div className="sm:px-2 sm:pt-8">
           <ChatsHeader setIsOpen={setIsOpen} />
-          <main className="min-h-[calc(100vh-3.5rem)] bg-neutral-300 bg-opacity-10 px-4 dark:bg-zinc-900 sm:min-h-[calc(100vh-6.5rem)]">
+          <main className="min-h-[calc(100vh-3.5rem)] bg-neutral-300 bg-opacity-10 px-4  sm:min-h-[calc(100vh-6.5rem)]">
             Main section
           </main>
         </div>

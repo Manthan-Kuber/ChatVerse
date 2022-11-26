@@ -10,7 +10,7 @@ const ChatsHeader = ({
   const { width: screenWidth } = useWindowSize();
 
   return (
-    <header className="bg-neutral-500 bg-opacity-10 p-4 sm:rounded-t-xl dark:bg-black">
+    <header className="bg-neutral-500 bg-opacity-10 p-4 sm:rounded-t-xl ">
       <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr] items-center gap-x-4">
         {screenWidth && screenWidth < 640 && (
           <div>
