@@ -1,9 +1,21 @@
-const Loader = () => {
+const Loader = ({
+  height,
+  width,
+  toggleOnLight = false,
+}: {
+  height?: string;
+  width?: string;
+  toggleOnLight?: boolean;
+}) => {
   return (
     <svg
       aria-hidden="true"
       role="status"
-      className="inline h-4 w-4 animate-spin text-white "
+      className={`inline ${height ?? "h-4"} ${
+        width ?? "h-4"
+      } animate-spin text-white  ${
+        toggleOnLight && "text-[#1c1b22] dark:text-white"
+      } `}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
