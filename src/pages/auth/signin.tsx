@@ -66,6 +66,7 @@ const Signin = () => {
     replace(callbackUrl);
     return <></>;
   }
+  
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
     try {
       const res = await signIn("email", {
