@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { resetScroll } from "../utils/functions";
 
 const Sidebar = () => {
   const { data: session } = useSession();
@@ -28,29 +29,35 @@ const Sidebar = () => {
     <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 dark:bg-[#1c1b22] sm:min-h-screen ">
       <div className="flex items-center gap-4 rounded-lg bg-neutral-500 bg-opacity-10 p-4 backdrop-blur-lg">
         {session?.user?.image ? (
-            <Image
-              src={session.user.image}
-              width={36}
-              height={36}
-              className="rounded-lg sm:h-12 sm:w-12"
-              alt="profile photo"
-              referrerPolicy="no-referrer"
-            />
+          <Image
+            src={session.user.image}
+            width={36}
+            height={36}
+            className="rounded-lg sm:h-12 sm:w-12"
+            alt="profile photo"
+            referrerPolicy="no-referrer"
+          />
         ) : (
           <div className="h-9 w-9 animate-pulse rounded-lg bg-neutral-500 sm:h-12 sm:w-12 " />
         )}
         <div className="w-full overflow-hidden ">
           {session?.user?.name ? (
-            <span className="block truncate font-mono tracking-wider sm:text-lg">
+            <span
+              onMouseLeave={resetScroll}
+              className="block scroll-smooth truncate font-mono tracking-wider hover:overflow-x-scroll sm:text-lg"
+            >
               {session.user.name}
             </span>
           ) : (
             <div className="h-4 animate-pulse rounded-sm bg-neutral-500 " />
           )}
           {session?.user?.email ? (
-            <p className="truncate font-mono text-sm sm:text-base ">
+            <span
+              onMouseLeave={resetScroll}
+              className="block scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll sm:text-base"
+            >
               {session.user.email}
-            </p>
+            </span>
           ) : (
             <div className="mt-1 h-4 animate-pulse rounded-sm bg-neutral-500" />
           )}
