@@ -1,10 +1,11 @@
 import React, { FormEvent, ReactElement, useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "../components/Sidebar";
 import Menu from "../components/Menu";
 import ChatsHeader from "../components/ChatsHeader";
 import { IoMdSend } from "react-icons/io";
+import { appearIntoView } from "../animations/animations";
 
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
@@ -12,11 +13,11 @@ const chats = () => {
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
 
-  const handleSubmit = (e:FormEvent) => {
-    e.preventDefault()
-    alert(message) //TODO Emit Socket event here 
-    setMessage("")
-  }
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    alert(message); //TODO Emit Socket event here
+    setMessage("");
+  };
 
   // TODO Add page transition animation
   return (
@@ -40,18 +41,28 @@ const chats = () => {
           <main className="flex min-h-[calc(100vh-4.5rem)] flex-col  bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
             <div className="flex-1 ">Main section</div>
             <div className="px-4 pt-2">
-              <form className="flex items-center gap-4"onSubmit={handleSubmit} >
+              <form className="flex items-center gap-4" onSubmit={handleSubmit}>
                 <input
-                  className="container rounded-full bg-neutral-500/10 px-4 py-2 focus:outline-none "
+                  className="container rounded-full bg-neutral-500/10 px-4 py-2 outline-none transition-all duration-200"
                   placeholder={`Message channel name`}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                 />
-                {message.length > 0 && (
-                  <button className="rounded-full bg-lime-400 hover:bg-lime-500 p-2" type="submit" disabled={!(message.length > 0)} >
-                    <IoMdSend className="h-5 w-5 text-white" />
-                  </button>
-                )}
+                <AnimatePresence>
+                  {message.length > 0 && (
+                    <motion.button
+                      className="rounded-full bg-lime-400 p-2 hover:bg-lime-500"
+                      type="submit"
+                      disabled={!(message.length > 0)}
+                      variants={appearIntoView}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      <IoMdSend className="h-5 w-5 text-white" />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </form>
             </div>
           </main>
