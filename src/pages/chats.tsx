@@ -7,8 +7,9 @@ import ChatsHeader from "../components/ChatsHeader";
 import { IoMdSend } from "react-icons/io";
 import { appearIntoView } from "../animations/animations";
 import { io } from "socket.io-client";
+import { env } from "../env/client.mjs";
 
-const socket = io("ws://localhost:6969");
+const socket = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
 
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
