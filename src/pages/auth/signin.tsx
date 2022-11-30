@@ -59,14 +59,22 @@ const Signin = () => {
   const { status } = useSession();
 
   if (status === "loading") {
-    return <Loader />;
+    return (
+      <div className="grid min-h-screen w-full  place-items-center text-2xl">
+        <Loader height="h-8" width="h-8" toggleOnLight />
+      </div>
+    );
   }
 
   if (status === "authenticated") {
     replace(callbackUrl);
-    return <></>;
+    return (
+      <div className="grid min-h-screen w-full  place-items-center text-2xl">
+        <Loader height="h-8" width="h-8" toggleOnLight />
+      </div>
+    );
   }
-  
+
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
     try {
       const res = await signIn("email", {
