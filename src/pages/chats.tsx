@@ -52,9 +52,12 @@ const chats = () => {
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
           <div className="flex-1">Main section</div>
           <div className="px-4 pt-2 pb-2 sm:pb-0">
-            <form className="flex items-center gap-4" onSubmit={handleSubmit}>
+            <form
+              className="relative flex items-center gap-4 "
+              onSubmit={handleSubmit}
+            >
               <input
-                className="w-full rounded-full bg-neutral-500/10 px-4 py-2 outline-none transition-all duration-200"
+                className="w-full rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200 pr-10"
                 placeholder={`Message channel name`}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
@@ -66,7 +69,7 @@ const chats = () => {
               <AnimatePresence>
                 {(isFocused || message.length > 0) && (
                   <motion.button
-                    className="rounded-full bg-lime-400 p-2 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600"
+                    className="absolute rounded-md bg-lime-400 p-2 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600 right-1"
                     type="submit"
                     disabled={!(message.length > 0)}
                     variants={appearIntoView}
@@ -74,7 +77,7 @@ const chats = () => {
                     animate="animate"
                     exit="exit"
                   >
-                    <IoMdSend className="h-5 w-5 text-white" />
+                    <IoMdSend className="h-4 w-4 text-white" />
                   </motion.button>
                 )}
               </AnimatePresence>
