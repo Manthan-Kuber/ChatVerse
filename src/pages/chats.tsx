@@ -15,6 +15,7 @@ const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const wByN = (n: number) => screenWidth && screenWidth * n;
 
   const handleSubmit = (
@@ -59,11 +60,13 @@ const chats = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 type="text"
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit(e)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
               />
               <AnimatePresence>
-                {message.length > 0 && (
+                {(isFocused || message.length > 0) && (
                   <motion.button
-                    className="rounded-full bg-lime-400 p-2 hover:bg-lime-500"
+                    className="rounded-full bg-lime-400 p-2 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600"
                     type="submit"
                     disabled={!(message.length > 0)}
                     variants={appearIntoView}
