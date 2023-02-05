@@ -5,12 +5,14 @@ import { z } from "zod";
 interface SearchRequest extends NextApiRequest {
   query: {
     searchQuery: string;
+    userId: string;
   };
 }
 
 const reqQuerySchema = z.object({
   query: z.object({
     searchQuery: z.string(),
+    userId: z.string(),
   }),
 });
 
@@ -23,9 +25,19 @@ const search = async (req: SearchRequest, res: NextApiResponse) => {
   if (!parsedQuery.success)
     return res.status(422).json({ message: "Invalid Request" });
   try {
-    const searchedUser = await prisma.user.findFirst({
+    const searchedUser = await prisma.user.findMany({
       where: {
-        name: req.query.searchQuery,
+        OR: [
+          {
+            name: {
+              contains: req.query.searchQuery,
+              mode: "insensitive",
+            },
+          },
+        ],
+        NOT: {
+          id: req.query.userId,
+        },
       },
     });
     console.log(searchedUser);
