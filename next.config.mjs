@@ -21,7 +21,7 @@ const config = {
       },
       {
         protocol: "https",
-        hostname: "unsplash.com",
+        hostname: "images.unsplash.com",
       },
       {
         protocol: "https",
