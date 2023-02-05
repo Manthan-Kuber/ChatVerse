@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 import { resetScroll } from "../utils/functions";
 import ChatInputForm from "./ChatInputForm";
-import { useState } from "react";
+import { FormEvent, KeyboardEvent, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const Sidebar = () => {
@@ -29,8 +29,19 @@ const Sidebar = () => {
     });
   }
 
-  function handleSearch() {
-    return;
+  async function handleSearch(
+    e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
+  ) {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/search?searchQuery=${value}`
+      );
+      const user = await response.json();
+      console.log(user);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (
