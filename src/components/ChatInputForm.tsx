@@ -10,6 +10,7 @@ const ChatInputForm = (props: {
   setValue: React.Dispatch<React.SetStateAction<string>>;
   value: string;
   Icon: IconType;
+  placeholder:string;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -20,7 +21,7 @@ const ChatInputForm = (props: {
     >
       <input
         className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
-        placeholder={`Message channel name`}
+        placeholder={props.placeholder}
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
         type="text"

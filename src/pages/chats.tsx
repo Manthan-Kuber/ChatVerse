@@ -56,6 +56,7 @@ const chats = () => {
               value={message}
               setValue={setMessage}
               Icon={IoMdSend}
+              placeholder="Message channel name"
             />
           </div>
         </main>
