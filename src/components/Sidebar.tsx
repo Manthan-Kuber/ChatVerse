@@ -4,14 +4,13 @@ import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { resetScroll } from "../utils/functions";
-import ChatInputForm from "./ChatInputForm";
-import { FormEvent, KeyboardEvent, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { ChangeEvent, useState, useDeferredValue } from "react";
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const [value, setValue] = useState("");
+  const deferredValue = useDeferredValue(value);
 
   function handleSignOut() {
     const signOutPromise = signOut({
@@ -29,13 +28,11 @@ const Sidebar = () => {
     });
   }
 
-  async function handleSearch(
-    e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
-  ) {
-    e.preventDefault();
+  async function handleSearch(e: ChangeEvent<HTMLInputElement>) {
+    setValue(e.target.value);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/search?searchQuery=${value}`
+        `http://localhost:3000/api/search?searchQuery=${deferredValue}&userId=${session?.user?.id}`
       );
       const user = await response.json();
       console.log(user);
@@ -84,13 +81,19 @@ const Sidebar = () => {
           </div>
         </div>
         <div className="mt-4">
-          <ChatInputForm
+          <input
+            className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
+            placeholder="Search for an user..."
             value={value}
-            setValue={setValue}
-            handleSubmit={handleSearch}
-            Icon={AiOutlineSearch}
-            placeholder="Search an user"
+            onChange={handleSearch}
+            onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
+        </div>
+        <div className="mt-4 space-y-4">
+          <div>
+            <span></span>
+            <span></span>
+          </div>
         </div>
       </div>
       <button

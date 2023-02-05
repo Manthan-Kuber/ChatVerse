@@ -10,7 +10,7 @@ const ChatInputForm = (props: {
   setValue: React.Dispatch<React.SetStateAction<string>>;
   value: string;
   Icon: IconType;
-  placeholder:string;
+  placeholder: string;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
