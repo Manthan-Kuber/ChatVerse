@@ -8,6 +8,7 @@ import { IoMdSend } from "react-icons/io";
 import { io } from "socket.io-client";
 import { env } from "../env/client.mjs";
 import ChatInputForm from "../components/ChatInputForm";
+import { motion } from "framer-motion";
 
 const socket = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
 
@@ -32,7 +33,12 @@ const chats = () => {
 
   // TODO Add page transition animation
   return (
-    <div className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]">
+    <motion.div
+      className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
       {screenWidth && screenWidth >= 640 ? (
         <section>
           <Sidebar />
@@ -61,7 +67,7 @@ const chats = () => {
           </div>
         </main>
       </div>
-    </div>
+    </motion.div>
   );
 };
 export default chats;
