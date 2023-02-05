@@ -3,14 +3,22 @@ import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import { resetScroll } from "../utils/functions";
+import { fetcher, resetScroll } from "../utils/functions";
 import { ChangeEvent, useState, useDeferredValue } from "react";
+import useSwr from "swr";
+import { UserSearch } from "../pages/api/search";
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const [value, setValue] = useState("");
   const deferredValue = useDeferredValue(value);
+  const { data } = useSwr<UserSearch>(
+    value !== ""
+      ? `http://localhost:3000/api/search?searchQuery=${deferredValue}&userId=${session?.user?.id}`
+      : null,
+    fetcher
+  );
 
   function handleSignOut() {
     const signOutPromise = signOut({
@@ -30,15 +38,7 @@ const Sidebar = () => {
 
   async function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
-    try {
-      const response = await fetch(
-        `http://localhost:3000/api/search?searchQuery=${deferredValue}&userId=${session?.user?.id}`
-      );
-      const user = await response.json();
-      console.log(user);
-    } catch (e) {
-      console.log(e);
-    }
+    console.log(data && data[0]);
   }
 
   return (
@@ -90,10 +90,14 @@ const Sidebar = () => {
           />
         </div>
         <div className="mt-4 space-y-4">
-          <div>
-            <span></span>
-            <span></span>
-          </div>
+          {data && (
+            data.map((user) => (
+              <div className="w-full "  key={user.id}>
+                <span>{user.name}</span>
+                <span>{user.email}</span>
+              </div>
+            ))
+          ) }
         </div>
       </div>
       <button
