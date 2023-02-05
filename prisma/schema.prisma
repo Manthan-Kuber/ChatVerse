@@ -41,15 +41,19 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  chatsId       String?
-  Chats         Chats?    @relation(fields: [chatsId], references: [id])
-  accounts      Account[]
-  sessions      Session[]
+  id                             String    @id @default(cuid())
+  name                           String?
+  email                          String?   @unique
+  emailVerified                  DateTime?
+  image                          String?
+  chatsId                        String?
+  isAdmin                        Boolean   @default(false)
+  Chats                          Chats?    @relation(fields: [chatsId], references: [id])
+  accounts                       Account[]
+  Chats_Chats_groupAdminIdToUser Chats?    @relation("Chats_groupAdminIdToUser")
+  Message_Message_userIdToUser   Message?  @relation("Message_userIdToUser")
+  sessions                       Session[]
+  Message_MessageToUser          Message[]
 }
 
 model VerificationToken {
@@ -61,8 +65,23 @@ model VerificationToken {
 }
 
 model Chats {
-  id          String  @id
-  isGroupChat Boolean
-  chatName    String
-  User        User[]
+  id                            String  @id
+  isGroupChat                   Boolean @default(false)
+  chatName                      String
+  groupAdminId                  String  @unique
+  messageId                     String
+  userId                        String  @unique
+  User_Chats_groupAdminIdToUser User    @relation("Chats_groupAdminIdToUser", fields: [groupAdminId], references: [id])
+  Message                       Message @relation(fields: [messageId], references: [id])
+  User                          User[]
+}
+
+model Message {
+  id                        String   @id
+  content                   String
+  createdAt                 DateTime
+  userId                    String   @unique
+  User_Message_userIdToUser User     @relation("Message_userIdToUser", fields: [userId], references: [id])
+  Chats                     Chats[]
+  User_MessageToUser        User[]
 }
