@@ -4,21 +4,56 @@ import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { fetcher, resetScroll } from "../utils/functions";
-import { ChangeEvent, useState, useDeferredValue } from "react";
+import { ChangeEvent, useState } from "react";
 import useSwr from "swr";
-import { UserSearch } from "../pages/api/search";
+import type { UserSearch } from "../pages/api/search";
+import useDebounce from "../hooks/useDebounce";
+
+const SearchResults = ({
+  searchQuery,
+  userId,
+}: {
+  searchQuery: string;
+  userId: string | undefined;
+}) => {
+  const { data: SearchedUsersArray, error } = useSwr<
+    UserSearch,
+    { message: string }
+  >(
+    searchQuery !== ""
+      ? `http://localhost:3000/api/search?searchQuery=${searchQuery}&userId=${userId}`
+      : null,
+    fetcher
+  );
+
+  if (error) {
+    toast.remove();
+    toast.error(error.message);
+    return null;
+  }
+
+  if (!SearchedUsersArray) return null;
+
+  return (
+    <>
+      {SearchedUsersArray.map((user) => (
+        <div
+          className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
+          key={user.id}
+        >
+          <span className="block">{user.name}</span>
+          <span className="block">{user.email}</span>
+        </div>
+      ))}
+    </>
+  );
+};
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const [value, setValue] = useState("");
-  const deferredValue = useDeferredValue(value);
-  const { data } = useSwr<UserSearch>(
-    value !== ""
-      ? `http://localhost:3000/api/search?searchQuery=${deferredValue}&userId=${session?.user?.id}`
-      : null,
-    fetcher
-  );
+  const debouncedValue = useDebounce(value, 350);
 
   function handleSignOut() {
     const signOutPromise = signOut({
@@ -38,7 +73,6 @@ const Sidebar = () => {
 
   async function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
-    console.log(data && data[0]);
   }
 
   return (
@@ -90,14 +124,10 @@ const Sidebar = () => {
           />
         </div>
         <div className="mt-4 space-y-4">
-          {data && (
-            data.map((user) => (
-              <div className="w-full "  key={user.id}>
-                <span>{user.name}</span>
-                <span>{user.email}</span>
-              </div>
-            ))
-          ) }
+          <SearchResults
+            searchQuery={debouncedValue}
+            userId={session?.user?.id}
+          />
         </div>
       </div>
       <button

@@ -10,8 +10,12 @@ export const fetcher = async (
   //TODO Improve error handling
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
+    const data = (await res.json()) as { message: string };
+    error.message = data.message;
     throw error;
   }
 
-  return res.json();
+  const data = await res.json();
+
+  return data;
 };
