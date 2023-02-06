@@ -8,6 +8,7 @@ import { ChangeEvent, useState } from "react";
 import useSwr from "swr";
 import type { UserSearch } from "../pages/api/search";
 import useDebounce from "../hooks/useDebounce";
+import Skeleton from "react-loading-skeleton";
 
 const SearchResults = ({
   searchQuery,
@@ -16,10 +17,11 @@ const SearchResults = ({
   searchQuery: string;
   userId: string | undefined;
 }) => {
-  const { data: SearchedUsersArray, error } = useSwr<
-    UserSearch,
-    { message: string }
-  >(
+  const {
+    data: SearchedUsersArray,
+    error,
+    isLoading,
+  } = useSwr<UserSearch, { message: string }>(
     searchQuery !== ""
       ? `http://localhost:3000/api/search?searchQuery=${searchQuery}&userId=${userId}`
       : null,
@@ -41,8 +43,14 @@ const SearchResults = ({
           className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
           key={user.id}
         >
-          <span className="block">{user.name}</span>
-          <span className="block">{user.email}</span>
+          {isLoading ? (
+            <Skeleton count={2} /> //TODO Improve dark mode skeleton styles
+          ) : (
+            <>
+              <span className="block">{user.name}</span>
+              <span className="block">{user.email}</span>
+            </>
+          )}
         </div>
       ))}
     </>

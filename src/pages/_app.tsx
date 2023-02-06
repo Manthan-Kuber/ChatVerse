@@ -8,6 +8,7 @@ import Layout from "../components/Layout";
 import CustomHead from "../components/CustomHead";
 import Auth from "../components/Auth";
 import { Toaster } from "react-hot-toast";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
