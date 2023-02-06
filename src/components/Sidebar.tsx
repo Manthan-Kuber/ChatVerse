@@ -9,6 +9,7 @@ import useSwr from "swr";
 import type { UserSearch } from "../pages/api/search";
 import useDebounce from "../hooks/useDebounce";
 import Skeleton from "react-loading-skeleton";
+import { useTheme } from "next-themes";
 
 const SearchResults = ({
   searchQuery,
@@ -17,6 +18,7 @@ const SearchResults = ({
   searchQuery: string;
   userId: string | undefined;
 }) => {
+  const { theme } = useTheme();
   const {
     data: SearchedUsersArray,
     error,
@@ -40,17 +42,41 @@ const SearchResults = ({
     <>
       {SearchedUsersArray.map((user) => (
         <div
-          className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
+          className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200 overflow-hidden"
           key={user.id}
         >
-          {isLoading ? (
-            <Skeleton count={2} /> //TODO Improve dark mode skeleton styles
-          ) : (
-            <>
-              <span className="block">{user.name}</span>
-              <span className="block">{user.email}</span>
-            </>
-          )}
+          <span className="block truncate">
+            {isLoading ? (
+              <Skeleton
+                baseColor={
+                  theme === "dark" ? "rgb(163 163 163 / 0.1)" : "#ebebeb"
+                }
+                highlightColor={
+                  theme === "dark"
+                    ? "rgb(163 163 163 / 0.1)"
+                    : "rgb(115 115 115 / 0.1)"
+                }
+              />
+            ) : (
+              user.name
+            )}
+          </span>
+          <span className="block truncate">
+            {isLoading ? (
+              <Skeleton
+                baseColor={
+                  theme === "dark" ? "rgb(163 163 163 / 0.1)" : "#ebebeb"
+                }
+                highlightColor={
+                  theme === "dark"
+                    ? "rgb(163 163 163 / 0.1)"
+                    : "rgb(115 115 115 / 0.1)"
+                }
+              />
+            ) : (
+              user.email
+            )}
+          </span>
         </div>
       ))}
     </>
