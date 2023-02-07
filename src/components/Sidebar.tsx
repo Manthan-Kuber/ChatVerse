@@ -37,7 +37,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen ">
+    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen">
       <div>
         <div className="flex items-center gap-4 rounded-lg bg-neutral-500 bg-opacity-10 p-4 backdrop-blur-lg">
           <ProfileImage image={session?.user?.image} />
@@ -65,7 +65,7 @@ const Sidebar = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
         </div>
-        <div className="mt-4 space-y-4">
+        <div className="mt-4  space-y-4 max-h-80 overflow-scroll">
           <SearchResults
             searchQuery={debouncedValue}
             userId={session?.user?.id}

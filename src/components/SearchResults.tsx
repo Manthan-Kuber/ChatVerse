@@ -52,7 +52,7 @@ const SearchResults = ({
     return null;
   }
 
-  if (isLoading) return <SearchResultSkeleton count={2} />;
+  if (isLoading) return <SearchResultSkeleton count={4} />;
 
   if (!SearchedUsersArray) return null;
 
