@@ -35,7 +35,7 @@ const Sidebar = () => {
   }
 
   return (
-    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 dark:bg-[#1c1b22] sm:min-h-screen ">
+    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen ">
       <div>
         <div className="flex items-center gap-4 rounded-lg bg-neutral-500 bg-opacity-10 p-4 backdrop-blur-lg">
           {session?.user?.image ? (
