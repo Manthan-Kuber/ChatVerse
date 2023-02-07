@@ -10,7 +10,7 @@ import { env } from "../env/client.mjs";
 import ChatInputForm from "../components/ChatInputForm";
 import { motion } from "framer-motion";
 
-const socket = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
+// const socket = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
 
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
@@ -24,7 +24,7 @@ const chats = () => {
     e.preventDefault();
     console.log(message);
     try {
-      socket.emit("send_message", message);
+      // socket.emit("send_message", message);
       setMessage("");
     } catch (err) {
       console.log(err);
