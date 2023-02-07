@@ -2,10 +2,22 @@ import Image from "next/image";
 import Skeleton from "react-loading-skeleton";
 import useWindowSize from "../hooks/useWindowSize";
 
-const ProfileImage = ({ image }: { image: string | null | undefined }) => {
+export const ProfileImageSkeleton = () => {
   const { width: screenWidth } = useWindowSize();
   const skeletonDimensions =
     screenWidth && screenWidth >= 640 ? "48px" : "36px";
+  return (
+    <Skeleton
+      style={{
+        width: skeletonDimensions,
+        height: skeletonDimensions,
+        borderRadius: "0.5rem",
+      }}
+    />
+  );
+};
+
+const ProfileImage = ({ image }: { image: string | null | undefined }) => {
   return (
     <>
       {image ? (
@@ -18,13 +30,7 @@ const ProfileImage = ({ image }: { image: string | null | undefined }) => {
           referrerPolicy="no-referrer"
         />
       ) : (
-        <Skeleton
-          style={{
-            width: skeletonDimensions,
-            height: skeletonDimensions,
-            borderRadius: "0.5rem",
-          }}
-        />
+        <ProfileImageSkeleton />
       )}
     </>
   );

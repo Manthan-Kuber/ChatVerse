@@ -1,9 +1,32 @@
 import useSwr from "swr";
 import type { UserSearch } from "../pages/api/search";
 import Skeleton from "react-loading-skeleton";
-import { useTheme } from "next-themes";
 import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
+import ProfileImage, { ProfileImageSkeleton } from "./ProfileImage";
+
+const SearchResultSkeleton = ({ count }: { count?: number }) => {
+  return (
+    <>
+      {Array(count || 1)
+        .fill(0)
+        .map((_, index) => (
+          <div
+            className="w-full overflow-hidden rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
+            key={index}
+          >
+            <div className="flex items-center gap-4">
+              <ProfileImageSkeleton />
+              <div className="w-full">
+                <Skeleton className="block truncate" />
+                <Skeleton className="block truncate" />
+              </div>
+            </div>
+          </div>
+        ))}
+    </>
+  );
+};
 
 const SearchResults = ({
   searchQuery,
@@ -12,7 +35,6 @@ const SearchResults = ({
   searchQuery: string;
   userId: string | undefined;
 }) => {
-  const { theme } = useTheme();
   const {
     data: SearchedUsersArray,
     error,
@@ -30,6 +52,8 @@ const SearchResults = ({
     return null;
   }
 
+  if (isLoading) return <SearchResultSkeleton count={2} />;
+
   if (!SearchedUsersArray) return null;
 
   return (
@@ -39,42 +63,17 @@ const SearchResults = ({
           className="w-full overflow-hidden rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
           key={user.id}
         >
-          <span className="block truncate">
-            {isLoading ? (
-              <Skeleton
-                baseColor={
-                  theme === "dark" ? "rgb(163 163 163 / 0.1)" : "#ebebeb"
-                }
-                highlightColor={
-                  theme === "dark"
-                    ? "rgb(163 163 163 / 0.1)"
-                    : "rgb(115 115 115 / 0.1)"
-                }
-              />
-            ) : (
-              user.name
-            )}
-          </span>
-          <span className="block truncate">
-            {isLoading ? (
-              <Skeleton
-                baseColor={
-                  theme === "dark" ? "rgb(163 163 163 / 0.1)" : "#ebebeb"
-                }
-                highlightColor={
-                  theme === "dark"
-                    ? "rgb(163 163 163 / 0.1)"
-                    : "rgb(115 115 115 / 0.1)"
-                }
-              />
-            ) : (
-              user.email
-            )}
-          </span>
+          <div className="flex items-center gap-4">
+            <ProfileImage image={user.image} />
+            <div>
+              <span className="block truncate">{user.name}</span>
+              <span className="block truncate">{user.id}</span>
+            </div>
+          </div>
         </div>
       ))}
     </>
   );
 };
 
-export default SearchResults
+export default SearchResults;
