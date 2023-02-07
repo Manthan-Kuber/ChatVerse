@@ -1,6 +1,11 @@
 import Image from "next/image";
+import Skeleton from "react-loading-skeleton";
+import useWindowSize from "../hooks/useWindowSize";
 
 const ProfileImage = ({ image }: { image: string | null | undefined }) => {
+  const { width: screenWidth } = useWindowSize();
+  const skeletonDimensions =
+    screenWidth && screenWidth >= 640 ? "48px" : "36px";
   return (
     <>
       {image ? (
@@ -13,7 +18,13 @@ const ProfileImage = ({ image }: { image: string | null | undefined }) => {
           referrerPolicy="no-referrer"
         />
       ) : (
-        <div className="h-9 w-9 animate-pulse rounded-lg bg-neutral-500 sm:h-12 sm:w-12 " />
+        <Skeleton
+          style={{
+            width: skeletonDimensions,
+            height: skeletonDimensions,
+            borderRadius: "0.5rem",
+          }}
+        />
       )}
     </>
   );
