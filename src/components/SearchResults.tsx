@@ -54,7 +54,11 @@ const SearchResults = ({
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
+  //TODO Return active conversations here
   if (!SearchedUsersArray) return null;
+
+  if (SearchedUsersArray.length === 0)
+    return <p className="text-center">No results found</p>;
 
   return (
     <>
