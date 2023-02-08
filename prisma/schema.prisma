@@ -65,15 +65,16 @@ model VerificationToken {
 }
 
 model Chats {
-  id            String    @id
+  id            String    @id @default(cuid())
   isGroupChat   Boolean   @default(false)
   chatName      String
-  groupAdminId  String    @unique
-  groupAdmin    User      @relation("Chats_groupAdminIdToUser", fields: [groupAdminId], references: [id])
+  groupAdminId  String?   @unique
+  groupAdmin    User?     @relation("Chats_groupAdminIdToUser", fields: [groupAdminId], references: [id])
   messages      Message[]
+  messageId     String?   @unique
   latestMessage Message?  @relation("Chats_LatestMessage")
   participants  User[]
-  messageId     String
+  chatImage     String?
 }
 
 model Message {
