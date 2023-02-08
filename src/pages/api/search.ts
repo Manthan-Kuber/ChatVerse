@@ -4,13 +4,6 @@ import { z } from "zod";
 import { Prisma } from "@prisma/client";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
-interface SearchRequest extends NextApiRequest {
-  query: {
-    searchQuery: string;
-    userId: string;
-  };
-}
-
 const reqQuerySchema = z.object({
   query: z.object({
     searchQuery: z.string(),
@@ -38,30 +31,28 @@ function searchUser(searchQuery: string, userId: string) {
   });
 }
 
-const search = async (req: SearchRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerAuthSession({ req, res });
 
-  if (!session) return res.status(401).json({ message: "User not signed in" });
+  if (!session) return res.status(401).json({ message: "User is not signed in" });
 
   if (req.method !== "GET")
-    return res.status(404).json({
+    return res.status(405).json({
       message: "Invalid HTTP Method. Only GET method is Accepted.",
     });
   const parsedQuery = reqQuerySchema.safeParse(req);
   if (!parsedQuery.success)
-    return res.status(422).json({ message: "Invalid Request" });
+    return res.status(400).json({ message: "Invalid Request" });
+  const { searchQuery, userId } = parsedQuery.data.query;
   try {
-    const searchedUser = await searchUser(
-      req.query.searchQuery,
-      req.query.userId
-    );
+    const searchedUser = await searchUser(searchQuery, userId);
     return res.status(200).json(searchedUser);
   } catch (e) {
     console.log(e);
-    res.status(400).end();
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
 export type UserSearch = Prisma.PromiseReturnType<typeof searchUser>;
 
-export default search;
+export default handler;
