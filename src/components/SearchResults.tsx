@@ -71,7 +71,7 @@ const SearchResults = ({
             <ProfileImage image={user.image} />
             <div>
               <span className="block truncate">{user.name}</span>
-              <span className="block truncate">{user.id}</span>
+              <span className="block truncate">{user.name}</span>
             </div>
           </div>
         </div>
