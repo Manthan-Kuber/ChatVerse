@@ -41,19 +41,15 @@ model Session {
 }
 
 model User {
-  id                             String    @id @default(cuid())
-  name                           String?
-  email                          String?   @unique
-  emailVerified                  DateTime?
-  image                          String?
-  chatsId                        String?
-  isAdmin                        Boolean   @default(false)
-  chats                          Chats?    @relation(fields: [chatsId], references: [id])
-  accounts                       Account[]
-  Chats_Chats_groupAdminIdToUser Chats?    @relation("Chats_groupAdminIdToUser")
-  Message_Message_userIdToUser   Message?  @relation("Message_userIdToUser")
-  sessions                       Session[]
-  Message_MessageToUser          Message[]
+  id            String                    @id @default(cuid())
+  name          String?
+  email         String?                   @unique
+  emailVerified DateTime?
+  image         String?
+  conversations ConversationParticipant[]
+  accounts      Account[]
+  sessions      Session[]
+  messages      Message[]
 }
 
 model VerificationToken {
@@ -64,28 +60,32 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Chats {
-  id            String    @id @default(cuid())
-  isGroupChat   Boolean   @default(false)
-  chatName      String
-  groupAdminId  String?   @unique
-  groupAdmin    User?     @relation("Chats_groupAdminIdToUser", fields: [groupAdminId], references: [id])
-  messages      Message[]
-  messageId     String?   @unique
-  latestMessage Message?  @relation("Chats_LatestMessage")
-  participants  User[]
-  chatImage     String?
+model Conversation {
+  id              String                    @id @default(cuid())
+  participants    ConversationParticipant[]
+  messages        Message[]                 @relation("conversationMessages")
+  latestMessage   Message?                  @relation(name: "latestConversationMessage", fields: [latestMessageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  latestMessageId String?                   @unique
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversationId String
 }
 
 model Message {
-  id                        String   @id
-  content                   String
-  createdAt                 DateTime
-  userId                    String   @unique
-  User_Message_userIdToUser User     @relation("Message_userIdToUser", fields: [userId], references: [id])
-  User_MessageToUser        User[]
-  chatsId                   String   @unique
-  chats                     Chats[]
-  latestMessageInChat       Chats?   @relation(name: "Chats_LatestMessage", fields: [latestMessageId], references: [id])
-  latestMessageId           String   @unique
+  id             String        @id @default(cuid())
+  conversation   Conversation  @relation(name: "conversationMessages", fields: [conversationId], references: [id])
+  conversationId String
+  isLatestIn     Conversation? @relation("latestConversationMessage")
+  sender         User          @relation(fields: [senderId], references: [id])
+  senderId       String
+  body           String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
