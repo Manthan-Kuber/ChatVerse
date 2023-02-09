@@ -12,15 +12,13 @@ const SearchResultSkeleton = ({ count }: { count?: number }) => {
         .fill(0)
         .map((_, index) => (
           <div
-            className="w-full overflow-hidden rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
+            className="flex w-full items-center gap-4 overflow-hidden rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
             key={index}
           >
-            <div className="flex items-center gap-4">
-              <ProfileImageSkeleton />
-              <div className="w-full">
-                <Skeleton className="block truncate" />
-                <Skeleton className="block truncate" />
-              </div>
+            <ProfileImageSkeleton />
+            <div className="w-full">
+              <Skeleton className="block truncate" />
+              <Skeleton className="block truncate" />
             </div>
           </div>
         ))}
@@ -64,15 +62,14 @@ const SearchResults = ({
     <>
       {SearchedUsersArray.map((user) => (
         <div
-          className="w-full overflow-hidden rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
+          className="grid grid-cols-[auto_1fr] items-center gap-4 rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
           key={user.id}
         >
-          <div className="flex items-center gap-4">
-            <ProfileImage image={user.image} />
-            <div>
-              <span className="block truncate">{user.name}</span>
-              <span className="block truncate">{user.name}</span>
-            </div>
+          {/*  TODO Handle overflowing text */}
+          <ProfileImage image={user.image} />
+          <div className="max-w-full overflow-hidden ">
+            <span className="block truncate">{user.name}</span>
+            <span className="block truncate">~ {user.email}</span>
           </div>
         </div>
       ))}

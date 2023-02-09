@@ -2,7 +2,6 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
-import Image from "next/image";
 import { resetScroll } from "../utils/functions";
 import { ChangeEvent, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
@@ -39,7 +38,7 @@ const Sidebar = () => {
   return (
     <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen">
       <div>
-        <div className="flex items-center gap-4 rounded-lg bg-neutral-500 bg-opacity-10 p-4 backdrop-blur-lg">
+        <div className="grid grid-cols-[auto_1fr] content-center items-center gap-4 rounded-lg bg-neutral-500 bg-opacity-10 p-4 backdrop-blur-lg">
           <ProfileImage image={session?.user?.image} />
           <div className="w-full overflow-hidden ">
             <span
@@ -58,14 +57,14 @@ const Sidebar = () => {
         </div>
         <div className="mt-4">
           <input
-            className="w-full rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
-            placeholder="Search for an user..."
+            className="w-full rounded-md bg-neutral-500/10 px-4 py-2 truncate outline-none transition-transform duration-200"
+            placeholder="Search or start a new chat"
             value={value}
             onChange={handleSearch}
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
         </div>
-        <div className="mt-4  space-y-4 max-h-80 overflow-scroll">
+        <div className="mt-4  max-h-80 space-y-4 overflow-scroll">
           <SearchResults
             searchQuery={debouncedValue}
             userId={session?.user?.id}
