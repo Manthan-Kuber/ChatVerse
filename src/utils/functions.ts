@@ -7,7 +7,6 @@ export const fetcher = async (
   ...args: any[]
 ) => {
   const res = await fetch(input, init);
-  //TODO Improve error handling
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
     const data = (await res.json()) as { message: string };
@@ -19,3 +18,4 @@ export const fetcher = async (
 
   return data;
 };
+
