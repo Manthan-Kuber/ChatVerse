@@ -60,8 +60,8 @@ const Signin = () => {
 
   if (status === "loading") {
     return (
-      <div className="grid min-h-screen w-full  place-items-center text-2xl">
-        <Loader height="h-8" width="h-8" toggleOnLight />
+      <div className="grid min-h-full w-full  place-items-center text-2xl">
+        <ChatVerseText className="animate-pulse" />
       </div>
     );
   }
@@ -69,8 +69,8 @@ const Signin = () => {
   if (status === "authenticated") {
     replace(callbackUrl);
     return (
-      <div className="grid min-h-screen w-full  place-items-center text-2xl">
-        <Loader height="h-8" width="h-8" toggleOnLight />
+      <div className="grid min-h-full w-full  place-items-center text-2xl">
+        <ChatVerseText className="animate-pulse" />
       </div>
     );
   }

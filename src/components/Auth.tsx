@@ -1,6 +1,6 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import Loader from "../components/Loader";
+import ChatVerseText from "./ChatVerseText";
 
 function Auth({ children }: { children: React.ReactNode }) {
   const { status } = useSession();
@@ -9,7 +9,7 @@ function Auth({ children }: { children: React.ReactNode }) {
   if (status === "loading") {
     return (
       <div className="grid min-h-screen w-full  place-items-center text-2xl">
-        <Loader height="h-8" width="h-8" toggleOnLight />
+        <ChatVerseText className="animate-pulse" />
       </div>
     );
   }

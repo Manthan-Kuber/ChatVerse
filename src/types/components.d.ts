@@ -2,6 +2,7 @@ type ChatVerseTextProps = {
   textSize?: string;
   mdTextSize?: string;
   isCentered?: boolean;
+  className?: string;
 };
 
 type InputProps = {
@@ -11,5 +12,5 @@ type InputProps = {
   placeholder?: string;
   register: UseFormRegister<FieldValues>;
   isError: boolean;
-  errorMessage:string;
+  errorMessage: string;
 };
