@@ -7,7 +7,6 @@ import { getServerAuthSession } from "../../server/common/get-server-auth-sessio
 const reqQuerySchema = z.object({
   query: z.object({
     searchQuery: z.string(),
-    userId: z.string(),
   }),
 });
 
@@ -39,10 +38,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const parsedQuery = reqQuerySchema.safeParse(req);
   if (!parsedQuery.success)
     return res.status(400).json({ message: "Invalid Request" });
-  const { searchQuery, userId } = parsedQuery.data.query;
+  const { searchQuery } = parsedQuery.data.query;
   try {
-    const searchedUser = await searchUser(searchQuery, userId);
-    return res.status(200).json(searchedUser);
+    if (session.user?.id) {
+      const searchedUsers = await searchUser(searchQuery, session.user.id);
+      return res.status(200).json(searchedUsers);
+    } else {
+      return res.status(500).json({ message: "Error in searching" });
+    }
   } catch (e) {
     console.log(e);
     res.status(500).json({ message: "Internal Server Error" });
