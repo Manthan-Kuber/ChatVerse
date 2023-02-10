@@ -5,18 +5,17 @@ import Sidebar from "../components/Sidebar";
 import Menu from "../components/Menu";
 import ChatsHeader from "../components/ChatsHeader";
 import { IoMdSend } from "react-icons/io";
-import { io } from "socket.io-client";
-import { env } from "../env/client.mjs";
 import ChatInputForm from "../components/ChatInputForm";
 import { motion } from "framer-motion";
-
-// const socket = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
+import { toast } from "react-hot-toast";
+import useSocket from "../hooks/useSocket";
 
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
+  const socket = useSocket();
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -24,10 +23,14 @@ const chats = () => {
     e.preventDefault();
     console.log(message);
     try {
-      // socket.emit("send_message", message);
-      setMessage("");
+      if (socket) {
+        console.log(socket);
+        socket.emit("send_message", message);
+        setMessage("");
+      }
     } catch (err) {
       console.log(err);
+      toast.error("Error in sending the message");
     }
   };
 
