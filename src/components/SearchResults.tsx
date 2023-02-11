@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import ProfileImage, { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
+import { useContext } from "react";
+import { ChatsContext } from "../context/chats.context";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -44,6 +46,13 @@ const SearchResults = ({
       : null,
     fetcher
   );
+  const chats = useContext(ChatsContext);
+
+  const participants = chats?.map((chat) =>
+    chat.participants.map((participant) => {
+      return { ...participant.user, latestMessage: chat.latestMessage?.body };
+    })
+  )[0];
 
   if (error) {
     toast.remove();
@@ -54,7 +63,15 @@ const SearchResults = ({
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
   //TODO Return active conversations here
-  if (!SearchedUsersArray) return null;
+  if (!SearchedUsersArray)
+    return participants?.map((participant) => {
+      return (
+        <>
+          <span>{participant.name}</span>
+          <image />
+        </>
+      );
+    });
 
   if (SearchedUsersArray.length === 0)
     return <p className="text-center">No results found</p>;

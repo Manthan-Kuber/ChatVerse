@@ -1,4 +1,5 @@
 import React, {
+  createContext,
   FormEvent,
   KeyboardEvent,
   ReactElement,
@@ -20,7 +21,9 @@ import { prisma } from "../server/db/client";
 import { Prisma } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
+import { ChatsProvider } from "../context/chats.context";
 
+//Returns a promise which needs to be resolved
 function findConversation(userId: string) {
   return prisma.conversation.findMany({
     where: {
@@ -30,15 +33,32 @@ function findConversation(userId: string) {
         },
       },
     },
-    include: {
+    select: {
+      id: true,
       messages: true,
-      participants: true,
-      latestMessage: true,
+      participants: {
+        where: {
+          NOT: {
+            userId,
+          },
+        },
+        select: {
+          user: {
+            select: {
+              name: true,
+              image: true,
+            },
+          },
+        },
+      },
+      latestMessage: {
+        select: { body: true },
+      },
     },
   });
 }
 
-type ChatSearch = Prisma.PromiseReturnType<typeof findConversation>;
+export type ChatSearch = Prisma.PromiseReturnType<typeof findConversation>;
 
 type ChatProps = {
   chats: ChatSearch | null;
@@ -67,7 +87,7 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
   }
 };
 
-const chats = () => {
+const chats = ({ chats }: { chats: ChatSearch }) => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -103,7 +123,6 @@ const chats = () => {
     receiveMessage();
   }, [socket]);
 
-  // TODO Add page transition animation
   return (
     <motion.div
       className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]"
@@ -111,19 +130,21 @@ const chats = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {screenWidth && screenWidth >= 640 ? (
-        <section>
-          <Sidebar />
-        </section>
-      ) : (
-        <AnimatePresence>
-          {isOpen && (
-            <Menu setIsOpen={setIsOpen} menuWidth={-wByN(2 / 3)!}>
-              <Sidebar />
-            </Menu>
-          )}
-        </AnimatePresence>
-      )}
+      <ChatsProvider value={chats}>
+        {screenWidth && screenWidth >= 640 ? (
+          <section>
+            <Sidebar />
+          </section>
+        ) : (
+          <AnimatePresence>
+            {isOpen && (
+              <Menu setIsOpen={setIsOpen} menuWidth={-wByN(2 / 3)!}>
+                <Sidebar />
+              </Menu>
+            )}
+          </AnimatePresence>
+        )}
+      </ChatsProvider>
       <div className="sm:px-2 sm:pt-8">
         <ChatsHeader setIsOpen={setIsOpen} />
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
