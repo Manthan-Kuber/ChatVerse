@@ -4,6 +4,7 @@ import Skeleton from "react-loading-skeleton";
 import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import ProfileImage, { ProfileImageSkeleton } from "./ProfileImage";
+import { env } from "../env/client.mjs";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -39,7 +40,7 @@ const SearchResults = ({
     isLoading,
   } = useSwr<UserSearch, { message: string }>(
     searchQuery
-      ? `http://localhost:3000/api/search?searchQuery=${searchQuery}&userId=${userId}`
+      ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}&userId=${userId}`
       : null,
     fetcher
   );

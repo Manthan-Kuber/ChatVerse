@@ -27,6 +27,7 @@ export const serverSchema = z.object({
   EMAIL_SERVER_HOST: z.string(),
   EMAIL_SERVER_PORT: z.string(),
   EMAIL_FROM: z.string(),
+  CLIENT_URL: z.string().url(),
 });
 
 /**
@@ -36,6 +37,7 @@ export const serverSchema = z.object({
  */
 export const clientSchema = z.object({
   NEXT_PUBLIC_SOCKET_SERVER_URL: z.string().url(),
+  NEXT_PUBLIC_CLIENT_URL: z.string().url(),
 });
 
 /**
@@ -46,4 +48,5 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   NEXT_PUBLIC_SOCKET_SERVER_URL: process.env.NEXT_PUBLIC_SOCKET_SERVER_URL,
+  NEXT_PUBLIC_CLIENT_URL: process.env.NEXT_PUBLIC_CLIENT_URL,
 };
