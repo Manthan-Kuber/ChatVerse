@@ -13,7 +13,7 @@ const Sidebar = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const [value, setValue] = useState("");
-  const debouncedValue = useDebounce(value, 350);
+  const debouncedValue = useDebounce(value);
 
   function handleSignOut() {
     const signOutPromise = signOut({

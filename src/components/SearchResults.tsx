@@ -38,7 +38,7 @@ const SearchResults = ({
     error,
     isLoading,
   } = useSwr<UserSearch, { message: string }>(
-    searchQuery !== ""
+    searchQuery
       ? `http://localhost:3000/api/search?searchQuery=${searchQuery}&userId=${userId}`
       : null,
     fetcher
