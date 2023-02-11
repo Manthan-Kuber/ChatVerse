@@ -16,7 +16,11 @@ function Auth({ children }: { children: React.ReactNode }) {
 
   if (status === "unauthenticated") {
     replace("/auth/signin");
-    return null;
+    return (
+      <div className="grid min-h-screen w-full  place-items-center text-2xl">
+        <ChatVerseText className="animate-pulse" />
+      </div>
+    );
   }
 
   return <>{children}</>;

@@ -49,7 +49,7 @@ const Home: NextPage = () => {
         </motion.a>
         <MotionLink
           className="link-btn flex items-center gap-2"
-          href={session ? "/chats" : "/auth/signin"}
+          href="/chats"
           variants={fadeInUp}
           whileTap={{ scale: 0.95 }}
         >
