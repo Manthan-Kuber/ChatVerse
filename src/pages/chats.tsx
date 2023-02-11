@@ -16,6 +16,56 @@ import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import useSocket from "../hooks/useSocket";
 import events from "../utils/events";
+import { prisma } from "../server/db/client";
+import { Prisma } from "@prisma/client";
+import { GetServerSideProps } from "next";
+import { getServerAuthSession } from "../server/common/get-server-auth-session";
+
+function findConversation(userId: string) {
+  return prisma.conversation.findMany({
+    where: {
+      participants: {
+        some: {
+          userId,
+        },
+      },
+    },
+    include: {
+      messages: true,
+      participants: true,
+      latestMessage: true,
+    },
+  });
+}
+
+type ChatSearch = Prisma.PromiseReturnType<typeof findConversation>;
+
+type ChatProps = {
+  chats: ChatSearch | null;
+};
+
+export const getServerSideProps: GetServerSideProps<ChatProps> = async (
+  context
+) => {
+  const { req, res } = context;
+  const session = await getServerAuthSession({ req, res });
+
+  if (session && session.user) {
+    const res = await findConversation(session.user.id);
+    console.log(JSON.parse(JSON.stringify(res)));
+    return {
+      props: {
+        chats: JSON.parse(JSON.stringify(res)), //can return empty array
+      },
+    };
+  } else {
+    return {
+      props: {
+        chats: null,
+      },
+    };
+  }
+};
 
 const chats = () => {
   const { width: screenWidth } = useWindowSize();
