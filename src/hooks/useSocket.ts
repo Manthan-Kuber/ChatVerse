@@ -6,14 +6,13 @@ function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socket = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
+    const socketInstance = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
 
-    setSocket(socket);
+    setSocket(socketInstance);
 
-    function cleanup() {
-      socket.disconnect();
-    }
-    return cleanup;
+    return () => {
+      socketInstance.disconnect();
+    };
   }, []);
 
   return socket;
