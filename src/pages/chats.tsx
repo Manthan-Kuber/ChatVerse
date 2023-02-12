@@ -1,5 +1,4 @@
 import React, {
-  createContext,
   FormEvent,
   KeyboardEvent,
   ReactElement,
@@ -134,6 +133,9 @@ const chats = ({
 
   useEffect(() => {
     if (fetchError) toast.error("Error in fetching chats");
+    return () => {
+      toast.remove();
+    };
   }, [fetchError]);
 
   return (

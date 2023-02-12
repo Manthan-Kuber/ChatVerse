@@ -57,10 +57,7 @@ const Sidebar = () => {
           />
         </div>
         <div className="mt-4 max-h-80 space-y-4 overflow-scroll">
-          <SearchResults
-            searchQuery={debouncedValue}
-            userId={session?.user?.id}
-          />
+          <SearchResults searchQuery={debouncedValue} />
         </div>
       </div>
       <button

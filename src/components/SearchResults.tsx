@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { ChatsContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 
@@ -30,13 +30,7 @@ const SearchResultSkeleton = ({ count }: { count?: number }) => {
   );
 };
 
-const SearchResults = ({
-  searchQuery,
-  userId,
-}: {
-  searchQuery: string;
-  userId: string | undefined;
-}) => {
+const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   const {
     data: SearchedUsersArray,
     error,
@@ -55,11 +49,15 @@ const SearchResults = ({
     })
   )[0];
 
-  if (error) {
-    toast.remove();
-    toast.error(error.message);
-    return null;
-  }
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message);
+    }
+    return () => {
+      toast.remove();
+    };
+  }, [error]);
+
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
