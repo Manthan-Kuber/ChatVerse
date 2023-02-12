@@ -43,7 +43,7 @@ const SearchResults = ({
     isLoading,
   } = useSwr<UserSearch, { message: string }>(
     searchQuery
-      ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}&userId=${userId}`
+      ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
       : null,
     fetcher
   );
@@ -63,7 +63,28 @@ const SearchResults = ({
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
-  if (!SearchedUsersArray) return null;
+  if (!SearchedUsersArray) {
+    return (
+      <>
+        {participants?.map(({ id, image, name, latestMessage }) => {
+          return (
+            <>
+              <ChatOrUserInfo
+                key={id}
+                image={image}
+                field1={name}
+                field2={
+                  latestMessage || (
+                    <span className="invisible">Placeholder</span>
+                  )
+                }
+              />
+            </>
+          );
+        })}
+      </>
+    );
+  }
 
   if (SearchedUsersArray.length === 0)
     return <p className="text-center">No results found</p>;

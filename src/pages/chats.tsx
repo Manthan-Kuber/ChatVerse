@@ -45,6 +45,7 @@ function findConversation(userId: string) {
         select: {
           user: {
             select: {
+              id: true,
               name: true,
               image: true,
             },
@@ -62,6 +63,7 @@ export type ChatSearch = Prisma.PromiseReturnType<typeof findConversation>;
 
 type ChatProps = {
   chats: ChatSearch | null;
+  fetchError: boolean;
 };
 
 export const getServerSideProps: GetServerSideProps<ChatProps> = async (
@@ -72,22 +74,29 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
 
   if (session && session.user) {
     const res = await findConversation(session.user.id);
-    console.log(JSON.parse(JSON.stringify(res)));
     return {
       props: {
         chats: JSON.parse(JSON.stringify(res)), //can return empty array
+        fetchError: false,
       },
     };
   } else {
     return {
       props: {
         chats: null,
+        fetchError: true,
       },
     };
   }
 };
 
-const chats = ({ chats }: { chats: ChatSearch }) => {
+const chats = ({
+  chats,
+  fetchError,
+}: {
+  chats: ChatSearch;
+  fetchError: boolean;
+}) => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -122,6 +131,10 @@ const chats = ({ chats }: { chats: ChatSearch }) => {
   useEffect(() => {
     receiveMessage();
   }, [socket]);
+
+  useEffect(() => {
+    if (fetchError) toast.error("Error in fetching chats");
+  }, [fetchError]);
 
   return (
     <motion.div

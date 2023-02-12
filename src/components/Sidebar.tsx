@@ -6,6 +6,7 @@ import { ChangeEvent, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";
+import Skeleton from "react-loading-skeleton";
 
 const Sidebar = () => {
   const { data: session } = useSession();
@@ -41,8 +42,8 @@ const Sidebar = () => {
       <div>
         <ChatOrUserInfo
           image={session?.user?.image}
-          field1={session?.user?.name}
-          field2={session?.user?.email}
+          field1={session?.user?.name || <Skeleton />}
+          field2={session?.user?.email || <Skeleton />}
           spanClassName1={`${spanClassName} sm:text-lg`}
           spanClassName2={`${spanClassName} sm:text-base`}
         />
@@ -55,7 +56,7 @@ const Sidebar = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
         </div>
-        <div className="mt-4  max-h-80 space-y-4 overflow-scroll">
+        <div className="mt-4 max-h-80 space-y-4 overflow-scroll">
           <SearchResults
             searchQuery={debouncedValue}
             userId={session?.user?.id}

@@ -1,4 +1,4 @@
-import Skeleton from "react-loading-skeleton";
+import { ReactNode } from "react";
 import { resetScroll } from "../utils/functions";
 import ProfileImage from "./ProfileImage";
 
@@ -15,8 +15,8 @@ const ChatOrUserInfo = ({
   ...props
 }: {
   image: string | null | undefined;
-  field1: string | null | undefined;
-  field2: string | null | undefined;
+  field1: string | ReactNode;
+  field2: string | ReactNode;
   divClassName?: string;
   spanClassName1?: string;
   spanClassName2?: string;
@@ -31,13 +31,13 @@ const ChatOrUserInfo = ({
           className={`block truncate ${spanClassName1}`}
           onMouseLeave={resetScroll}
         >
-          {props.field1 || <Skeleton />}
+          {props.field1}
         </span>
         <span
           className={`block truncate ${spanClassName2}`}
           onMouseLeave={resetScroll}
         >
-          {props.field2 || <Skeleton />}
+          {props.field2}
         </span>
       </div>
     </div>
