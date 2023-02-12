@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext } from "react";
 import { ChatSearch } from "../pages/chats";
 
 const ChatsContext = createContext<ChatSearch | null>(null);

@@ -2,12 +2,10 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { resetScroll } from "../utils/functions";
 import { ChangeEvent, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import SearchResults from "./SearchResults";
-import ProfileImage from "./ProfileImage";
-import Skeleton from "react-loading-skeleton";
+import ChatOrUserInfo from "./ChatOrUserInfo";
 
 const Sidebar = () => {
   const { data: session } = useSession();
@@ -35,29 +33,22 @@ const Sidebar = () => {
     setValue(e.target.value);
   }
 
+  const spanClassName =
+    "scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll";
+
   return (
-    <div className=" flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen">
+    <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen">
       <div>
-        <div className="grid grid-cols-[auto_1fr] content-center items-center gap-4 rounded-lg bg-neutral-500 bg-opacity-10 p-4 backdrop-blur-lg">
-          <ProfileImage image={session?.user?.image} />
-          <div className="w-full overflow-hidden ">
-            <span
-              onMouseLeave={resetScroll}
-              className="block scroll-smooth truncate font-mono tracking-wider hover:overflow-x-scroll sm:text-lg"
-            >
-              {session?.user?.name || <Skeleton />}
-            </span>
-            <span
-              onMouseLeave={resetScroll}
-              className="block scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll sm:text-base"
-            >
-              {session?.user?.email || <Skeleton />}
-            </span>
-          </div>
-        </div>
+        <ChatOrUserInfo
+          image={session?.user?.image}
+          field1={session?.user?.name}
+          field2={session?.user?.email}
+          spanClassName1={`${spanClassName} sm:text-lg`}
+          spanClassName2={`${spanClassName} sm:text-base`}
+        />
         <div className="mt-4">
           <input
-            className="w-full rounded-md bg-neutral-500/10 px-4 py-2 truncate outline-none transition-transform duration-200"
+            className="w-full truncate rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
             placeholder="Search or start a new chat"
             value={value}
             onChange={handleSearch}
