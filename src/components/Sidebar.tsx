@@ -56,7 +56,8 @@ const Sidebar = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
         </div>
-        <div className="mt-4 max-h-80 space-y-4 overflow-scroll">
+        {!value && <h3 className="mt-4 text-lg sm:text-xl">Chats</h3>}
+        <div className="mt-4 max-h-80 space-y-2 overflow-scroll">
           <SearchResults searchQuery={debouncedValue} />
         </div>
       </div>

@@ -28,7 +28,7 @@ function searchUser(searchQuery: string, userId: string) {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerAuthSession({ req, res });
 
-  if (!session)
+  if (!session?.user)
     return res.status(401).json({ message: "User is not signed in" });
 
   if (req.method !== "GET")

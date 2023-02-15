@@ -73,9 +73,10 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
 
   if (session && session.user) {
     const res = await findConversation(session.user.id);
+    const chats = JSON.parse(JSON.stringify(res));
     return {
       props: {
-        chats: JSON.parse(JSON.stringify(res)), //can return empty array
+        chats, //can return empty array
         fetchError: false,
       },
     };
