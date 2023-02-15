@@ -15,7 +15,7 @@ export default async function handler(
 ) {
   const session = await getServerAuthSession({ req, res });
 
-  if (!session)
+  if (!session?.user)
     return res.status(401).json({ message: "User is not signed in" });
 
   if (req.method !== "POST") {
@@ -31,18 +31,37 @@ export default async function handler(
 
   const { userId } = parsedSchema.data.body;
 
+  if (userId === session.user.id)
+    return res.status(400).json({ message: "User Id same as signed in user's id" });
+
   try {
     if (session?.user?.id) {
+      //Check for combination of id
+      const chatExists = await prisma.conversation.findMany({
+        where: {
+          OR: [
+            { id: session.user.id + userId },
+            { id: userId + session.user.id },
+          ],
+        },
+      });
+
+      if (chatExists.length !== 0)
+        return res
+          .status(403)
+          .json({ message: "Chat already exists", chat: chatExists });
+
       const newChat = await prisma.conversation.create({
         data: {
+          id: session.user.id + userId, //Create conv with combination of userIds
           participants: {
             createMany: {
-              data: [{ userId: session?.user?.id }, { userId }],
+              data: [{ userId: session.user.id }, { userId }],
             },
           },
         },
       });
-      return res.status(201).send(newChat);
+      return res.status(201).json({ message: "Doesn't exist", chat: newChat });
     } else {
       res.status(500).json({ message: "Error in creating conversation" });
     }
