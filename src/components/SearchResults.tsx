@@ -43,11 +43,10 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   );
   const chats = useContext(ChatsContext);
 
-  const participants = chats?.map((chat) =>
-    chat.participants.map((participant) => {
-      return { ...participant.user, latestMessage: chat.latestMessage?.body };
-    })
-  )[0];
+  const chatsInfo = chats?.map((c) => ({
+    ...c.participants[0]?.user,
+    latestMessage: c.latestMessage?.body,
+  }));
 
   useEffect(() => {
     if (error) {
@@ -58,19 +57,18 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     };
   }, [error]);
 
-
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
   if (!SearchedUsersArray) {
     return (
       <>
-        {participants?.map(({ id, image, name, latestMessage }) => {
+        {chatsInfo?.map(({ id, image, name, latestMessage }) => {
           return (
             <>
               <ChatOrUserInfo
                 key={id}
                 image={image}
-                field1={name}
+                field1={name || <Skeleton />}
                 field2={
                   latestMessage || (
                     <span className="invisible">Placeholder</span>
