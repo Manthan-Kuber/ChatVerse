@@ -74,6 +74,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                     <span className="invisible">Placeholder</span>
                   )
                 }
+                divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200"
               />
             </>
           );
@@ -93,6 +94,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
           field1={user.name}
           field2={`~ ${user.email}`}
           key={user.id}
+          divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200"
         />
       ))}
     </>
