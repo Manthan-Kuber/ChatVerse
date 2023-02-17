@@ -2,6 +2,7 @@ import React, {
   FormEvent,
   KeyboardEvent,
   ReactElement,
+  ReactNode,
   useEffect,
   useState,
 } from "react";
@@ -129,6 +130,19 @@ const chats = ({
     }
   }
 
+  const SideBarWrapper = ({ children }: { children: ReactNode }) =>
+    screenWidth && screenWidth >= 640 ? (
+      <section>{children}</section>
+    ) : (
+      <AnimatePresence>
+        {isOpen && (
+          <Menu setIsOpen={setIsOpen} menuWidth={-wByN(2 / 3)!}>
+            {children}
+          </Menu>
+        )}
+      </AnimatePresence>
+    );
+
   useEffect(() => {
     receiveMessage();
   }, [socket]);
@@ -147,21 +161,11 @@ const chats = ({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <ChatsProvider value={chats}>
-        {screenWidth && screenWidth >= 640 ? (
-          <section>
-            <Sidebar />
-          </section>
-        ) : (
-          <AnimatePresence>
-            {isOpen && (
-              <Menu setIsOpen={setIsOpen} menuWidth={-wByN(2 / 3)!}>
-                <Sidebar />
-              </Menu>
-            )}
-          </AnimatePresence>
-        )}
-      </ChatsProvider>
+      <SideBarWrapper>
+        <ChatsProvider value={chats}>
+          <Sidebar />
+        </ChatsProvider>
+      </SideBarWrapper>
       <div className="sm:px-2 sm:pt-8">
         <ChatsHeader setIsOpen={setIsOpen} currentChat={currentChat} />
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
