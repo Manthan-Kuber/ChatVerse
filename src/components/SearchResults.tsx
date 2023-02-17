@@ -6,8 +6,9 @@ import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
 import { useContext, useEffect } from "react";
-import { ChatsContext } from "../context/chats.context";
+import { ChatsContext, SetCurrentChatContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
+import { ChatSearch } from "../pages/chats";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -42,12 +43,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     fetcher
   );
   const chats = useContext(ChatsContext);
-
-  const chatsInfo = chats?.map((c) => ({
-    ...c.participants[0]?.user,
-    messages:c.messages,
-    latestMessage: c.latestMessage?.body,
-  }));
+  const setCurrentChat = useContext(SetCurrentChatContext);
 
   useEffect(() => {
     if (error) {
@@ -60,22 +56,28 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
+  const handleClick = (chat: ChatSearch[0]) =>
+    setCurrentChat && setCurrentChat(chat);
+
   if (!SearchedUsersArray) {
     return (
       <>
-        {chatsInfo?.map(({ id, image, name, latestMessage }) => {
+        {chats?.map((chat) => {
+          const { id: chatId, latestMessage } = chat;
+          const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
           return (
             <>
               <ChatOrUserInfo
-                key={id}
-                image={image}
-                field1={name || <Skeleton />}
+                key={chatId}
+                image={user?.image}
+                field1={user?.name || <Skeleton />}
                 field2={
-                  latestMessage || (
+                  latestMessage?.body || (
                     <span className="invisible">Placeholder</span>
                   )
                 }
                 divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200"
+                onClick={() => handleClick(chat)}
               />
             </>
           );

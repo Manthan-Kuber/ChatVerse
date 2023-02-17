@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
 import { resetScroll } from "../utils/functions";
 import ProfileImage from "./ProfileImage";
 
@@ -20,10 +20,12 @@ const ChatOrUserInfo = ({
   divClassName?: string;
   spanClassName1?: string;
   spanClassName2?: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
     <div
       className={`grid grid-cols-[auto_1fr] content-center items-center gap-4 rounded-md bg-neutral-500/10 px-4 py-2 outline-none backdrop-blur-lg transition-transform duration-200 ${divClassName}`}
+      onClick={props.onClick}
     >
       <ProfileImage image={props.image} />
       <div className="max-w-full overflow-hidden ">
