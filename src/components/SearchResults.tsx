@@ -45,6 +45,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
 
   const chatsInfo = chats?.map((c) => ({
     ...c.participants[0]?.user,
+    messages:c.messages,
     latestMessage: c.latestMessage?.body,
   }));
 

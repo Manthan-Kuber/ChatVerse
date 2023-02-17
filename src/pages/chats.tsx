@@ -103,6 +103,7 @@ const chats = ({
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [messageList, setMessageList] = useState<string[]>([]);
+  const [currentChat, setCurrentChat] = useState<ChatSearch[0] | undefined>();
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -162,7 +163,7 @@ const chats = ({
         )}
       </ChatsProvider>
       <div className="sm:px-2 sm:pt-8">
-        <ChatsHeader setIsOpen={setIsOpen} />
+        <ChatsHeader setIsOpen={setIsOpen} currentChat={currentChat} />
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
           <div className="flex-1">
             {messageList.map((message) => (
