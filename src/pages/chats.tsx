@@ -21,7 +21,10 @@ import { prisma } from "../server/db/client";
 import { Prisma } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
-import { ChatsProvider } from "../context/chats.context";
+import {
+  ChatsProvider,
+  SetCurrentChatProvider,
+} from "../context/chats.context";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -104,7 +107,7 @@ const chats = ({
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [messageList, setMessageList] = useState<string[]>([]);
-  const [currentChat, setCurrentChat] = useState<ChatSearch[0] | undefined>();
+  const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -163,7 +166,9 @@ const chats = ({
     >
       <SideBarWrapper>
         <ChatsProvider value={chats}>
-          <Sidebar />
+          <SetCurrentChatProvider value={setCurrentChat}>
+            <Sidebar />
+          </SetCurrentChatProvider>
         </ChatsProvider>
       </SideBarWrapper>
       <div className="sm:px-2 sm:pt-8">
