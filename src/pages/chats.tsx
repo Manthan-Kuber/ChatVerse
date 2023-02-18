@@ -25,6 +25,7 @@ import {
   ChatsProvider,
   SetCurrentChatProvider,
 } from "../context/chats.context";
+import Image from "next/image";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -67,6 +68,7 @@ export type ChatSearch = Prisma.PromiseReturnType<typeof findConversation>;
 type ChatProps = {
   chats: ChatSearch | null;
   fetchError: boolean;
+  currentUserId: string | null;
 };
 
 export const getServerSideProps: GetServerSideProps<ChatProps> = async (
@@ -82,6 +84,7 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
       props: {
         chats, //can return empty array
         fetchError: false,
+        currentUserId: session.user.id,
       },
     };
   } else {
@@ -89,18 +92,13 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
       props: {
         chats: null,
         fetchError: true,
+        currentUserId: null,
       },
     };
   }
 };
 
-const chats = ({
-  chats,
-  fetchError,
-}: {
-  chats: ChatSearch;
-  fetchError: boolean;
-}) => {
+const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -129,7 +127,7 @@ const chats = ({
 
   function receiveMessage() {
     if (socket) {
-      socket.on(events.RECEIVE_MESSAGE, (data) => {
+      socket.on(events.RECEIVE_MESSAGE, (data: string) => {
         setMessageList(
           (prev) => [...(prev || []), data] //Fallback of empty array if undefined
         );
@@ -151,6 +149,7 @@ const chats = ({
     );
 
   useEffect(() => {
+    if (currentUserId) socket?.emit(events.ADD_NEW_USER, currentUserId);
     receiveMessage();
   }, [socket]);
 
@@ -176,21 +175,45 @@ const chats = ({
         </ChatsProvider>
       </SideBarWrapper>
       <div className="sm:px-2 sm:pt-8">
-        <ChatsHeader setIsOpen={setIsOpen} currentChat={currentChat} />
+        {/* User will be signed out if no session. currentUserId will not be null */}
+        <ChatsHeader
+          setIsOpen={setIsOpen}
+          currentChat={currentChat}
+          currentUserId={currentUserId!}
+        />
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
-          <div className="flex-1">
-            {messageList?.map((message,idx) => (
-              <p key={idx}>{message}</p>
-            ))}
+          <div
+            className={`flex-1 ${
+              !currentChat && " flex items-center justify-center "
+            }`}
+          >
+            {currentChat ? (
+              messageList?.map((message, idx) => <p key={idx}>{message}</p>)
+            ) : (
+              <div>
+                <Image
+                  src="/undraw_quick_chat_re_bit5.svg"
+                  width={240}
+                  height={240}
+                  alt="logo"
+                  className="md:mb-4 md:w-[320px] "
+                />
+                <span className="block text-center font-mono text-lg">
+                  Click on a chat to start chatting
+                </span>
+              </div>
+            )}
           </div>
           <div className="px-4 pt-2 pb-2 sm:pb-0">
-            <ChatInputForm
-              handleSubmit={handleSubmit}
-              value={message}
-              setValue={setMessage}
-              Icon={IoMdSend}
-              placeholder="Message channel name"
-            />
+            {currentChat && (
+              <ChatInputForm
+                handleSubmit={handleSubmit}
+                value={message}
+                setValue={setMessage}
+                Icon={IoMdSend}
+                placeholder="Message channel name"
+              />
+            )}
           </div>
         </main>
       </div>

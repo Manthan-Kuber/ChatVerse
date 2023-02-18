@@ -1,4 +1,3 @@
-import { useSession } from "next-auth/react";
 import { Dispatch, SetStateAction } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
@@ -8,14 +7,15 @@ import ThemeChanger from "./ThemeChanger";
 const ChatsHeader = ({
   setIsOpen,
   currentChat,
+  currentUserId,
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  currentChat: ChatSearch[0] | undefined ;
+  currentChat: ChatSearch[0] | undefined;
+  currentUserId: string;
 }) => {
   const { width: screenWidth } = useWindowSize();
-  const { data: session } = useSession();
   const chatName = currentChat?.participants
-    .filter((x) => x.user.id !== session?.user?.id)
+    .filter((x) => x.user.id !== currentUserId)
     .map((x) => x.user.name)[0];
   return (
     <header className="bg-neutral-500 bg-opacity-10 p-4 sm:rounded-t-xl ">
