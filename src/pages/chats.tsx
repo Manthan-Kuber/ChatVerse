@@ -106,8 +106,10 @@ const chats = ({
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
-  const [messageList, setMessageList] = useState<string[]>([]);
   const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
+  const [messageList, setMessageList] = useState<string[] | undefined>(
+    currentChat?.messages.map((m) => m.body)
+  );
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -116,7 +118,7 @@ const chats = ({
     try {
       if (socket) {
         socket.emit(events.SEND_MESSAGE, message);
-        setMessageList([...messageList, message]);
+        setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
         setMessage("");
       }
     } catch (err) {
@@ -128,7 +130,9 @@ const chats = ({
   function receiveMessage() {
     if (socket) {
       socket.on(events.RECEIVE_MESSAGE, (data) => {
-        setMessageList((prev) => [...prev, data]);
+        setMessageList(
+          (prev) => [...(prev || []), data] //Fallback of empty array if undefined
+        );
       });
     }
   }
@@ -175,8 +179,8 @@ const chats = ({
         <ChatsHeader setIsOpen={setIsOpen} currentChat={currentChat} />
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
           <div className="flex-1">
-            {messageList.map((message) => (
-              <p>{message}</p>
+            {messageList?.map((message,idx) => (
+              <p key={idx}>{message}</p>
             ))}
           </div>
           <div className="px-4 pt-2 pb-2 sm:pb-0">
