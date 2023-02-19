@@ -26,6 +26,7 @@ import {
   SetCurrentChatProvider,
 } from "../context/chats.context";
 import Image from "next/image";
+import Message from "../components/Message";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -105,9 +106,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
-  const [messageList, setMessageList] = useState<string[] | undefined>(
-    currentChat?.messages.map((m) => m.body)
-  );
+  const [messageList, setMessageList] = useState<string[] | undefined>();
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -149,6 +148,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     );
 
   useEffect(() => {
+    setMessageList(currentChat?.messages.map((m) => m.body));
+  }, [currentChat]);
+
+  useEffect(() => {
     if (currentUserId) socket?.emit(events.ADD_NEW_USER, currentUserId);
     receiveMessage();
   }, [socket]);
@@ -183,12 +186,14 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         />
         <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
           <div
-            className={`flex-1 ${
+            className={`flex-1  ${
               !currentChat && " flex items-center justify-center "
             }`}
           >
             {currentChat ? (
-              messageList?.map((message, idx) => <p key={idx}>{message}</p>)
+              messageList?.map((message, idx) => (
+                <Message isSender={true} key={idx} message={message} />
+              ))
             ) : (
               <div>
                 <Image
