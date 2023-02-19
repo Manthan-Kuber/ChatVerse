@@ -40,11 +40,10 @@ function findConversation(userId: string) {
     },
     select: {
       id: true,
-      messages: true,
       participants: {
         where: {
           NOT: {
-            userId,
+            userId, //Return participants other than current signed in user
           },
         },
         select: {
@@ -148,7 +147,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     );
 
   useEffect(() => {
-    setMessageList(currentChat?.messages.map((m) => m.body));
+    // setMessageList(currentChat?.messages.map((m) => m.body));
   }, [currentChat]);
 
   useEffect(() => {

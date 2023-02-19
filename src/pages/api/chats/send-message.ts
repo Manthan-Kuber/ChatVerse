@@ -43,7 +43,7 @@ export default async function handler(
     conversationId === receiverId + session.user.id;
 
   if (!isConvValid)
-    return res.status(400).json({ message: "Invalid conversation id" });
+    return res.status(400).json({ message: "Invalid conversation or receiver id" });
 
   try {
     const newMessage = await prisma.message.create({
