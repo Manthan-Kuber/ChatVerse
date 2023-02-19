@@ -91,6 +91,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
 
   return (
     <>
+    {/* TODO create chat on click */}
       {SearchedUsersArray.map((user) => (
         <ChatOrUserInfo
           image={user.image}
