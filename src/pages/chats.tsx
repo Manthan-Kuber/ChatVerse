@@ -26,7 +26,7 @@ import {
   SetCurrentChatProvider,
 } from "../context/chats.context";
 import Image from "next/image";
-import Message from "../components/Message";
+import MessageList from "../components/MessageList";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -114,7 +114,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     try {
       if (socket) {
         socket.emit(events.SEND_MESSAGE, message);
-        setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
+        //Perform swr mutation here
+        // setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
         setMessage("");
       }
     } catch (err) {
@@ -126,6 +127,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   function receiveMessage() {
     if (socket) {
       socket.on(events.RECEIVE_MESSAGE, (data: string) => {
+        //Perform Swr mutation here
         setMessageList(
           (prev) => [...(prev || []), data] //Fallback of empty array if undefined
         );
@@ -145,10 +147,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         )}
       </AnimatePresence>
     );
-
-  useEffect(() => {
-    // setMessageList(currentChat?.messages.map((m) => m.body));
-  }, [currentChat]);
 
   useEffect(() => {
     if (currentUserId) socket?.emit(events.ADD_NEW_USER, currentUserId);
@@ -190,9 +188,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             }`}
           >
             {currentChat ? (
-              messageList?.map((message, idx) => (
-                <Message isSender={true} key={idx} message={message} />
-              ))
+              <MessageList
+                conversationId={currentChat.id}
+                receiverId={currentChat.participants.map((p) => p.user.id)[0]!}
+              /> //Rec id wont be undefined
             ) : (
               <div>
                 <Image
