@@ -1,9 +1,18 @@
+import { Message } from "@prisma/client";
+
 type MessageProps = {
-  message: string;
-  isSender: boolean;
+  message: Message;
+  currentUserId: string;
 };
 
-const Message = ({ message, isSender }: MessageProps) => {
+const Message = ({ message, currentUserId }: MessageProps) => {
+  const isSender = currentUserId === message.senderId;
+  const messageCreationDate = new Date(message.createdAt)
+    .toLocaleString(navigator.language, {
+      timeStyle: "short",
+      dateStyle: "short",
+    })
+    .replace(",", " ");
   return (
     <div className={`m-2 flex flex-col ${isSender && "items-end"} `}>
       <span
@@ -13,9 +22,9 @@ const Message = ({ message, isSender }: MessageProps) => {
             : "float-left rounded-bl-md bg-gray-400 dark:bg-gray-500 "
         } w-fit rounded-full p-4`}
       >
-        {message}
+        {message.body}
       </span>
-      <small>11:47 pm</small>
+      <small>{messageCreationDate}</small>
     </div>
   );
 };
