@@ -1,20 +1,21 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { ChatSearch } from "../pages/chats";
 
-type SetCurrentChat = Dispatch<
-  SetStateAction<ChatSearch[0] | undefined>
-> | null;
+type CurrentChat = {
+  setCurrentChat: Dispatch<SetStateAction<ChatSearch[0] | undefined>>;
+  currentChat: ChatSearch[0] | undefined;
+} | null;
 type ChatsContext = ChatSearch | null;
 
 const ChatsContext = createContext<ChatsContext>(null);
 const { Provider: ChatsProvider } = ChatsContext;
-const SetCurrentChatContext = createContext<SetCurrentChat>(null);
-const { Provider: SetCurrentChatProvider } = SetCurrentChatContext;
+const CurrentChatContext = createContext<CurrentChat>(null);
+const { Provider: CurrentChatProvider } = CurrentChatContext;
 
 export {
   ChatsContext,
   ChatsProvider,
-  SetCurrentChatContext,
-  SetCurrentChatProvider,
-  type SetCurrentChat,
+  CurrentChatContext,
+  CurrentChatProvider,
+  type CurrentChat,
 };

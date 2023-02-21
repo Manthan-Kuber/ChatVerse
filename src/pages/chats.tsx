@@ -23,7 +23,8 @@ import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import {
   ChatsProvider,
-  SetCurrentChatProvider,
+  CurrentChatContext,
+  CurrentChatProvider,
 } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
@@ -115,7 +116,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       if (socket) {
         socket.emit(events.SEND_MESSAGE, message);
         //Perform swr mutation here
-        // setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
+        setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
         setMessage("");
       }
     } catch (err) {
@@ -169,9 +170,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     >
       <SideBarWrapper>
         <ChatsProvider value={chats}>
-          <SetCurrentChatProvider value={setCurrentChat}>
+          <CurrentChatProvider value={{currentChat,setCurrentChat}}>
             <Sidebar />
-          </SetCurrentChatProvider>
+          </CurrentChatProvider>
         </ChatsProvider>
       </SideBarWrapper>
       <div className="sm:px-2 sm:pt-8">

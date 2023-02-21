@@ -6,7 +6,7 @@ import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
 import { useContext, useEffect } from "react";
-import { ChatsContext, SetCurrentChatContext } from "../context/chats.context";
+import { ChatsContext, CurrentChatContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { ChatSearch } from "../pages/chats";
 
@@ -43,7 +43,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     fetcher
   );
   const chats = useContext(ChatsContext);
-  const setCurrentChat = useContext(SetCurrentChatContext);
+  const currentChatState = useContext(CurrentChatContext);
 
   useEffect(() => {
     if (error) {
@@ -57,7 +57,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
   const handleClick = (chat: ChatSearch[0]) =>
-    setCurrentChat && setCurrentChat(chat);
+    currentChatState && currentChatState.setCurrentChat(chat);
 
   if (!SearchedUsersArray) {
     return (
@@ -76,7 +76,10 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                     <span className="invisible">Placeholder</span>
                   )
                 }
-                divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200"
+                divClassName={`hover:cursor-pointer hover:bg-neutral-300/10 transition-colors duration-200 ${
+                  currentChatState?.currentChat?.id === chatId &&
+                  "bg-neutral-400/10"
+                }`}
                 onClick={() => handleClick(chat)}
               />
             </>
@@ -91,7 +94,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
 
   return (
     <>
-    {/* TODO create chat on click */}
+      {/* TODO create chat on click */}
       {SearchedUsersArray.map((user) => (
         <ChatOrUserInfo
           image={user.image}

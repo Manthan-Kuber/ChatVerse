@@ -1,5 +1,4 @@
 import { Message } from "@prisma/client";
-import Skeleton from "react-loading-skeleton";
 
 type MessageProps = {
   message: Message;
