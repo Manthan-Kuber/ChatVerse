@@ -181,9 +181,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           currentChat={currentChat}
           currentUserId={currentUserId!}
         />
-        <main className="flex min-h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:min-h-[calc(100vh-6.5rem)] sm:pb-16">
+        <main className="flex h-[calc(100vh-4.5rem)] flex-col bg-neutral-300 bg-opacity-10 sm:h-[calc(100vh-6.5rem)] sm:pb-16">
           <div
-            className={`flex-1  ${
+            className={`flex-1 overflow-y-scroll  ${
               !currentChat && " flex items-center justify-center "
             }`}
           >
@@ -207,7 +207,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
               </div>
             )}
           </div>
-          <div className="px-4 pt-2 pb-2 sm:pb-0">
+          <div className="px-4 pt-2 pb-2 my-4 sm:my-0 sm:pb-0">
             {currentChat && (
               <ChatInputForm
                 handleSubmit={handleSubmit}

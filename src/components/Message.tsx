@@ -1,4 +1,5 @@
 import { Message } from "@prisma/client";
+import Skeleton from "react-loading-skeleton";
 
 type MessageProps = {
   message: Message;
@@ -14,7 +15,9 @@ const Message = ({ message, currentUserId }: MessageProps) => {
     })
     .replace(",", " ");
   return (
-    <div className={`m-2 flex flex-col ${isSender && "items-end"} `}>
+    <div
+      className={`m-2 flex flex-col ${isSender ? "items-end" : "items-start"} `}
+    >
       <span
         className={`${
           isSender
