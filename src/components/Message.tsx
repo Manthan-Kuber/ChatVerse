@@ -18,12 +18,19 @@ const Message = ({ message, currentUserId }: MessageProps) => {
       <span
         className={`${
           isSender
-            ? " rounded-br-md bg-lime-400 dark:bg-lime-500"
-            : " rounded-bl-md bg-gray-400 dark:bg-gray-500 "
-        } w-fit rounded-full p-4`}
+            ? " rounded-br-none bg-lime-400 dark:bg-lime-500"
+            : " rounded-bl-none bg-gray-400 dark:bg-gray-500 "
+        } w-fit rounded-md p-4`}
       >
         {message.body}
       </span>
+      <div
+        className={`h-0 w-0 border-t-8 ${
+          isSender
+            ? "border-l-8 border-l-transparent border-t-lime-400 dark:border-t-lime-500"
+            : "border-r-8 border-r-transparent border-t-gray-400 dark:border-t-gray-500"
+        }`}
+      />
       <small>{messageCreationDate}</small>
     </div>
   );
