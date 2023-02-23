@@ -3,6 +3,7 @@ import React, {
   KeyboardEvent,
   ReactElement,
   ReactNode,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -107,6 +108,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const socket = useSocket();
   const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
   const [messageList, setMessageList] = useState<string[] | undefined>();
+  const [onlineUsers, setOnlineUsers] = useState<
+    { userId: string; socketId: string }[]
+  >([]);
+  const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -114,7 +119,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     e.preventDefault();
     try {
       if (socket) {
-        socket.emit(events.SEND_MESSAGE, message);
+        socket.emit(events.PRIVATE_MESSAGE, {
+          message,
+          from: currentUserId,
+          to: receiverId,
+        });
         //Perform swr mutation here
         setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
         setMessage("");
@@ -124,17 +133,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       toast.error("Error in sending the message");
     }
   };
-
-  function receiveMessage() {
-    if (socket) {
-      socket.on(events.RECEIVE_MESSAGE, (data: string) => {
-        //Perform Swr mutation here
-        setMessageList(
-          (prev) => [...(prev || []), data] //Fallback of empty array if undefined
-        );
-      });
-    }
-  }
 
   const SideBarWrapper = ({ children }: { children: ReactNode }) =>
     screenWidth && screenWidth >= 640 ? (
@@ -149,9 +147,35 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       </AnimatePresence>
     );
 
+  const privateMessage = useCallback(
+    (data: { message: string; to: string; from: string }) => {
+      console.log(data);
+      //Perform Swr mutation here
+      setMessageList(
+        (prev) => [...(prev || []), data.message] //Fallback of empty array if undefined
+      );
+    },
+    [setMessageList, messageList]
+  );
+
+  const getUsers = useCallback(
+    (user: { userId: string; socketId: string }) => {
+      console.log(user);
+      setOnlineUsers([...onlineUsers, user]);
+    },
+    [onlineUsers, setOnlineUsers]
+  );
+
   useEffect(() => {
-    if (currentUserId) socket?.emit(events.ADD_NEW_USER, currentUserId);
-    receiveMessage();
+    if (socket) {
+      if (currentUserId) socket.emit(events.ADD_NEW_USER, currentUserId);
+      socket.on(events.GET_USERS, (user) => getUsers(user));
+    }
+  }, [socket]);
+
+  useEffect(() => {
+    if (socket)
+      socket.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
   }, [socket]);
 
   useEffect(() => {
@@ -170,7 +194,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     >
       <SideBarWrapper>
         <ChatsProvider value={chats}>
-          <CurrentChatProvider value={{currentChat,setCurrentChat}}>
+          <CurrentChatProvider value={{ currentChat, setCurrentChat }}>
             <Sidebar />
           </CurrentChatProvider>
         </ChatsProvider>
@@ -189,10 +213,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             }`}
           >
             {currentChat ? (
-              <MessageList
-                conversationId={currentChat.id}
-                receiverId={currentChat.participants.map((p) => p.user.id)[0]!}
-              /> //Rec id wont be undefined
+              // <MessageList
+              //   conversationId={currentChat.id}
+              //   receiverId={receiverId!}
+              // /> //Rec id wont be undefined
+              messageList?.map((m) => <p>{m}</p>)
             ) : (
               <div>
                 <Image
@@ -208,7 +233,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
               </div>
             )}
           </div>
-          <div className="px-4 pt-2 pb-2 my-4 sm:my-0 sm:pb-0">
+          <div className="my-4 px-4 pt-2 pb-2 sm:my-0 sm:pb-0">
             {currentChat && (
               <ChatInputForm
                 handleSubmit={handleSubmit}
