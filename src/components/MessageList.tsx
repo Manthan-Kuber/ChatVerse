@@ -1,5 +1,6 @@
+import type { Message as MessageType } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
 import useSwr from "swr";
@@ -34,9 +35,16 @@ const MessageListSkeleton = ({ count }: { count?: number }) => {
 type MessageListProps = {
   conversationId: string;
   receiverId: string;
+  messageList: MessageType[] | undefined;
+  setMessageList: Dispatch<SetStateAction<MessageType[] | undefined>>;
 };
 
-const MessageList = ({ conversationId, receiverId }: MessageListProps) => {
+const MessageList = ({
+  conversationId,
+  receiverId,
+  messageList,
+  setMessageList,
+}: MessageListProps) => {
   const currentUserId = useSession().data?.user?.id;
   const {
     data: MessagesArray,
@@ -56,15 +64,17 @@ const MessageList = ({ conversationId, receiverId }: MessageListProps) => {
     };
   }, [error]);
 
+  useEffect(() => {
+    if (MessagesArray) setMessageList(MessagesArray.flatMap((m) => m.messages));
+  }, [MessagesArray]);
+
   if (isLoading) return <MessageListSkeleton count={12} />;
 
-  if (!MessagesArray || MessagesArray.length === 0) return <></>;
-
-  const MessageList = MessagesArray.flatMap((m) => m.messages);
+  if (!messageList || messageList.length === 0) return <></>;
 
   return (
     <>
-      {MessageList.map((message) => (
+      {messageList.map((message) => (
         <Message message={message} currentUserId={currentUserId!} />
       ))}
     </>

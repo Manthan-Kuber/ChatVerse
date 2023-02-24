@@ -19,14 +19,10 @@ import { toast } from "react-hot-toast";
 import useSocket from "../hooks/useSocket";
 import events from "../utils/events";
 import { prisma } from "../server/db/client";
-import { Prisma } from "@prisma/client";
+import { Message, Prisma } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
-import {
-  ChatsProvider,
-  CurrentChatContext,
-  CurrentChatProvider,
-} from "../context/chats.context";
+import { ChatsProvider, CurrentChatProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
 
@@ -107,7 +103,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
-  const [messageList, setMessageList] = useState<string[] | undefined>();
+  const [messageList, setMessageList] = useState<Message[] | undefined>();
   const [onlineUsers, setOnlineUsers] = useState<
     { userId: string; socketId: string }[]
   >([]);
@@ -125,7 +121,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           to: receiverId,
         });
         //Perform swr mutation here
-        setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
+        // setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
         setMessage("");
       }
     } catch (err) {
@@ -151,9 +147,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     (data: { message: string; to: string; from: string }) => {
       console.log(data);
       //Perform Swr mutation here
-      setMessageList(
-        (prev) => [...(prev || []), data.message] //Fallback of empty array if undefined
-      );
+      // setMessageList(
+      //   (prev) => [...(prev || []), data.message] //Fallback of empty array if undefined
+      // );
     },
     [setMessageList, messageList]
   );
@@ -170,12 +166,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     if (socket) {
       if (currentUserId) socket.emit(events.ADD_NEW_USER, currentUserId);
       socket.on(events.GET_USERS, (user) => getUsers(user));
-    }
-  }, [socket]);
-
-  useEffect(() => {
-    if (socket)
       socket.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
+    }
   }, [socket]);
 
   useEffect(() => {
@@ -213,11 +205,12 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             }`}
           >
             {currentChat ? (
-              // <MessageList
-              //   conversationId={currentChat.id}
-              //   receiverId={receiverId!}
-              // /> //Rec id wont be undefined
-              messageList?.map((m) => <p>{m}</p>)
+              <MessageList
+                conversationId={currentChat.id}
+                receiverId={receiverId!}
+                messageList={messageList}
+                setMessageList={setMessageList}
+              /> //Rec id wont be undefined
             ) : (
               <div>
                 <Image
