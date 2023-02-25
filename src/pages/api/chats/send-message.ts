@@ -4,11 +4,9 @@ import { getServerAuthSession } from "../../../server/common/get-server-auth-ses
 import { prisma } from "../../../server/db/client";
 
 const reqBodySchema = z.object({
-  body: z.object({
-    conversationId: z.string(),
-    messageBody: z.string(),
-    receiverId: z.string(),
-  }),
+  conversationId: z.string(),
+  messageBody: z.string(),
+  receiverId: z.string(),
 });
 
 export default async function handler(
@@ -26,14 +24,14 @@ export default async function handler(
     });
   }
 
-  const parsedSchema = reqBodySchema.safeParse(req);
+  const parsedSchema = reqBodySchema.safeParse(JSON.parse(req.body));
 
   if (!parsedSchema.success)
     return res.status(400).json({
       message: "Invalid Request. Required parameters missing from the request",
     });
 
-  const { conversationId, messageBody, receiverId } = parsedSchema.data.body;
+  const { conversationId, messageBody, receiverId } = parsedSchema.data;
 
   if (receiverId === session.user.id)
     return res.status(400).json({ message: "Cannot message yourself" });
@@ -43,7 +41,9 @@ export default async function handler(
     conversationId === receiverId + session.user.id;
 
   if (!isConvValid)
-    return res.status(400).json({ message: "Invalid conversation or receiver id" });
+    return res
+      .status(400)
+      .json({ message: "Invalid conversation or receiver id" });
 
   try {
     const newMessage = await prisma.message.create({
