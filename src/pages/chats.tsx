@@ -25,6 +25,8 @@ import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { ChatsProvider, CurrentChatProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
+import { fetcher } from "../utils/functions";
+import { env } from "../env/client.mjs";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -96,6 +98,25 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
   }
 };
 
+async function sendMessage(
+  url: string,
+  {
+    conversationId,
+    messageBody,
+    receiverId,
+  }: { conversationId: string; messageBody: string; receiverId: string }
+) {
+  const data = await fetcher(url, {
+    method: "POST",
+    body: JSON.stringify({
+      conversationId,
+      messageBody,
+      receiverId,
+    }),
+  });
+  return data;
+}
+
 const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
@@ -108,17 +129,23 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     { userId: string; socketId: string }[]
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
+  const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
   ) => {
     e.preventDefault();
     try {
-      if (socket) {
+      if (socket && currentChat) {
         socket.emit(events.PRIVATE_MESSAGE, {
           message,
           from: currentUserId,
           to: receiverId,
+        });
+        sendMessage(sendMessageUrl, {
+          conversationId: currentChat.id,
+          messageBody: message,
+          receiverId: receiverId!,
         });
         //Perform swr mutation here
         // setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
