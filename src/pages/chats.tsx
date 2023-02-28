@@ -19,7 +19,7 @@ import { toast } from "react-hot-toast";
 import useSocket from "../hooks/useSocket";
 import events from "../utils/events";
 import { prisma } from "../server/db/client";
-import { Message, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { ChatsProvider, CurrentChatProvider } from "../context/chats.context";
@@ -27,6 +27,8 @@ import Image from "next/image";
 import MessageList from "../components/MessageList";
 import { fetcher } from "../utils/functions";
 import { env } from "../env/client.mjs";
+import useSwr from "swr";
+import { GetMessages } from "./api/chats/get-messages";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -124,12 +126,22 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
-  const [messageList, setMessageList] = useState<Message[] | undefined>();
+  // const [messageList, setMessageList] = useState<Message[] | undefined>();
   const [onlineUsers, setOnlineUsers] = useState<
     { userId: string; socketId: string }[]
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
+  const conversationId = currentChat?.id;
   const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
+  const {
+    data: MessagesArray,
+    error,
+    isLoading,
+  } = useSwr<GetMessages, { message: string }>(
+    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`,
+    fetcher
+  );
+  const messageList = MessagesArray?.flatMap((m) => m.messages);
 
   const handleSubmit = (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -170,16 +182,16 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       </AnimatePresence>
     );
 
-  const privateMessage = useCallback(
-    (data: { message: string; to: string; from: string }) => {
-      console.log(data);
-      //Perform Swr mutation here
-      // setMessageList(
-      //   (prev) => [...(prev || []), data.message] //Fallback of empty array if undefined
-      // );
-    },
-    [setMessageList, messageList]
-  );
+  // const privateMessage = useCallback(
+  //   (data: { message: string; to: string; from: string }) => {
+  //     console.log(data);
+  //     //Perform Swr mutation here
+  //     // setMessageList(
+  //     //   (prev) => [...(prev || []), data.message] //Fallback of empty array if undefined
+  //     // );
+  //   },
+  //   [setMessageList, messageList]
+  // );
 
   const getUsers = useCallback(
     (user: { userId: string; socketId: string }) => {
@@ -193,7 +205,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     if (socket) {
       if (currentUserId) socket.emit(events.ADD_NEW_USER, currentUserId);
       socket.on(events.GET_USERS, (user) => getUsers(user));
-      socket.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
+      // socket.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
     }
   }, [socket]);
 
@@ -233,11 +245,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           >
             {currentChat ? (
               <MessageList
-                conversationId={currentChat.id}
-                receiverId={receiverId!}
                 messageList={messageList}
-                setMessageList={setMessageList}
-              /> //Rec id wont be undefined
+                error={error}
+                isLoading={isLoading}
+              />
             ) : (
               <div>
                 <Image

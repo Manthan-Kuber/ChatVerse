@@ -1,12 +1,8 @@
 import type { Message as MessageType } from "@prisma/client";
 import { useSession } from "next-auth/react";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
-import useSwr from "swr";
-import { env } from "../env/client.mjs";
-import { GetMessages } from "../pages/api/chats/get-messages";
-import { fetcher } from "../utils/functions";
 import Message from "./Message";
 
 const MessageListSkeleton = ({ count }: { count?: number }) => {
@@ -33,27 +29,17 @@ const MessageListSkeleton = ({ count }: { count?: number }) => {
 };
 
 type MessageListProps = {
-  conversationId: string;
-  receiverId: string;
   messageList: MessageType[] | undefined;
-  setMessageList: Dispatch<SetStateAction<MessageType[] | undefined>>;
+  error:
+    | {
+        message: string;
+      }
+    | undefined;
+  isLoading: boolean;
 };
 
-const MessageList = ({
-  conversationId,
-  receiverId,
-  messageList,
-  setMessageList,
-}: MessageListProps) => {
+const MessageList = ({ messageList, error, isLoading }: MessageListProps) => {
   const currentUserId = useSession().data?.user?.id;
-  const {
-    data: MessagesArray,
-    error,
-    isLoading,
-  } = useSwr<GetMessages, { message: string }>(
-    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`,
-    fetcher
-  );
 
   useEffect(() => {
     if (error) {
@@ -63,10 +49,6 @@ const MessageList = ({
       toast.remove();
     };
   }, [error]);
-
-  useEffect(() => {
-    if (MessagesArray) setMessageList(MessagesArray.flatMap((m) => m.messages));
-  }, [MessagesArray]);
 
   if (isLoading) return <MessageListSkeleton count={12} />;
 
