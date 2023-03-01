@@ -145,7 +145,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     isLoading,
     mutate,
   } = useSwr<GetMessages, { message: string }>(
-    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`,
+    currentChat
+      ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`
+      : null,
     fetcher
   );
 
@@ -160,6 +162,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           from: currentUserId,
           to: receiverId,
         });
+        setMessage("");
         const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
         const messageParams = {
           conversationId: currentChat.id,
@@ -184,7 +187,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           populateCache: true,
           revalidate: false,
         });
-        setMessage("");
       }
     } catch (err) {
       console.log(err);
