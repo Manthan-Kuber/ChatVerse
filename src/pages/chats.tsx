@@ -96,6 +96,7 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
         fetchError: true,
         currentUserId: null,
       },
+     //TODO Redirect from server side
     };
   }
 };
@@ -132,18 +133,18 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
-  const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
   const {
     data: MessagesArray,
     error,
     isLoading,
+    mutate,
   } = useSwr<GetMessages, { message: string }>(
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`,
     fetcher
   );
-  const messageList = MessagesArray?.flatMap((m) => m.messages);
+  // const messageList = MessagesArray?.flatMap((m) => m.messages);
 
-  const handleSubmit = (
+  const handleSubmit = async (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
   ) => {
     e.preventDefault();
@@ -154,11 +155,18 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           from: currentUserId,
           to: receiverId,
         });
-        sendMessage(sendMessageUrl, {
-          conversationId: currentChat.id,
-          messageBody: message,
-          receiverId: receiverId!,
-        });
+        // const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
+        // const messageParams = {
+        //   conversationId: currentChat.id,
+        //   messageBody: message,
+        //   receiverId: receiverId!,
+        // };
+        // const newMessage = {
+
+        // }
+        // await mutate(sendMessage(sendMessageUrl, {...messageParams}),{
+        //   optimisticData:[...(messageList || [])]
+        // });
         //Perform swr mutation here
         // setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
         setMessage("");
@@ -245,7 +253,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           >
             {currentChat ? (
               <MessageList
-                messageList={messageList}
+                currentUserId={currentUserId}
+                messageList={MessagesArray}
                 error={error}
                 isLoading={isLoading}
               />

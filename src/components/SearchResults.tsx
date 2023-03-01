@@ -76,7 +76,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                     <span className="invisible">Placeholder</span>
                   )
                 }
-                divClassName={`hover:cursor-pointer hover:bg-neutral-300/10 transition-colors duration-200 ${
+                divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
                   currentChatState?.currentChat?.id === chatId &&
                   "bg-neutral-400/10"
                 }`}

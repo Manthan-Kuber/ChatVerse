@@ -1,5 +1,4 @@
 import type { Message as MessageType } from "@prisma/client";
-import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
@@ -36,11 +35,15 @@ type MessageListProps = {
       }
     | undefined;
   isLoading: boolean;
+  currentUserId: string | null;
 };
 
-const MessageList = ({ messageList, error, isLoading }: MessageListProps) => {
-  const currentUserId = useSession().data?.user?.id;
-
+const MessageList = ({
+  messageList,
+  error,
+  isLoading,
+  currentUserId,
+}: MessageListProps) => {
   useEffect(() => {
     if (error) {
       toast.error(error.message);
