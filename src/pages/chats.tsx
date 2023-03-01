@@ -19,7 +19,7 @@ import { toast } from "react-hot-toast";
 import useSocket from "../hooks/useSocket";
 import events from "../utils/events";
 import { prisma } from "../server/db/client";
-import { Prisma } from "@prisma/client";
+import { Message, Prisma } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { ChatsProvider, CurrentChatProvider } from "../context/chats.context";
@@ -29,6 +29,7 @@ import { fetcher } from "../utils/functions";
 import { env } from "../env/client.mjs";
 import useSwr from "swr";
 import { GetMessages } from "./api/chats/get-messages";
+import { SendMessage } from "./api/chats/send-message";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -96,7 +97,7 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
         fetchError: true,
         currentUserId: null,
       },
-     //TODO Redirect from server side
+      //TODO Redirect from server side
     };
   }
 };
@@ -107,9 +108,15 @@ async function sendMessage(
     conversationId,
     messageBody,
     receiverId,
-  }: { conversationId: string; messageBody: string; receiverId: string }
+    MessagesArray,
+  }: {
+    conversationId: string;
+    messageBody: string;
+    receiverId: string;
+    MessagesArray: Message[] | undefined;
+  }
 ) {
-  const data = await fetcher(url, {
+  const { newMessage }: SendMessage = await fetcher(url, {
     method: "POST",
     body: JSON.stringify({
       conversationId,
@@ -117,7 +124,7 @@ async function sendMessage(
       receiverId,
     }),
   });
-  return data;
+  return [...(MessagesArray || []), newMessage]; //Cache will be swapped with the returned value on successful request
 }
 
 const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
@@ -127,7 +134,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
-  // const [messageList, setMessageList] = useState<Message[] | undefined>();
   const [onlineUsers, setOnlineUsers] = useState<
     { userId: string; socketId: string }[]
   >([]);
@@ -142,7 +148,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`,
     fetcher
   );
-  // const messageList = MessagesArray?.flatMap((m) => m.messages);
 
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -155,20 +160,30 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           from: currentUserId,
           to: receiverId,
         });
-        // const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
-        // const messageParams = {
-        //   conversationId: currentChat.id,
-        //   messageBody: message,
-        //   receiverId: receiverId!,
-        // };
-        // const newMessage = {
-
-        // }
-        // await mutate(sendMessage(sendMessageUrl, {...messageParams}),{
-        //   optimisticData:[...(messageList || [])]
-        // });
-        //Perform swr mutation here
-        // setMessageList([...(messageList || []), message]); //Fallback of empty array if undefined
+        const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
+        const messageParams = {
+          conversationId: currentChat.id,
+          messageBody: message,
+          receiverId: receiverId!,
+          MessagesArray: MessagesArray,
+        };
+        const newMessage: Message = {
+          id: crypto.randomUUID(),
+          conversationId: currentChat.id,
+          senderId: currentUserId!,
+          body: message,
+          createdAt: new Date(), //Make new message date as current time
+          updatedAt: new Date(),
+        };
+        await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
+          optimisticData: [
+            ...(MessagesArray || [{ ...newMessage }]),
+            newMessage,
+          ],
+          rollbackOnError: true,
+          populateCache: true,
+          revalidate: false,
+        });
         setMessage("");
       }
     } catch (err) {

@@ -1,3 +1,4 @@
+import { Message } from "@prisma/client";
 import { type NextApiRequest, type NextApiResponse } from "next";
 import { z } from "zod";
 import { getServerAuthSession } from "../../../server/common/get-server-auth-session";
@@ -61,3 +62,8 @@ export default async function handler(
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export type SendMessage = {
+  message: string;
+  newMessage: Message;
+};
