@@ -11,8 +11,8 @@ const reqQuerySchema = z.object({
   }),
 });
 
-function getMessages(conversationId: string) {
-  return prisma.conversation.findMany({
+async function getMessages(conversationId: string) {
+  const messages = await prisma.conversation.findMany({
     where: {
       id: conversationId,
     },
@@ -20,6 +20,7 @@ function getMessages(conversationId: string) {
       messages: true,
     },
   });
+  return messages.flatMap((m) => m.messages);
 }
 
 export default async function handler(
@@ -56,7 +57,7 @@ export default async function handler(
       .json({ message: "Invalid conversation or receiver id" });
 
   try {
-    const messages = await getMessages(conversationId)
+    const messages = await getMessages(conversationId);
     return res.status(200).json(messages);
   } catch (e) {
     console.log(e);
@@ -64,4 +65,4 @@ export default async function handler(
   }
 }
 
-export type GetMessages = Prisma.PromiseReturnType<typeof getMessages>
+export type GetMessages = Prisma.PromiseReturnType<typeof getMessages>;

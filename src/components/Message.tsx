@@ -1,4 +1,4 @@
-import { Message } from "@prisma/client";
+import type { Message } from "@prisma/client";
 
 type MessageProps = {
   message: Message;
