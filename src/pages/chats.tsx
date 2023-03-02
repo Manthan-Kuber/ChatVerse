@@ -179,10 +179,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           updatedAt: new Date(),
         };
         await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
-          optimisticData: [
-            ...(MessagesArray || [{ ...newMessage }]),
-            newMessage,
-          ],
+          optimisticData: [...(MessagesArray || []), newMessage],
           rollbackOnError: true,
           populateCache: true,
           revalidate: false,
@@ -207,16 +204,23 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       </AnimatePresence>
     );
 
-  // const privateMessage = useCallback(
-  //   (data: { message: string; to: string; from: string }) => {
-  //     console.log(data);
-  //     //Perform Swr mutation here
-  //     // setMessageList(
-  //     //   (prev) => [...(prev || []), data.message] //Fallback of empty array if undefined
-  //     // );
-  //   },
-  //   [setMessageList, messageList]
-  // );
+  const privateMessage = useCallback(
+    (data: { message: string; to: string; from: string }) => {
+      console.log(data);
+      //FIXME need to fix mutation
+      const currentChatId = data.from + data.to; //Not to use
+      const newMessage: Message = {
+        id: crypto.randomUUID(),
+        conversationId: currentChatId,
+        senderId: data.from,
+        body: data.message,
+        createdAt: new Date(), //Make new message date as current time
+        updatedAt: new Date(),
+      };
+      mutate([...(MessagesArray || []), newMessage]);
+    },
+    [MessagesArray]
+  );
 
   const getUsers = useCallback(
     (user: { userId: string; socketId: string }) => {
@@ -227,11 +231,13 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   );
 
   useEffect(() => {
-    if (socket) {
-      if (currentUserId) socket.emit(events.ADD_NEW_USER, currentUserId);
-      socket.on(events.GET_USERS, (user) => getUsers(user));
-      // socket.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
-    }
+    if (currentUserId) socket?.emit(events.ADD_NEW_USER, currentUserId);
+    socket?.on(events.GET_USERS, (user) => getUsers(user));
+    socket?.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
+    return () => {
+      socket?.off(events.GET_USERS);
+      socket?.off(events.PRIVATE_MESSAGE);
+    };
   }, [socket]);
 
   useEffect(() => {

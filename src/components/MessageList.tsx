@@ -44,6 +44,7 @@ const MessageList = ({
   isLoading,
   currentUserId,
 }: MessageListProps) => {
+  //TODO Move error to parent
   useEffect(() => {
     if (error) {
       toast.error(error.message);
