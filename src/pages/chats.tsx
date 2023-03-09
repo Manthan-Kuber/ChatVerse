@@ -102,7 +102,6 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
         destination: "/auth/signin",
         permanent: true,
       },
-      //TODO Redirect from server side
     };
   }
 };
@@ -250,10 +249,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
 
   useEffect(() => {
     if (fetchError) toast.error("Error in fetching chats");
+    if (error) toast.error(error.message);
     return () => {
       toast.remove();
     };
-  }, [fetchError]);
+  }, [fetchError, error]);
 
   return (
     <motion.div
@@ -286,7 +286,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
               <MessageList
                 currentUserId={currentUserId}
                 messageList={MessagesArray}
-                error={error}
                 isLoading={isLoading}
               />
             ) : (

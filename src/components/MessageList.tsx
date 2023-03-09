@@ -1,6 +1,4 @@
 import type { Message as MessageType } from "@prisma/client";
-import { useEffect } from "react";
-import { toast } from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
 import Message from "./Message";
 
@@ -29,31 +27,15 @@ const MessageListSkeleton = ({ count }: { count?: number }) => {
 
 type MessageListProps = {
   messageList: MessageType[] | undefined;
-  error:
-    | {
-        message: string;
-      }
-    | undefined;
   isLoading: boolean;
   currentUserId: string | null;
 };
 
 const MessageList = ({
   messageList,
-  error,
   isLoading,
   currentUserId,
 }: MessageListProps) => {
-  //TODO Move error to parent
-  useEffect(() => {
-    if (error) {
-      toast.error(error.message);
-    }
-    return () => {
-      toast.remove();
-    };
-  }, [error]);
-
   if (isLoading) return <MessageListSkeleton count={12} />;
 
   if (!messageList || messageList.length === 0) return <></>;
