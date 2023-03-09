@@ -97,6 +97,11 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
         fetchError: true,
         currentUserId: null,
       },
+      redirect: {
+        source: "/chats",
+        destination: "/auth/signin",
+        permanent: true,
+      },
       //TODO Redirect from server side
     };
   }
