@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import useWindowSize from "../hooks/useWindowSize";
@@ -143,6 +144,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
+  const messageEndRef = useRef<HTMLDivElement>(null);
   const {
     data: MessagesArray,
     error,
@@ -154,6 +156,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       : null,
     fetcher
   );
+
+  const scrollIntoView = () => {
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
@@ -186,7 +192,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           optimisticData: (currentMessages) => [
             ...(currentMessages || []),
             newMessage,
-          ], //Optimistic data can also have access to current data
+          ], //Optimistic data can also have access to current data via a callback function
           rollbackOnError: true,
           populateCache: true,
           revalidate: false,
@@ -258,6 +264,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     };
   }, [fetchError, error]);
 
+  useEffect(() => {
+    scrollIntoView();
+  }, [MessagesArray]);
+
   return (
     <motion.div
       className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_2fr]"
@@ -290,6 +300,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 currentUserId={currentUserId}
                 messageList={MessagesArray}
                 isLoading={isLoading}
+                messagesEndRef={messageEndRef}
               />
             ) : (
               <div>
@@ -314,6 +325,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 setValue={setMessage}
                 Icon={IoMdSend}
                 placeholder="Message channel name"
+                scrollIntoView={scrollIntoView}
               />
             )}
           </div>

@@ -11,6 +11,7 @@ const ChatInputForm = (props: {
   value: string;
   Icon: IconType;
   placeholder: string;
+  scrollIntoView: () => void
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -26,7 +27,10 @@ const ChatInputForm = (props: {
         onChange={(e) => props.setValue(e.target.value)}
         type="text"
         onKeyDown={(e) => e.key === "Enter" && props.handleSubmit(e)}
-        onFocus={() => setIsFocused(true)}
+        onFocus={() => {
+          setIsFocused(true)
+          props.scrollIntoView()
+        }}
         onBlur={() => setIsFocused(false)}
       />
       <AnimatePresence>

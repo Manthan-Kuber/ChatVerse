@@ -29,11 +29,13 @@ type MessageListProps = {
   messageList: MessageType[] | undefined;
   isLoading: boolean;
   currentUserId: string | null;
+  messagesEndRef: React.MutableRefObject<HTMLDivElement | null>;
 };
 
 const MessageList = ({
   messageList,
   isLoading,
+  messagesEndRef,
   currentUserId,
 }: MessageListProps) => {
   if (isLoading) return <MessageListSkeleton count={12} />;
@@ -45,6 +47,7 @@ const MessageList = ({
       {messageList.map((message) => (
         <Message message={message} currentUserId={currentUserId!} />
       ))}
+      <div ref={messagesEndRef} />
     </>
   );
 };
