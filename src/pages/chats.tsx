@@ -183,7 +183,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           updatedAt: new Date(),
         };
         await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
-          optimisticData: [...(MessagesArray || []), newMessage],
+          optimisticData: (currentMessages) => [
+            ...(currentMessages || []),
+            newMessage,
+          ], //Optimistic data can also have access to current data
           rollbackOnError: true,
           populateCache: true,
           revalidate: false,
