@@ -212,7 +212,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const privateMessage = useCallback(
     (data: { message: string; to: string; from: string }) => {
       console.log(data);
-      //FIXME need to fix mutation
       const currentChatId = data.from + data.to; //Not to use
       const newMessage: Message = {
         id: crypto.randomUUID(),
@@ -222,7 +221,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         createdAt: new Date(), //Make new message date as current time
         updatedAt: new Date(),
       };
-      mutate([...(MessagesArray || []), newMessage]);
+      mutate((currentMessages) => [...(currentMessages || []), newMessage], {
+        populateCache: true,
+        revalidate: false,
+        rollbackOnError: true,
+      }); //Pass a function to obtain current data in the cache as param
     },
     [MessagesArray]
   );
