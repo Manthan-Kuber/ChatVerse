@@ -1,10 +1,11 @@
-import React, {
+import {
   FormEvent,
   KeyboardEvent,
   ReactElement,
   ReactNode,
   useCallback,
   useEffect,
+  useReducer,
   useRef,
   useState,
 } from "react";
@@ -132,13 +133,39 @@ async function sendMessage(
   return [...(MessagesArray || []), newMessage]; //Cache will be swapped with the returned value on successful request
 }
 
+const enum CHATSREDUCER_ACTION_TYPE {
+  UPDATE_LATEST_MESSAGE,
+}
+
+export type ChatsReducerAction = {
+  type: CHATSREDUCER_ACTION_TYPE;
+  payload: { conversationId: string; latestMessage: string };
+};
+
+function chatsReducer(state: ChatSearch | null, action: ChatsReducerAction) {
+  switch (action.type) {
+    case CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE:
+      if (state) {
+        state.forEach((chat) => {
+          if (chat.id === action.payload.conversationId)
+            if (chat.latestMessage) {
+              chat.latestMessage.body = action.payload.latestMessage;
+              return state;
+            }
+        });
+      }
+    default:
+      return state;
+  }
+}
+
 const chats = ({
   chats: fetchedChats,
   fetchError,
   currentUserId,
 }: ChatProps) => {
   const { width: screenWidth } = useWindowSize();
-  const [chats, setChats] = useState(fetchedChats); //TODO use a reducer function instead
+  const [chats, dispatch] = useReducer(chatsReducer, fetchedChats);
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
@@ -281,7 +308,7 @@ const chats = ({
       exit={{ opacity: 0 }}
     >
       <SideBarWrapper>
-        <ChatsProvider value={{chats,setChats}}>
+        <ChatsProvider value={{ chats, dispatch }}>
           <CurrentChatProvider value={{ currentChat, setCurrentChat }}>
             <Sidebar />
           </CurrentChatProvider>

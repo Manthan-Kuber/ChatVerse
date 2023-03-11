@@ -1,5 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { ChatSearch } from "../pages/chats";
+import { ChatSearch, ChatsReducerAction } from "../pages/chats";
 
 type CurrentChatElement = ChatSearch[0] | undefined;
 
@@ -8,11 +8,11 @@ type CurrentChat = {
   currentChat: CurrentChatElement;
 } | null;
 
-type Chats = ChatSearch | null
+type Chats = ChatSearch | null;
 
 type ChatsContext = {
   chats: Chats;
-  setChats: Dispatch<SetStateAction<Chats>>;
+  dispatch: Dispatch<ChatsReducerAction>;
 } | null;
 
 const ChatsContext = createContext<ChatsContext>(null);
