@@ -42,7 +42,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
       : null,
     fetcher
   );
-  const chats = useContext(ChatsContext);
+  const chatsState = useContext(ChatsContext);
   const currentChatState = useContext(CurrentChatContext);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   if (!SearchedUsersArray) {
     return (
       <>
-        {chats?.map((chat) => {
+        {chatsState?.chats?.map((chat) => {
           const { id: chatId, latestMessage } = chat;
           const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
           return (
@@ -73,9 +73,11 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                 image={user?.image}
                 field1={user?.name || <Skeleton />}
                 field2={
-                  <small className="text-gray-400" >{latestMessage?.body}</small> || (
-                    <span className="invisible">Placeholder</span>
-                  )
+                  (
+                    <small className="text-gray-400">
+                      {latestMessage?.body}
+                    </small>
+                  ) || <span className="invisible">Placeholder</span>
                 }
                 divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
                   currentChatState?.currentChat?.id === chatId &&

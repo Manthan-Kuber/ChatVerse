@@ -132,8 +132,13 @@ async function sendMessage(
   return [...(MessagesArray || []), newMessage]; //Cache will be swapped with the returned value on successful request
 }
 
-const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
+const chats = ({
+  chats: fetchedChats,
+  fetchError,
+  currentUserId,
+}: ChatProps) => {
   const { width: screenWidth } = useWindowSize();
+  const [chats, setChats] = useState(fetchedChats); //TODO use a reducer function instead
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
@@ -276,7 +281,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       exit={{ opacity: 0 }}
     >
       <SideBarWrapper>
-        <ChatsProvider value={chats}>
+        <ChatsProvider value={{chats,setChats}}>
           <CurrentChatProvider value={{ currentChat, setCurrentChat }}>
             <Sidebar />
           </CurrentChatProvider>

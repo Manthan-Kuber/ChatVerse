@@ -1,11 +1,19 @@
 import { createContext, Dispatch, SetStateAction } from "react";
 import { ChatSearch } from "../pages/chats";
 
+type CurrentChatElement = ChatSearch[0] | undefined;
+
 type CurrentChat = {
-  setCurrentChat: Dispatch<SetStateAction<ChatSearch[0] | undefined>>;
-  currentChat: ChatSearch[0] | undefined;
+  setCurrentChat: Dispatch<SetStateAction<CurrentChatElement>>;
+  currentChat: CurrentChatElement;
 } | null;
-type ChatsContext = ChatSearch | null;
+
+type Chats = ChatSearch | null
+
+type ChatsContext = {
+  chats: Chats;
+  setChats: Dispatch<SetStateAction<Chats>>;
+} | null;
 
 const ChatsContext = createContext<ChatsContext>(null);
 const { Provider: ChatsProvider } = ChatsContext;
