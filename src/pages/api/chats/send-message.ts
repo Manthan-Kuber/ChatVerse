@@ -54,6 +54,17 @@ export default async function handler(
         senderId: session.user.id,
       },
     });
+    await prisma.conversation.update({
+      where: {
+        id: conversationId,
+      },
+      include: {
+        latestMessage: true,
+      },
+      data: {
+        latestMessageId: newMessage.id, //Only update latest message id. The latest message will be referenced by this id
+      },
+    });
     return res
       .status(201)
       .json({ message: "Created message successfully", newMessage });
