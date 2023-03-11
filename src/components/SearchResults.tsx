@@ -56,8 +56,9 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
-  const handleClick = (chat: ChatSearch[0]) =>
+  const setAsCurrentChat = (chat: ChatSearch[0]) => {
     currentChatState && currentChatState.setCurrentChat(chat);
+  };
 
   if (!SearchedUsersArray) {
     return (
@@ -72,7 +73,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                 image={user?.image}
                 field1={user?.name || <Skeleton />}
                 field2={
-                  latestMessage?.body || (
+                  <small className="text-gray-400" >{latestMessage?.body}</small> || (
                     <span className="invisible">Placeholder</span>
                   )
                 }
@@ -80,7 +81,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                   currentChatState?.currentChat?.id === chatId &&
                   "bg-neutral-400/10"
                 }`}
-                onClick={() => handleClick(chat)}
+                onClick={() => setAsCurrentChat(chat)}
               />
             </>
           );
