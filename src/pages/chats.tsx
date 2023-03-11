@@ -146,12 +146,16 @@ function chatsReducer(state: ChatSearch | null, action: ChatsReducerAction) {
   switch (action.type) {
     case CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE:
       if (state) {
-        state.forEach((chat) => {
-          if (chat.id === action.payload.conversationId)
-            if (chat.latestMessage) {
-              chat.latestMessage.body = action.payload.latestMessage;
-              return state;
-            }
+        //Map function doesn't mutate the state.State update is done immutably
+        return state.map((chat) => {
+          if (chat.id === action.payload.conversationId) {
+            return {
+              ...chat,
+              latestMessage: { body: action.payload.latestMessage },
+            };
+          } else {
+            return chat;
+          }
         });
       }
     default:
@@ -188,6 +192,19 @@ const chats = ({
       : null,
     fetcher
   );
+
+  const updateLatestMessage = ({
+    conversationId,
+    latestMessage,
+  }: {
+    conversationId: string;
+    latestMessage: string;
+  }) => {
+    dispatch({
+      type: CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE,
+      payload: { conversationId, latestMessage },
+    });
+  };
 
   const scrollIntoView = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -229,6 +246,10 @@ const chats = ({
           populateCache: true,
           revalidate: false,
         });
+        updateLatestMessage({
+          conversationId: currentChat.id,
+          latestMessage: message,
+        });
       }
     } catch (err) {
       console.log(err);
@@ -252,10 +273,10 @@ const chats = ({
   const privateMessage = useCallback(
     (data: { message: string; to: string; from: string }) => {
       console.log(data);
-      const currentChatId = data.from + data.to; //Not to use
+      if (!conversationId) return toast.error("Invalid Conversation Id"); //FIXME state should update on receiving a message. Even when current chat is not selected
       const newMessage: Message = {
         id: crypto.randomUUID(),
-        conversationId: currentChatId,
+        conversationId,
         senderId: data.from,
         body: data.message,
         createdAt: new Date(), //Make new message date as current time
@@ -266,6 +287,10 @@ const chats = ({
         revalidate: false,
         rollbackOnError: true,
       }); //Pass a function to obtain current data in the cache as param
+      updateLatestMessage({
+        conversationId,
+        latestMessage: data.message,
+      });
     },
     [MessagesArray]
   );
