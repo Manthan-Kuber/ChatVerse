@@ -51,7 +51,10 @@ const Menu = ({
           <ThemeChanger />
           <IoMdClose
             className="btn-with-hover"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              setShouldAnimate(true);
+            }}
           />
         </div>
         {children}
