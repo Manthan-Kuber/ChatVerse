@@ -253,7 +253,6 @@ const chats = ({
         });
       }
     } catch (err) {
-      console.log(err);
       toast.error("Error in sending the message");
     }
   };
@@ -278,7 +277,6 @@ const chats = ({
       from: string;
       conversationId: string;
     }) => {
-      console.log(data);
       const newMessage: Message = {
         id: crypto.randomUUID(),
         conversationId: data.conversationId,
@@ -302,7 +300,6 @@ const chats = ({
 
   const getUsers = useCallback(
     (user: { userId: string; socketId: string }) => {
-      console.log(user);
       setOnlineUsers([...onlineUsers, user]);
     },
     [onlineUsers, setOnlineUsers]
