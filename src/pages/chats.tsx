@@ -220,18 +220,19 @@ const chats = ({
           message,
           from: currentUserId,
           to: receiverId,
+          conversationId: conversationId!,
         });
         setMessage("");
         const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
         const messageParams = {
-          conversationId: currentChat.id,
+          conversationId: conversationId!,
           messageBody: message,
           receiverId: receiverId!,
           MessagesArray: MessagesArray,
         };
         const newMessage: Message = {
           id: crypto.randomUUID(),
-          conversationId: currentChat.id,
+          conversationId: conversationId!,
           senderId: currentUserId!,
           body: message,
           createdAt: new Date(), //Make new message date as current time
@@ -271,12 +272,16 @@ const chats = ({
     );
 
   const privateMessage = useCallback(
-    (data: { message: string; to: string; from: string }) => {
+    (data: {
+      message: string;
+      to: string;
+      from: string;
+      conversationId: string;
+    }) => {
       console.log(data);
-      if (!conversationId) return toast.error("Invalid Conversation Id"); //FIXME state should update on receiving a message. Even when current chat is not selected
       const newMessage: Message = {
         id: crypto.randomUUID(),
-        conversationId,
+        conversationId: data.conversationId,
         senderId: data.from,
         body: data.message,
         createdAt: new Date(), //Make new message date as current time
@@ -288,7 +293,7 @@ const chats = ({
         rollbackOnError: true,
       }); //Pass a function to obtain current data in the cache as param
       updateLatestMessage({
-        conversationId,
+        conversationId: data.conversationId,
         latestMessage: data.message,
       });
     },
