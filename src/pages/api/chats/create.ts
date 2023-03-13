@@ -61,12 +61,12 @@ export default async function handler(
           },
         },
       });
-      return res.status(201).json({ message: "Doesn't exist", chat: newChat });
+      return res.status(201).json({ message: "Chat created successfully", chat: newChat });
     } else {
-      res.status(500).json({ message: "Error in creating conversation" });
+      return res.status(500).json({ message: "Error in creating conversation" });
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
