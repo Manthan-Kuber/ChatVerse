@@ -1,5 +1,4 @@
 import { type NextPage } from "next";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { BsGithub } from "react-icons/bs";
@@ -9,8 +8,6 @@ import { motion } from "framer-motion";
 import { fadeInOut, fadeInUp, stagger } from "../animations/animations";
 
 const Home: NextPage = () => {
-  const { data: session } = useSession();
-
   const MotionLink = motion(Link);
 
   return (

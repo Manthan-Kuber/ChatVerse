@@ -35,7 +35,7 @@ import { SendMessage } from "./api/chats/send-message";
 import useLocalStorage from "../hooks/useLocalStorage";
 
 //Returns a promise which needs to be resolved
-function findConversation(userId: string) {
+function getChats(userId: string) {
   return prisma.conversation.findMany({
     where: {
       participants: {
@@ -69,7 +69,7 @@ function findConversation(userId: string) {
   });
 }
 
-export type ChatSearch = Prisma.PromiseReturnType<typeof findConversation>;
+export type ChatSearch = Prisma.PromiseReturnType<typeof getChats>;
 
 type ChatProps = {
   chats: ChatSearch | null;
@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps<ChatProps> = async (
   const session = await getServerAuthSession({ req, res });
 
   if (session && session.user) {
-    const res = await findConversation(session.user.id);
+    const res = await getChats(session.user.id);
     const chats = JSON.parse(JSON.stringify(res));
     return {
       props: {
