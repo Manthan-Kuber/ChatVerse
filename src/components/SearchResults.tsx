@@ -73,35 +73,31 @@ const SearchResults = ({
           const { id: chatId, latestMessage } = chat;
           const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
           return (
-            <>
-              <ChatOrUserInfo
-                key={chatId}
-                image={user?.image}
-                field1={user?.name || <Skeleton />}
-                field2={
-                  (
-                    <small className="text-gray-400">
-                      {latestMessage?.body}
-                    </small>
-                  ) || <span className="invisible">Placeholder</span>
-                }
-                divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                  currentChatState?.currentChat?.id === chatId &&
-                  "bg-neutral-400/10"
-                }`}
-                onClick={() => {
-                  setAsCurrentChat(chat);
-                  setIsOpen(false);
-                }}
-              />
-            </>
+            <ChatOrUserInfo
+              key={chatId}
+              image={user?.image}
+              field1={user?.name || <Skeleton />}
+              field2={
+                (
+                  <small className="text-gray-400">{latestMessage?.body}</small>
+                ) || <span className="invisible">Placeholder</span>
+              }
+              divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
+                currentChatState?.currentChat?.id === chatId &&
+                "bg-neutral-400/10"
+              }`}
+              onClick={() => {
+                setAsCurrentChat(chat);
+                setIsOpen(false);
+              }}
+            />
           );
         })}
       </>
     );
   }
 
-  if (SearchedUsersArray.length === 0)
+  if (SearchedUsersArray?.length === 0)
     return <p className="text-center">No results found</p>;
 
   return (

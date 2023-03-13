@@ -45,7 +45,11 @@ const MessageList = ({
   return (
     <>
       {messageList.map((message) => (
-        <Message message={message} currentUserId={currentUserId!} />
+        <Message
+          key={message.id}
+          message={message}
+          currentUserId={currentUserId!}
+        />
       ))}
       <div ref={messagesEndRef} />
     </>
