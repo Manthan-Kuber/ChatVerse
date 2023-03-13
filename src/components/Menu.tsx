@@ -2,22 +2,20 @@ import { motion } from "framer-motion";
 import { fadeInOut } from "../animations/animations";
 import { IoMdClose } from "react-icons/io";
 import ThemeChanger from "./ThemeChanger";
-import useLocalStorage from "../hooks/useLocalStorage";
 
 const Menu = ({
   children,
   menuWidth,
+  shouldAnimate,
+  setShouldAnimate,
   setIsOpen,
 }: {
   children: React.ReactNode;
   menuWidth: number;
+  shouldAnimate: boolean;
+  setShouldAnimate: (value: boolean | ((val: boolean) => boolean)) => void;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  //1st Arg is key,2nd Arg is value
-  const [shouldAnimate, setShouldAnimate] = useLocalStorage(
-    "shouldAnimate",
-    true
-  );
   const fadeInOutProps = {
     key: "sidebar",
     variants: { fadeInOut },
@@ -53,7 +51,6 @@ const Menu = ({
             className="btn-with-hover"
             onClick={() => {
               setIsOpen(false);
-              setShouldAnimate(true);
             }}
           />
         </div>

@@ -32,6 +32,7 @@ import { env } from "../env/client.mjs";
 import useSwr from "swr";
 import { GetMessages } from "./api/chats/get-messages";
 import { SendMessage } from "./api/chats/send-message";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 //Returns a promise which needs to be resolved
 function findConversation(userId: string) {
@@ -180,6 +181,11 @@ const chats = ({
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
+  //1st Arg is key,2nd Arg is value
+  const [shouldAnimate, setShouldAnimate] = useLocalStorage(
+    "shouldAnimate",
+    true
+  );
   const messageEndRef = useRef<HTMLDivElement>(null);
   const {
     data: MessagesArray,
@@ -263,7 +269,12 @@ const chats = ({
     ) : (
       <AnimatePresence>
         {isOpen && (
-          <Menu setIsOpen={setIsOpen} menuWidth={-wByN(2 / 3)!}>
+          <Menu
+            shouldAnimate={shouldAnimate}
+            setShouldAnimate={setShouldAnimate}
+            setIsOpen={setIsOpen}
+            menuWidth={-wByN(2 / 3)!}
+          >
             {children}
           </Menu>
         )}
@@ -326,6 +337,10 @@ const chats = ({
   useEffect(() => {
     scrollIntoView();
   }, [MessagesArray]);
+
+  useEffect(() => {
+    if (!isOpen) setShouldAnimate(true);
+  }, [isOpen]);
 
   return (
     <motion.div
