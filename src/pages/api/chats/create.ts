@@ -4,9 +4,7 @@ import { getServerAuthSession } from "../../../server/common/get-server-auth-ses
 import { prisma } from "../../../server/db/client";
 
 const reqBodySchema = z.object({
-  body: z.object({
-    userId: z.string(),
-  }),
+  userId: z.string(),
 });
 
 export default async function handler(
@@ -24,15 +22,17 @@ export default async function handler(
     });
   }
 
-  const parsedSchema = reqBodySchema.safeParse(req);
+  const parsedSchema = reqBodySchema.safeParse(JSON.parse(req.body));
 
   if (!parsedSchema.success)
     return res.status(400).json({ message: "Invalid Request" });
 
-  const { userId } = parsedSchema.data.body;
+  const { userId } = parsedSchema.data;
 
   if (userId === session.user.id)
-    return res.status(400).json({ message: "User Id same as signed in user's id" });
+    return res
+      .status(400)
+      .json({ message: "User Id same as signed in user's id" });
 
   try {
     if (session?.user?.id) {
@@ -61,9 +61,13 @@ export default async function handler(
           },
         },
       });
-      return res.status(201).json({ message: "Chat created successfully", chat: newChat });
+      return res
+        .status(201)
+        .json({ message: "Chat created successfully", chat: newChat });
     } else {
-      return res.status(500).json({ message: "Error in creating conversation" });
+      return res
+        .status(500)
+        .json({ message: "Error in creating conversation" });
     }
   } catch (e) {
     console.log(e);
