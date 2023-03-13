@@ -352,7 +352,7 @@ const chats = ({
       <SideBarWrapper>
         <ChatsProvider value={{ chats, dispatch }}>
           <CurrentChatProvider value={{ currentChat, setCurrentChat }}>
-            <Sidebar />
+            <Sidebar setIsOpen={setIsOpen} />
           </CurrentChatProvider>
         </ChatsProvider>
       </SideBarWrapper>

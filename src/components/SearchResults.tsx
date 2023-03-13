@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
-import { useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import { ChatsContext, CurrentChatContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { ChatSearch } from "../pages/chats";
@@ -31,7 +31,13 @@ const SearchResultSkeleton = ({ count }: { count?: number }) => {
   );
 };
 
-const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
+const SearchResults = ({
+  searchQuery,
+  setIsOpen,
+}: {
+  searchQuery: string;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const {
     data: SearchedUsersArray,
     error,
@@ -83,7 +89,10 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                   currentChatState?.currentChat?.id === chatId &&
                   "bg-neutral-400/10"
                 }`}
-                onClick={() => setAsCurrentChat(chat)}
+                onClick={() => {
+                  setAsCurrentChat(chat);
+                  setIsOpen(false);
+                }}
               />
             </>
           );
@@ -97,7 +106,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
 
   return (
     <>
-      {/* TODO create chat on click */}
+      {/* TODO create chat on click and close menu */}
       {SearchedUsersArray.map((user) => (
         <ChatOrUserInfo
           image={user.image}

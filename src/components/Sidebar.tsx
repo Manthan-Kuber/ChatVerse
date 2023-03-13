@@ -2,13 +2,17 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import Skeleton from "react-loading-skeleton";
 
-const Sidebar = () => {
+const Sidebar = ({
+  setIsOpen,
+}: {
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const [value, setValue] = useState("");
@@ -60,7 +64,7 @@ const Sidebar = () => {
           {value ? "Search Results" : "Chats"}
         </h3>
         <div className="mt-4 max-h-80 space-y-2 overflow-scroll">
-          <SearchResults searchQuery={debouncedValue} />
+          <SearchResults setIsOpen={setIsOpen} searchQuery={debouncedValue} />
         </div>
       </div>
       <button
