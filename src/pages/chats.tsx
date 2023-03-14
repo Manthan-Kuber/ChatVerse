@@ -20,14 +20,13 @@ import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import useSocket from "../hooks/useSocket";
 import events from "../utils/events";
-import { prisma } from "../server/db/client";
-import { Message, Prisma } from "@prisma/client";
+import { Message } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { ChatsProvider, CurrentChatProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
-import { fetcher } from "../utils/functions";
+import { fetcher, scrollIntoView } from "../utils/functions";
 import { env } from "../env/client.mjs";
 import useSwr from "swr";
 import { GetMessages } from "./api/chats/get-messages";
@@ -178,10 +177,6 @@ const chats = ({
     });
   };
 
-  const scrollIntoView = () => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   const handleSubmit = async (
     e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
   ) => {
@@ -301,7 +296,7 @@ const chats = ({
   }, [fetchError, error]);
 
   useEffect(() => {
-    scrollIntoView();
+    scrollIntoView(messageEndRef);
   }, [MessagesArray]);
 
   useEffect(() => {
@@ -365,7 +360,9 @@ const chats = ({
                 setValue={setMessage}
                 Icon={IoMdSend}
                 placeholder="Message channel name"
-                scrollIntoView={scrollIntoView}
+                scrollIntoView={() => {
+                  scrollIntoView(messageEndRef);
+                }}
               />
             )}
           </div>
