@@ -139,8 +139,8 @@ const enum CHATSREDUCER_ACTION_TYPE {
 }
 
 export type ChatsReducerAction = {
-  type: CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE;
-  payload: { conversationId: string; latestMessage: string };
+  type: CHATSREDUCER_ACTION_TYPE;
+  payload: any;
 };
 
 function chatsReducer(state: GetChats | null, action: ChatsReducerAction) {
@@ -149,10 +149,13 @@ function chatsReducer(state: GetChats | null, action: ChatsReducerAction) {
       if (state) {
         //Map function doesn't mutate the state.State update is done immutably
         return state.map((chat) => {
-          if (chat.id === action.payload.conversationId) {
+          type PayloadType = { conversationId: string; latestMessage: string };
+          if (chat.id === (action.payload as PayloadType).conversationId) {
             return {
               ...chat,
-              latestMessage: { body: action.payload.latestMessage },
+              latestMessage: {
+                body: (action.payload as PayloadType).latestMessage,
+              },
             };
           } else {
             return chat;
