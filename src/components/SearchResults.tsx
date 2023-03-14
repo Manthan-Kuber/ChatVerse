@@ -8,7 +8,8 @@ import { env } from "../env/client.mjs";
 import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import { ChatsContext, CurrentChatContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
-import { ChatSearch } from "../pages/chats";
+import { GetChats } from "../pages/chats";
+import { Conversation } from "@prisma/client";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -31,6 +32,10 @@ const SearchResultSkeleton = ({ count }: { count?: number }) => {
   );
 };
 
+type CreateChatResponse =
+  | { message: string }
+  | { message: string; chat: Conversation | Conversation[] };
+
 const SearchResults = ({
   searchQuery,
   setIsOpen,
@@ -51,6 +56,22 @@ const SearchResults = ({
   const chatsState = useContext(ChatsContext);
   const currentChatState = useContext(CurrentChatContext);
 
+  const handleChatCreation = (userId: string) => {
+    const url = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/create`;
+    const createChatPromise: Promise<CreateChatResponse> = fetcher(url, {
+      method: "POST",
+      body: JSON.stringify({ userId }),
+    });
+    toast.promise(createChatPromise, {
+      loading: "Creating Chat...",
+      success: (data) => {
+        console.log(data);
+        return "Created chat successfully";
+      },
+      error: (err) => `${(err as { message: string }).message}`,
+    });
+  };
+
   useEffect(() => {
     if (error) {
       toast.error(error.message);
@@ -62,37 +83,47 @@ const SearchResults = ({
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
-  const setAsCurrentChat = (chat: ChatSearch[0]) => {
+  const setAsCurrentChat = (chat: GetChats[0]) => {
     currentChatState && currentChatState.setCurrentChat(chat);
   };
 
   if (!SearchedUsersArray) {
     return (
       <>
-        {chatsState?.chats?.map((chat) => {
-          const { id: chatId, latestMessage } = chat;
-          const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
-          return (
-            <ChatOrUserInfo
-              key={chatId}
-              image={user?.image}
-              field1={user?.name || <Skeleton />}
-              field2={
-                (
-                  <small className="text-gray-400">{latestMessage?.body}</small>
-                ) || <span className="invisible">Placeholder</span>
-              }
-              divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                currentChatState?.currentChat?.id === chatId &&
-                "bg-neutral-400/10"
-              }`}
-              onClick={() => {
-                setAsCurrentChat(chat);
-                setIsOpen(false);
-              }}
-            />
-          );
-        })}
+        {chatsState?.chats?.length === 0 ? (
+          <p className="text-center">
+            No active chats found.
+            <br />
+            Search for an user and click on it to create a chat{" "}
+          </p>
+        ) : (
+          chatsState?.chats?.map((chat: GetChats[0]) => {
+            const { id: chatId, latestMessage } = chat;
+            const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
+            return (
+              <ChatOrUserInfo
+                key={chatId}
+                image={user?.image}
+                field1={user?.name || <Skeleton />}
+                field2={
+                  (
+                    <small className="text-gray-400">
+                      {latestMessage?.body}
+                    </small>
+                  ) || <span className="invisible">Placeholder</span>
+                }
+                divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
+                  currentChatState?.currentChat?.id === chatId &&
+                  "bg-neutral-400/10"
+                }`}
+                onClick={() => {
+                  setAsCurrentChat(chat);
+                  setIsOpen(false);
+                }}
+              />
+            );
+          })
+        )}
       </>
     );
   }
@@ -110,6 +141,9 @@ const SearchResults = ({
           field2={`~ ${user.email}`}
           key={user.id}
           divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200"
+          onClick={() => {
+            handleChatCreation(user.id);
+          }}
         />
       ))}
     </>
