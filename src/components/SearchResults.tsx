@@ -50,8 +50,7 @@ const SearchResults = ({
   } = useSwr<UserSearch, { message: string }>(
     searchQuery
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
-      : null,
-    fetcher
+      : null
   );
   const chatsState = useContext(ChatsContext);
   const currentChatState = useContext(CurrentChatContext);
@@ -68,7 +67,7 @@ const SearchResults = ({
         console.log(data);
         return "Created chat successfully";
       },
-      error: (err) => `${(err as { message: string }).message}`,
+      error: (err) => `${(err as { message: string }).message}`, //TODO when chat already exists, set with current state
     });
   };
 

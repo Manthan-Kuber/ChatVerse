@@ -146,10 +146,10 @@ export type ChatsReducerAction = {
 function chatsReducer(state: GetChats | null, action: ChatsReducerAction) {
   switch (action.type) {
     case CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE:
+      type PayloadType = { conversationId: string; latestMessage: string };
       if (state) {
         //Map function doesn't mutate the state.State update is done immutably
         return state.map((chat) => {
-          type PayloadType = { conversationId: string; latestMessage: string };
           if (chat.id === (action.payload as PayloadType).conversationId) {
             return {
               ...chat,
@@ -198,8 +198,7 @@ const chats = ({
   } = useSwr<GetMessages, { message: string }>(
     currentChat
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`
-      : null,
-    fetcher
+      : null
   );
 
   const updateLatestMessage = ({

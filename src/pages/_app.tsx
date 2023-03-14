@@ -10,6 +10,8 @@ import Auth from "../components/Auth";
 import { Toaster } from "react-hot-toast";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { SWRConfig } from "swr";
+import { fetcher } from "../utils/functions";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -32,12 +34,14 @@ const MyApp = ({
       <CustomHead />
       <SessionProvider session={session}>
         <ThemeProvider attribute="class" enableSystem>
-          <Toaster />
-          {Component.auth ? (
-            <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
-          ) : (
-            getLayout(<Component {...pageProps} />)
-          )}
+          <SWRConfig value={{ fetcher }}>
+            <Toaster />
+            {Component.auth ? (
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+            ) : (
+              getLayout(<Component {...pageProps} />)
+            )}
+          </SWRConfig>
         </ThemeProvider>
       </SessionProvider>
     </SkeletonTheme>
