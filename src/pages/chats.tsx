@@ -33,43 +33,7 @@ import useSwr from "swr";
 import { GetMessages } from "./api/chats/get-messages";
 import { SendMessage } from "./api/chats/send-message";
 import useLocalStorage from "../hooks/useLocalStorage";
-
-//Returns a promise which needs to be resolved
-function getChats(userId: string) {
-  return prisma.conversation.findMany({
-    where: {
-      participants: {
-        some: {
-          userId,
-        },
-      },
-    },
-    select: {
-      id: true,
-      participants: {
-        where: {
-          NOT: {
-            userId, //Return participants other than current signed in user
-          },
-        },
-        select: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              image: true,
-            },
-          },
-        },
-      },
-      latestMessage: {
-        select: { body: true },
-      },
-    },
-  });
-}
-
-export type GetChats = Prisma.PromiseReturnType<typeof getChats>;
+import { type GetChats, getChats } from "../server/common/getChats";
 
 type ChatProps = {
   chats: GetChats | null;
