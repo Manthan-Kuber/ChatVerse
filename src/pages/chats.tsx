@@ -139,7 +139,7 @@ const enum CHATSREDUCER_ACTION_TYPE {
 }
 
 export type ChatsReducerAction = {
-  type: CHATSREDUCER_ACTION_TYPE;
+  type: CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE;
   payload: { conversationId: string; latestMessage: string };
 };
 
