@@ -69,10 +69,10 @@ function getChats(userId: string) {
   });
 }
 
-export type ChatSearch = Prisma.PromiseReturnType<typeof getChats>;
+export type GetChats = Prisma.PromiseReturnType<typeof getChats>;
 
 type ChatProps = {
-  chats: ChatSearch | null;
+  chats: GetChats | null;
   fetchError: boolean;
   currentUserId: string | null;
 };
@@ -143,7 +143,7 @@ export type ChatsReducerAction = {
   payload: { conversationId: string; latestMessage: string };
 };
 
-function chatsReducer(state: ChatSearch | null, action: ChatsReducerAction) {
+function chatsReducer(state: GetChats | null, action: ChatsReducerAction) {
   switch (action.type) {
     case CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE:
       if (state) {
@@ -175,7 +175,7 @@ const chats = ({
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
-  const [currentChat, setCurrentChat] = useState<ChatSearch[0]>();
+  const [currentChat, setCurrentChat] = useState<GetChats[0]>();
   const [onlineUsers, setOnlineUsers] = useState<
     { userId: string; socketId: string }[]
   >([]);
