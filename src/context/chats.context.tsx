@@ -4,10 +4,10 @@ import { GetChats } from "../server/common/getChats";
 
 type CurrentChatElement = GetChats[0] | undefined;
 
-type CurrentChat = {
+type GlobalState = {
   setCurrentChat: Dispatch<SetStateAction<CurrentChatElement>>;
   currentChat: CurrentChatElement;
-  setIsOpen: Dispatch<SetStateAction<boolean>>
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 } | null;
 
 type Chats = GetChats | null;
@@ -19,13 +19,14 @@ type ChatsContext = {
 
 const ChatsContext = createContext<ChatsContext>(null);
 const { Provider: ChatsProvider } = ChatsContext;
-const CurrentChatContext = createContext<CurrentChat>(null);
-const { Provider: CurrentChatProvider } = CurrentChatContext;
+
+const GlobalStateContext = createContext<GlobalState>(null);
+const { Provider: GlobalStateProvider } = GlobalStateContext;
 
 export {
   ChatsContext,
   ChatsProvider,
-  CurrentChatContext,
-  CurrentChatProvider,
-  type CurrentChat,
+  GlobalStateContext,
+  GlobalStateProvider,
+  type GlobalState,
 };

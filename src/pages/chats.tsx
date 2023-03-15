@@ -23,7 +23,7 @@ import events from "../utils/events";
 import { Message } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
-import { ChatsProvider, CurrentChatProvider } from "../context/chats.context";
+import { ChatsProvider, GlobalStateProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
 import { fetcher, scrollIntoView } from "../utils/functions";
@@ -334,11 +334,11 @@ const chats = ({
     >
       <SideBarWrapper>
         <ChatsProvider value={{ chats, dispatch }}>
-          <CurrentChatProvider
+          <GlobalStateProvider
             value={{ currentChat, setCurrentChat, setIsOpen }}
           >
             <Sidebar />
-          </CurrentChatProvider>
+          </GlobalStateProvider>
         </ChatsProvider>
       </SideBarWrapper>
       <div className="sm:px-2 sm:pt-8">

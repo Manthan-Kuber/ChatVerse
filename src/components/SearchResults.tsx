@@ -6,7 +6,7 @@ import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
 import { useContext, useEffect } from "react";
-import { ChatsContext, CurrentChatContext } from "../context/chats.context";
+import { ChatsContext, GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { Conversation } from "@prisma/client";
 import { GetChats } from "../server/common/getChats";
@@ -38,7 +38,7 @@ type CreateChatResponse =
 
 const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   const chatsState = useContext(ChatsContext);
-  const currentChatState = useContext(CurrentChatContext);
+  const currentChatState = useContext(GlobalStateContext);
   const {
     data: SearchedUsersArray,
     error,
