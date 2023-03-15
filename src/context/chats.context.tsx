@@ -1,14 +1,16 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { ChatSearch, ChatsReducerAction } from "../pages/chats";
+import { ChatsReducerAction } from "../pages/chats";
+import { GetChats } from "../server/common/getChats";
 
-type CurrentChatElement = ChatSearch[0] | undefined;
+type CurrentChatElement = GetChats[0] | undefined;
 
 type CurrentChat = {
   setCurrentChat: Dispatch<SetStateAction<CurrentChatElement>>;
   currentChat: CurrentChatElement;
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 } | null;
 
-type Chats = ChatSearch | null;
+type Chats = GetChats | null;
 
 type ChatsContext = {
   chats: Chats;

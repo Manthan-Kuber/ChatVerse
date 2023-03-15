@@ -5,11 +5,11 @@ import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ChatsContext, CurrentChatContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
-import { GetChats } from "../pages/chats";
 import { Conversation } from "@prisma/client";
+import { GetChats } from "../server/common/getChats";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -36,13 +36,7 @@ type CreateChatResponse =
   | { message: string }
   | { message: string; chat: Conversation | Conversation[] };
 
-const SearchResults = ({
-  searchQuery,
-  setIsOpen,
-}: {
-  searchQuery: string;
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}) => {
+const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   const {
     data: SearchedUsersArray,
     error,
@@ -117,7 +111,7 @@ const SearchResults = ({
                 }`}
                 onClick={() => {
                   setAsCurrentChat(chat);
-                  setIsOpen(false);
+                  currentChatState?.setIsOpen(false);
                 }}
               />
             );
