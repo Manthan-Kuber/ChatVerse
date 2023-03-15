@@ -47,7 +47,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
       : null
   );
-  const { data: ChatsList } = useSwr<GetChats | undefined>( //No undefined data is shown when data is logged as fallback data is set to ssr fetched data
+  const { data: ChatsList, mutate: mutateChats } = useSwr<GetChats | undefined>( //No undefined data is shown when data is logged as fallback data is set to ssr fetched data
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
     fetcher,
     {
@@ -64,8 +64,8 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     });
     toast.promise(createChatPromise, {
       loading: "Creating Chat...",
-      success: (data) => {
-        console.log(data);
+      success: () => {
+        mutateChats();
         return "Created chat successfully";
       },
       error: (err) => `${(err as { message: string }).message}`, //TODO when chat already exists, set with current state
