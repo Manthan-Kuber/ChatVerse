@@ -60,7 +60,7 @@ const Sidebar = () => {
           {value ? "Search Results" : "Chats"}
         </h3>
         <div className="mt-4 max-h-80 space-y-2 overflow-scroll">
-          <SearchResults searchQuery={debouncedValue} />
+          <SearchResults setValue={setValue} searchQuery={debouncedValue} />
         </div>
       </div>
       <button

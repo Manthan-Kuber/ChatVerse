@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
-import { useContext, useEffect } from "react";
+import { Dispatch, SetStateAction, useContext, useEffect } from "react";
 import { GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { Conversation } from "@prisma/client";
@@ -32,11 +32,18 @@ const SearchResultSkeleton = ({ count }: { count?: number }) => {
   );
 };
 
-type CreateChatResponse =
-  | { message: string }
-  | { message: string; chat: Conversation | Conversation[] };
+type CreateChatResponse = {
+  message: string;
+  chat: Conversation;
+};
 
-const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
+const SearchResults = ({
+  searchQuery,
+  setValue,
+}: {
+  searchQuery: string;
+  setValue: Dispatch<SetStateAction<string>>;
+}) => {
   const GlobalState = useContext(GlobalStateContext);
   const {
     data: SearchedUsersArray,
@@ -51,7 +58,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
     fetcher,
     {
-      fallbackData: GlobalState?.chats!,
+      fallbackData: GlobalState?.chats!, //Initial data for the cache
       revalidateOnMount: false, //show correct latest message to disabling revalidation
     }
   );
@@ -66,6 +73,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
       loading: "Creating Chat...",
       success: () => {
         mutateChats();
+        setValue("");
         return "Created chat successfully";
       },
       error: (err) => `${(err as { message: string }).message}`, //TODO when chat already exists, set with current state
@@ -81,11 +89,11 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     };
   }, [error]);
 
-  if (isLoading) return <SearchResultSkeleton count={4} />;
-
   const setAsCurrentChat = (chat: GetChats[0]) => {
     GlobalState && GlobalState.setCurrentChat(chat);
   };
+
+  if (isLoading) return <SearchResultSkeleton count={4} />;
 
   if (!SearchedUsersArray) {
     return (
