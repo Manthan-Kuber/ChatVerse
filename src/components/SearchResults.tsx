@@ -6,7 +6,7 @@ import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
 import { useContext, useEffect } from "react";
-import { ChatsContext, GlobalStateContext } from "../context/chats.context";
+import { GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { Conversation } from "@prisma/client";
 import { GetChats } from "../server/common/getChats";
@@ -37,7 +37,6 @@ type CreateChatResponse =
   | { message: string; chat: Conversation | Conversation[] };
 
 const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
-  const chatsState = useContext(ChatsContext);
   const GlobalState = useContext(GlobalStateContext);
   const {
     data: SearchedUsersArray,
@@ -52,7 +51,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
     fetcher,
     {
-      fallbackData: chatsState?.chats!,
+      fallbackData: GlobalState?.chats!,
       revalidateOnMount: false, //show correct latest message to disabling revalidation
     }
   );

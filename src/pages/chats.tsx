@@ -5,7 +5,6 @@ import {
   ReactNode,
   useCallback,
   useEffect,
-  useReducer,
   useRef,
   useState,
 } from "react";
@@ -23,12 +22,12 @@ import events from "../utils/events";
 import { Message } from "@prisma/client";
 import { GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
-import { ChatsProvider, GlobalStateProvider } from "../context/chats.context";
+import { GlobalStateProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
 import { fetcher, scrollIntoView } from "../utils/functions";
 import { env } from "../env/client.mjs";
-import useSwr, { useSWRConfig } from "swr";
+import useSwr from "swr";
 import { GetMessages } from "./api/chats/get-messages";
 import { SendMessage } from "./api/chats/send-message";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -97,46 +96,8 @@ async function sendMessage(
   return [...(MessagesArray || []), newMessage]; //Cache will be swapped with the returned value on successful request
 }
 
-const enum CHATSREDUCER_ACTION_TYPE {
-  UPDATE_LATEST_MESSAGE,
-}
-
-export type ChatsReducerAction = {
-  type: CHATSREDUCER_ACTION_TYPE;
-  payload: any;
-};
-
-function chatsReducer(state: GetChats | null, action: ChatsReducerAction) {
-  switch (action.type) {
-    case CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE:
-      type PayloadType = { conversationId: string; latestMessage: string };
-      if (state) {
-        //Map function doesn't mutate the state.State update is done immutably
-        return state.map((chat) => {
-          if (chat.id === (action.payload as PayloadType).conversationId) {
-            return {
-              ...chat,
-              latestMessage: {
-                body: (action.payload as PayloadType).latestMessage,
-              },
-            };
-          } else {
-            return chat;
-          }
-        });
-      }
-    default:
-      return state;
-  }
-}
-
-const chats = ({
-  chats: fetchedChats,
-  fetchError,
-  currentUserId,
-}: ChatProps) => {
+const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const { width: screenWidth } = useWindowSize();
-  const [chats, dispatch] = useReducer(chatsReducer, fetchedChats);
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const wByN = (n: number) => screenWidth && screenWidth * n;
@@ -333,13 +294,11 @@ const chats = ({
       exit={{ opacity: 0 }}
     >
       <SideBarWrapper>
-        <ChatsProvider value={{ chats, dispatch }}>
-          <GlobalStateProvider
-            value={{ chats,currentChat, setCurrentChat, setIsOpen }}
-          >
-            <Sidebar />
-          </GlobalStateProvider>
-        </ChatsProvider>
+        <GlobalStateProvider
+          value={{ chats, currentChat, setCurrentChat, setIsOpen }}
+        >
+          <Sidebar />
+        </GlobalStateProvider>
       </SideBarWrapper>
       <div className="sm:px-2 sm:pt-8">
         {/* User will be signed out if no session. currentUserId will not be null */}
