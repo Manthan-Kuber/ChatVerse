@@ -37,6 +37,8 @@ type CreateChatResponse =
   | { message: string; chat: Conversation | Conversation[] };
 
 const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
+  const chatsState = useContext(ChatsContext);
+  const currentChatState = useContext(CurrentChatContext);
   const {
     data: SearchedUsersArray,
     error,
@@ -46,8 +48,11 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
       : null
   );
-  const chatsState = useContext(ChatsContext);
-  const currentChatState = useContext(CurrentChatContext);
+  const { data: ChatsList } = useSwr<GetChats | undefined>(
+    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
+    fetcher,
+    { fallbackData: chatsState?.chats! }
+  );
 
   const handleChatCreation = (userId: string) => {
     const url = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/create`;
@@ -83,14 +88,14 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   if (!SearchedUsersArray) {
     return (
       <>
-        {chatsState?.chats?.length === 0 ? (
+        {ChatsList?.length === 0 ? (
           <p className="text-center">
             No active chats found.
             <br />
             Search for an user and click on it to create a chat{" "}
           </p>
         ) : (
-          chatsState?.chats?.map((chat: GetChats[0]) => {
+          ChatsList?.map((chat: GetChats[0]) => {
             const { id: chatId, latestMessage } = chat;
             const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
             return (

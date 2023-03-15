@@ -28,7 +28,7 @@ import Image from "next/image";
 import MessageList from "../components/MessageList";
 import { fetcher, scrollIntoView } from "../utils/functions";
 import { env } from "../env/client.mjs";
-import useSwr from "swr";
+import useSwr, { useSWRConfig } from "swr";
 import { GetMessages } from "./api/chats/get-messages";
 import { SendMessage } from "./api/chats/send-message";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -163,6 +163,9 @@ const chats = ({
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`
       : null
   );
+  const { mutate: mutateChats } = useSwr<GetChats | undefined>(
+    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`
+  );
 
   const updateLatestMessage = ({
     conversationId,
@@ -171,10 +174,28 @@ const chats = ({
     conversationId: string;
     latestMessage: string;
   }) => {
-    dispatch({
-      type: CHATSREDUCER_ACTION_TYPE.UPDATE_LATEST_MESSAGE,
-      payload: { conversationId, latestMessage },
-    });
+    //FIXME Mutate bug shows prev message even after updation
+    mutateChats(
+      (prev) => {
+        return prev?.map((chat) => {
+          if (chat.id === conversationId) {
+            return {
+              ...chat,
+              latestMessage: {
+                body: latestMessage,
+              },
+            };
+          } else {
+            return chat;
+          }
+        });
+      },
+      {
+        populateCache: true,
+        revalidate: false,
+        rollbackOnError: true,
+      }
+    );
   };
 
   const handleSubmit = async (
