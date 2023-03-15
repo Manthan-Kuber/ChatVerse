@@ -38,7 +38,7 @@ type CreateChatResponse =
 
 const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   const chatsState = useContext(ChatsContext);
-  const currentChatState = useContext(GlobalStateContext);
+  const GlobalState = useContext(GlobalStateContext);
   const {
     data: SearchedUsersArray,
     error,
@@ -85,7 +85,7 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
   if (isLoading) return <SearchResultSkeleton count={4} />;
 
   const setAsCurrentChat = (chat: GetChats[0]) => {
-    currentChatState && currentChatState.setCurrentChat(chat);
+    GlobalState && GlobalState.setCurrentChat(chat);
   };
 
   if (!SearchedUsersArray) {
@@ -114,12 +114,11 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
                   ) || <span className="invisible">Placeholder</span>
                 }
                 divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                  currentChatState?.currentChat?.id === chatId &&
-                  "bg-neutral-400/10"
+                  GlobalState?.currentChat?.id === chatId && "bg-neutral-400/10"
                 }`}
                 onClick={() => {
                   setAsCurrentChat(chat);
-                  currentChatState?.setIsOpen(false);
+                  GlobalState?.setIsOpen(false);
                 }}
               />
             );

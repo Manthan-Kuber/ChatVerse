@@ -335,7 +335,7 @@ const chats = ({
       <SideBarWrapper>
         <ChatsProvider value={{ chats, dispatch }}>
           <GlobalStateProvider
-            value={{ currentChat, setCurrentChat, setIsOpen }}
+            value={{ chats,currentChat, setCurrentChat, setIsOpen }}
           >
             <Sidebar />
           </GlobalStateProvider>

@@ -8,6 +8,7 @@ type GlobalState = {
   setCurrentChat: Dispatch<SetStateAction<CurrentChatElement>>;
   currentChat: CurrentChatElement;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
+  chats: Chats;
 } | null;
 
 type Chats = GetChats | null;
