@@ -48,10 +48,13 @@ const SearchResults = ({ searchQuery }: { searchQuery: string }) => {
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
       : null
   );
-  const { data: ChatsList } = useSwr<GetChats | undefined>(
+  const { data: ChatsList } = useSwr<GetChats | undefined>( //No undefined data is shown when data is logged as fallback data is set to ssr fetched data
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
     fetcher,
-    { fallbackData: chatsState?.chats! }
+    {
+      fallbackData: chatsState?.chats!,
+      revalidateOnMount: false, //show correct latest message to disabling revalidation
+    }
   );
 
   const handleChatCreation = (userId: string) => {

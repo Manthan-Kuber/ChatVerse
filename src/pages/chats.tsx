@@ -174,21 +174,22 @@ const chats = ({
     conversationId: string;
     latestMessage: string;
   }) => {
-    //FIXME Mutate bug shows prev message even after updation
     mutateChats(
       (prev) => {
-        return prev?.map((chat) => {
-          if (chat.id === conversationId) {
-            return {
-              ...chat,
-              latestMessage: {
-                body: latestMessage,
-              },
-            };
-          } else {
-            return chat;
-          }
-        });
+        if (prev) {
+          return prev.map((chat) => {
+            if (chat.id === conversationId) {
+              return {
+                ...chat,
+                latestMessage: {
+                  body: latestMessage,
+                },
+              };
+            } else {
+              return chat;
+            }
+          });
+        }
       },
       {
         populateCache: true,
@@ -226,6 +227,10 @@ const chats = ({
           createdAt: new Date(), //Make new message date as current time
           updatedAt: new Date(),
         };
+        updateLatestMessage({
+          conversationId: currentChat.id,
+          latestMessage: message,
+        });
         await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
           optimisticData: (currentMessages) => [
             ...(currentMessages || []),
@@ -234,10 +239,6 @@ const chats = ({
           rollbackOnError: true,
           populateCache: true,
           revalidate: false,
-        });
-        updateLatestMessage({
-          conversationId: currentChat.id,
-          latestMessage: message,
         });
       }
     } catch (err) {
