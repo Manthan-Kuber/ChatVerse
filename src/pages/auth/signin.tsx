@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import ChatVerseText from "../../components/ChatVerseText";
 import Input from "../../components/Input";
 import SocialIcon from "../../components/SocialIcon";
-import { BsTwitter, BsGithub, BsGoogle } from "react-icons/bs";
+import { BsGithub, BsGoogle } from "react-icons/bs";
 import { FaDiscord } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +17,6 @@ const SocialIconsList = [
   { id: 0, name: "google", iconType: BsGoogle },
   { id: 1, name: "discord", iconType: FaDiscord },
   { id: 2, name: "github", iconType: BsGithub },
-  // { id: 3, iconType: BsTwitter }, Change Later
 ].map(({ iconType, id, name }) => (
   <li
     key={id}

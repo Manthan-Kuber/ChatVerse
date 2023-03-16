@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
-import { ChatSearch } from "../pages/chats";
+import { GetChats } from "../server/common/getChats";
 import ThemeChanger from "./ThemeChanger";
 
 const ChatsHeader = ({
@@ -10,7 +10,7 @@ const ChatsHeader = ({
   currentUserId,
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
-  currentChat: ChatSearch[0] | undefined;
+  currentChat: GetChats[0] | undefined;
   currentUserId: string;
 }) => {
   const { width: screenWidth } = useWindowSize();
