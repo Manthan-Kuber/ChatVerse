@@ -83,6 +83,7 @@ const SearchResults = ({
     if (comb_1 || comb_2) {
       const searchedChat = comb_1 || comb_2; //Set new chat as one of the combinations
       if (searchedChat) setAsCurrentChat(searchedChat);
+      GlobalState?.setIsOpen(false);
       return;
     }
     const url = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/create`;
@@ -98,7 +99,7 @@ const SearchResults = ({
         setNewChatId(data.chat.id);
         return "Created chat successfully";
       },
-      error: (err) => `${(err as { message: string }).message}`, //TODO when chat already exists, set with current state
+      error: (err) => `${(err as { message: string }).message}`,
     });
   };
 
@@ -174,7 +175,6 @@ const SearchResults = ({
 
   return (
     <>
-      {/* TODO create chat on click and close menu */}
       {SearchedUsersArray.map((user) => (
         <ChatOrUserInfo
           image={user.image}

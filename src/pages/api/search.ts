@@ -10,7 +10,6 @@ const reqQuerySchema = z.object({
   }),
 });
 
-//TODO return chat details if chat present else return the user only
 function searchUser(searchQuery: string, userId: string) {
   return prisma.user.findMany({
     where: {
