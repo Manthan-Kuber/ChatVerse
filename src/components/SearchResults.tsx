@@ -5,7 +5,13 @@ import toast from "react-hot-toast";
 import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
-import { Dispatch, SetStateAction, useContext, useEffect } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { Conversation } from "@prisma/client";
@@ -45,6 +51,7 @@ const SearchResults = ({
   setValue: Dispatch<SetStateAction<string>>;
 }) => {
   const GlobalState = useContext(GlobalStateContext);
+  const [newChatId, setNewChatId] = useState("");
   const {
     data: SearchedUsersArray,
     error,
@@ -54,7 +61,11 @@ const SearchResults = ({
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
       : null
   );
-  const { data: ChatsList, mutate: mutateChats } = useSwr<GetChats | undefined>( //No undefined data is shown when data is logged as fallback data is set to ssr fetched data
+  const {
+    data: ChatsList,
+    mutate: mutateChats,
+    isValidating: chatsValidating,
+  } = useSwr<GetChats | undefined>( //No undefined data is shown when data is logged as fallback data is set to ssr fetched data
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
     fetcher,
     {
@@ -71,13 +82,19 @@ const SearchResults = ({
     });
     toast.promise(createChatPromise, {
       loading: "Creating Chat...",
-      success: () => {
+      success: (data) => {
         mutateChats();
         setValue("");
+        setNewChatId(data.chat.id);
         return "Created chat successfully";
       },
       error: (err) => `${(err as { message: string }).message}`, //TODO when chat already exists, set with current state
     });
+  };
+
+  const checkChatExists = (chatId: string) => {
+    const newChat = ChatsList?.find((c) => c.id === chatId);
+    if (newChat) return newChat;
   };
 
   useEffect(() => {
@@ -88,6 +105,13 @@ const SearchResults = ({
       toast.remove();
     };
   }, [error]);
+
+  useEffect(() => {
+    if (!chatsValidating) {
+      const newChat = checkChatExists(newChatId);
+      if (newChat) setAsCurrentChat(newChat);
+    }
+  }, [ChatsList]);
 
   const setAsCurrentChat = (chat: GetChats[0]) => {
     GlobalState && GlobalState.setCurrentChat(chat);
@@ -107,7 +131,7 @@ const SearchResults = ({
         ) : (
           ChatsList?.map((chat: GetChats[0]) => {
             const { id: chatId, latestMessage } = chat;
-            const user = chat.participants.map((c) => c.user)[0]; //TODO display skeleton when any var is undefined
+            const user = chat.participants.map((c) => c.user)[0];
             return (
               <ChatOrUserInfo
                 key={chatId}
