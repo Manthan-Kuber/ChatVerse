@@ -44,6 +44,12 @@ type CreateChatResponse = {
   chat: Conversation;
 };
 
+//type UserSearch[0] => User
+const sortData = (a: UserSearch[0], b: UserSearch[0]) => {
+  if (a.name && b.name) return a.name.localeCompare(b.name);
+  return Number(a.id) - Number(b.id); //Wont reach here, outputs NaN
+};
+
 const SearchResults = ({
   searchQuery,
   setValue,
@@ -61,7 +67,11 @@ const SearchResults = ({
   } = useSwr<UserSearch, { message: string }>(
     searchQuery
       ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
-      : null
+      : null,
+    fetcher,
+    {
+      onSuccess: (data) => data.sort((a, b) => sortData(a, b)),
+    }
   );
   const {
     data: ChatsList,
