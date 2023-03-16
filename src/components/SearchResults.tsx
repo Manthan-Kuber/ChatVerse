@@ -16,6 +16,7 @@ import { GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import { Conversation } from "@prisma/client";
 import { GetChats } from "../server/common/getChats";
+import { useSession } from "next-auth/react";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -51,6 +52,7 @@ const SearchResults = ({
   setValue: Dispatch<SetStateAction<string>>;
 }) => {
   const GlobalState = useContext(GlobalStateContext);
+  const { data: session } = useSession();
   const [newChatId, setNewChatId] = useState("");
   const {
     data: SearchedUsersArray,
@@ -75,6 +77,14 @@ const SearchResults = ({
   );
 
   const handleChatCreation = (userId: string) => {
+    //Conv id is combination of either
+    const comb_1 = checkChatExists(session?.user?.id + userId);
+    const comb_2 = checkChatExists(userId + session?.user?.id);
+    if (comb_1 || comb_2) {
+      const searchedChat = comb_1 || comb_2; //Set new chat as one of the combinations
+      if (searchedChat) setAsCurrentChat(searchedChat);
+      return;
+    }
     const url = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/create`;
     const createChatPromise: Promise<CreateChatResponse> = fetcher(url, {
       method: "POST",
