@@ -33,7 +33,7 @@ const Footer = () => {
         className="ml-1 italic"
         href="https://github.com/Manthan-Kuber"
         target="_blank"
-        rel="noreferer"
+        rel="noopener"
       >
         <span className="text-xs xs:text-sm  sm:text-lg">Manthan Kuber</span>
       </a>
