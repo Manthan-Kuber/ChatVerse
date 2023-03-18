@@ -1,6 +1,6 @@
-import type { Message as MessageType } from "@prisma/client";
+import type { Message } from "@prisma/client";
 import Skeleton from "react-loading-skeleton";
-import Message from "./Message";
+import MessageComponent from "./Message";
 
 const MessageListSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -26,7 +26,7 @@ const MessageListSkeleton = ({ count }: { count?: number }) => {
 };
 
 type MessageListProps = {
-  messageList: MessageType[] | undefined;
+  messageList: Message[] | undefined;
   isLoading: boolean;
   currentUserId: string | null;
   messagesEndRef: React.MutableRefObject<HTMLDivElement | null>;
@@ -45,7 +45,7 @@ const MessageList = ({
   return (
     <>
       {messageList.map((message) => (
-        <Message
+        <MessageComponent
           key={message.id}
           message={message}
           currentUserId={currentUserId!}
