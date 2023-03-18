@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
-import { GetChats } from "../server/common/getChats";
+import type { GetChats } from "../server/common/getChats";
 import ThemeChanger from "./ThemeChanger";
 
 const ChatsHeader = ({

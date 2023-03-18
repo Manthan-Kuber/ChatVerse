@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { FormEvent, KeyboardEvent, useState } from "react";
+import { type FormEvent,type KeyboardEvent, useState } from "react";
 import { IconType } from "react-icons";
 import { appearIntoView } from "../animations/animations";
 
@@ -11,7 +11,7 @@ const ChatInputForm = (props: {
   value: string;
   Icon: IconType;
   placeholder: string;
-  scrollIntoView: () => void
+  scrollIntoView: () => void;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -28,8 +28,8 @@ const ChatInputForm = (props: {
         type="text"
         onKeyDown={(e) => e.key === "Enter" && props.handleSubmit(e)}
         onFocus={() => {
-          setIsFocused(true)
-          props.scrollIntoView()
+          setIsFocused(true);
+          props.scrollIntoView();
         }}
         onBlur={() => setIsFocused(false)}
       />

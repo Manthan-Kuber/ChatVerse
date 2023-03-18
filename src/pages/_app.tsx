@@ -13,7 +13,10 @@ import { SkeletonTheme } from "react-loading-skeleton";
 import { SWRConfig } from "swr";
 import { fetcher } from "../utils/functions";
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<
+  P,
+  IP
+> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 

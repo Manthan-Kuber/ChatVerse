@@ -4,7 +4,7 @@ import Input from "../../components/Input";
 import SocialIcon from "../../components/SocialIcon";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import { FaDiscord } from "react-icons/fa";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Loader from "../../components/Loader";

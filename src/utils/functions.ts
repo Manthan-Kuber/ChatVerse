@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { type RefObject } from "react";
 
 export const resetScroll = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) =>
   (e.currentTarget.scrollLeft = 0);
