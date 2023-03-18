@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 
 const CustomHead = () => {
   const { pathname } = useRouter();
+  const pathArray = pathname.split("/") ?? [];
   const defaultTitle =
-    pathname.split("/")[1]?.toUpperCase()[0] +
-    pathname.split("/")[1]?.substring(1)!;
+    (pathArray[1] || "").toUpperCase()[0] + (pathArray[1] || "").substring(1);
   const getCurrTitle = () => {
     switch (pathname) {
       case "/":

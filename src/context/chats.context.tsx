@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, type Dispatch, type SetStateAction } from "react";
 import { GetChats } from "../server/common/getChats";
 
 type CurrentChatElement = GetChats[0] | undefined;

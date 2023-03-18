@@ -2,7 +2,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";

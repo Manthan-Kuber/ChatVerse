@@ -1,7 +1,7 @@
 import { type NextApiRequest, type NextApiResponse } from "next";
 import { prisma } from "../../server/db/client";
 import { z } from "zod";
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 
 const reqQuerySchema = z.object({

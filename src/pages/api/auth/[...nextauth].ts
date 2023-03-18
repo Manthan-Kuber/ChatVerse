@@ -16,10 +16,9 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
         if (!session.user.name && session.user.email) {
           const email = session.user.email;
-          const placeholderName = email
-            .split("@")[0]
-            ?.toUpperCase()[0]
-            ?.concat(email.split("@")[0]?.substring(1)!);
+          const placeholderName = (
+            (email.split("@")[0] || "").toUpperCase()[0] || ""
+          ).concat((email.split("@")[0] || "").substring(1));
           await prisma.user.update({
             where: {
               id: user.id,

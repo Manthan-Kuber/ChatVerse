@@ -1,7 +1,7 @@
 import {
-  FormEvent,
-  KeyboardEvent,
-  ReactElement,
+  type FormEvent,
+  type KeyboardEvent,
+  type ReactElement,
   ReactNode,
   useCallback,
   useEffect,
@@ -19,8 +19,8 @@ import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import useSocket from "../hooks/useSocket";
 import events from "../utils/events";
-import { Message } from "@prisma/client";
-import { GetServerSideProps } from "next";
+import { type Message } from "@prisma/client";
+import { type GetServerSideProps } from "next";
 import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { GlobalStateProvider } from "../context/chats.context";
 import Image from "next/image";
@@ -28,8 +28,8 @@ import MessageList from "../components/MessageList";
 import { fetcher, scrollIntoView } from "../utils/functions";
 import { env } from "../env/client.mjs";
 import useSwr from "swr";
-import { GetMessages } from "./api/chats/get-messages";
-import { SendMessage } from "./api/chats/send-message";
+import { type GetMessages } from "./api/chats/get-messages";
+import { type SendMessage } from "./api/chats/send-message";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { type GetChats, getChats } from "../server/common/getChats";
 

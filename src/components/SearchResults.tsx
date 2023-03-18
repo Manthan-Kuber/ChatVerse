@@ -6,16 +6,16 @@ import { fetcher } from "../utils/functions";
 import { ProfileImageSkeleton } from "./ProfileImage";
 import { env } from "../env/client.mjs";
 import {
-  Dispatch,
-  SetStateAction,
+  type Dispatch,
+  type SetStateAction,
   useContext,
   useEffect,
   useState,
 } from "react";
 import { GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
-import { Conversation } from "@prisma/client";
-import { GetChats } from "../server/common/getChats";
+import type { Conversation } from "@prisma/client";
+import type { GetChats } from "../server/common/getChats";
 import { useSession } from "next-auth/react";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
@@ -81,7 +81,7 @@ const SearchResults = ({
     `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
     fetcher,
     {
-      fallbackData: GlobalState?.chats!, //Initial data for the cache
+      fallbackData: GlobalState?.chats ?? undefined, //Initial data for the cache
       revalidateOnMount: false, //show correct latest message to disabling revalidation
     }
   );
@@ -118,6 +118,10 @@ const SearchResults = ({
     if (newChat) return newChat;
   };
 
+  const setAsCurrentChat = (chat: GetChats[0]) => {
+    GlobalState && GlobalState.setCurrentChat(chat);
+  };
+
   useEffect(() => {
     if (error) {
       toast.error(error.message);
@@ -130,13 +134,9 @@ const SearchResults = ({
   useEffect(() => {
     if (!chatsValidating) {
       const newChat = checkChatExists(newChatId);
-      if (newChat) setAsCurrentChat(newChat);
+    if (newChat) setAsCurrentChat(newChat);
     }
-  }, [ChatsList]);
-
-  const setAsCurrentChat = (chat: GetChats[0]) => {
-    GlobalState && GlobalState.setCurrentChat(chat);
-  };
+  }, [ChatsList, chatsValidating, newChatId, setAsCurrentChat]);
 
   if (isLoading) return <SearchResultSkeleton count={4} />;
 

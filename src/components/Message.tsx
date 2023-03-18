@@ -1,7 +1,7 @@
-import type { Message } from "@prisma/client";
+import type { Message as MessageType } from "@prisma/client";
 
 type MessageProps = {
-  message: Message;
+  message: MessageType;
   currentUserId: string;
 };
 
