@@ -20,7 +20,7 @@ const CustomHead = () => {
     <Head>
       {/* Title element should strictly have a single child */}
       <title>{`ChatVerse ${getCurrTitle()}`}</title>
-      <meta name="description" content="ChatVerse - a chat app" />
+      <meta name="description" content="ChatVerse - a chat app by Manthan Kuber" />
       <link rel="icon" href="/favicon.ico" />
     </Head>
   );
