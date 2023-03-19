@@ -18,6 +18,8 @@ const ThemeChanger = () => {
 
   return (
     <button
+      id="theme-changer"
+      aria-label="theme-changer"
       onClick={() =>
         currTheme === "dark" ? setTheme("light") : setTheme("dark")
       }
