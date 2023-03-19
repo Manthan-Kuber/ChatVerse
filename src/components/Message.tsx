@@ -22,7 +22,7 @@ const Message = ({ message, currentUserId }: MessageProps) => {
           isSender
             ? " rounded-br-none bg-lime-400 dark:bg-lime-500"
             : " rounded-bl-none bg-gray-400 dark:bg-gray-500 "
-        } w-fit rounded-md p-4`}
+        }  max-w-full break-words rounded-md p-4`}
       >
         {message.body}
       </span>
@@ -33,7 +33,7 @@ const Message = ({ message, currentUserId }: MessageProps) => {
             : "border-r-8 border-r-transparent border-t-gray-400 dark:border-t-gray-500"
         }`}
       />
-      <small>{messageCreationDate}</small>
+      <small className="max-w-full break-words">{messageCreationDate}</small>
     </div>
   );
 };
