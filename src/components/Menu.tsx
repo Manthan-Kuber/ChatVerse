@@ -36,14 +36,14 @@ const Menu = ({
   return (
     <motion.div
       {...(shouldAnimate ? fadeInOutProps : {})}
-      className="fixed top-0 left-0 z-10 min-h-screen  w-full bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
+      className="z-1 fixed top-0 left-0 max-h-full w-full overflow-y-scroll bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         {...(shouldAnimate ? slideInProps : {})}
         onAnimationComplete={() => {
           setShouldAnimate(false);
         }}
-        className="min-h-screen w-11/12 overflow-y-scroll  bg-white py-4 dark:bg-[#1c1b22]"
+        className="min-h-screen w-11/12 overflow-y-scroll bg-white py-4 dark:bg-black "
       >
         <div className="flex items-center justify-between px-2">
           <ThemeChanger />
