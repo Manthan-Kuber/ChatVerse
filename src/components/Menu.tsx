@@ -43,7 +43,7 @@ const Menu = ({
         onAnimationComplete={() => {
           setShouldAnimate(false);
         }}
-        className="min-h-screen w-8/12 bg-white py-4 dark:bg-[#1c1b22]"
+        className="min-h-screen w-11/12  bg-white py-4 dark:bg-[#1c1b22]"
       >
         <div className="flex items-center justify-between px-2">
           <ThemeChanger />

@@ -38,7 +38,7 @@ const Sidebar = () => {
     "scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll";
 
   return (
-    <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between px-2 py-8 sm:min-h-screen">
+    <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between overflow-y-scroll px-2 py-8 sm:min-h-screen">
       <div>
         <ChatOrUserInfo
           image={session?.user?.image}
