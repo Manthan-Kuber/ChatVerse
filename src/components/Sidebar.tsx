@@ -2,16 +2,20 @@ import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { BiLogOut } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { type ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState, useRef, useEffect } from "react";
 import useDebounce from "../hooks/useDebounce";
 import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import Skeleton from "react-loading-skeleton";
 
+const spanClassName =
+  "scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll";
+
 const Sidebar = () => {
   const { data: session } = useSession();
   const { push } = useRouter();
   const [value, setValue] = useState("");
+  const searchBoxRef = useRef<HTMLInputElement>(null);
   const debouncedValue = useDebounce(value);
 
   function handleSignOut() {
@@ -34,8 +38,9 @@ const Sidebar = () => {
     setValue(e.target.value);
   }
 
-  const spanClassName =
-    "scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll";
+  useEffect(() => {
+    searchBoxRef.current?.focus()
+  },[])
 
   return (
     <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between overflow-y-scroll px-2 py-8 sm:min-h-screen">
@@ -52,6 +57,7 @@ const Sidebar = () => {
             className="w-full truncate rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
             placeholder="Search or start a new chat"
             value={value}
+            ref={searchBoxRef}
             onChange={handleSearch}
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />

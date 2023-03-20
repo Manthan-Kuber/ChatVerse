@@ -36,7 +36,7 @@ const Menu = ({
   return (
     <motion.div
       {...(shouldAnimate ? fadeInOutProps : {})}
-      className="z-2 sticky top-0 bottom-0 overflow-y-scroll  min-h-fit w-full  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
+      className="z-2 fixed top-0 bottom-0 min-h-0 w-full overflow-y-scroll  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         {...(shouldAnimate ? slideInProps : {})}
