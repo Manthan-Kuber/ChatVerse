@@ -321,7 +321,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 messagesEndRef={messageEndRef}
               />
             ) : (
-              <div>
+              <div className="p-4 grid place-items-center" >
                 <Image
                   src="/undraw_quick_chat_re_bit5.svg"
                   width={240}
@@ -330,7 +330,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                   className="md:mb-4 md:w-[320px] "
                   priority
                 />
-                <span className="block text-center font-mono text-lg p-4">
+                <span className="block text-center font-mono text-lg">
                   Click on a chat to start chatting
                 </span>
               </div>
