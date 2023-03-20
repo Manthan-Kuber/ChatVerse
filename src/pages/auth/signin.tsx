@@ -10,6 +10,7 @@ import { z } from "zod";
 import Loader from "../../components/Loader";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import ChatVerseLoader from "../../components/ChatVerseLoader";
 
 const callbackUrl = "/chats";
 
@@ -58,20 +59,12 @@ const Signin = () => {
   const { status } = useSession();
 
   if (status === "loading") {
-    return (
-      <div className="grid min-h-full w-full  place-items-center text-2xl">
-        <ChatVerseText className="animate-pulse" />
-      </div>
-    );
+    return <ChatVerseLoader />;
   }
 
   if (status === "authenticated") {
     replace(callbackUrl);
-    return (
-      <div className="grid min-h-full w-full  place-items-center text-2xl">
-        <ChatVerseText className="animate-pulse" />
-      </div>
-    );
+    return <ChatVerseLoader />;
   }
 
   const onSubmit: SubmitHandler<FormValues> = async ({ email }) => {
