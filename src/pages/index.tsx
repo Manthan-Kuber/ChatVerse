@@ -25,6 +25,7 @@ const Home: NextPage = () => {
         height={240}
         alt="logo"
         className="mx-auto md:mb-4 md:w-[320px] "
+        priority
       />
       <ChatVerseText />
       <motion.div

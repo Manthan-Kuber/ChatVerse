@@ -328,8 +328,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                   height={240}
                   alt="logo"
                   className="md:mb-4 md:w-[320px] "
+                  priority
                 />
-                <span className="block text-center font-mono text-lg">
+                <span className="block text-center font-mono text-lg p-4">
                   Click on a chat to start chatting
                 </span>
               </div>
