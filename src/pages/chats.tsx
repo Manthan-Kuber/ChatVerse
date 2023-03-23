@@ -2,16 +2,12 @@ import {
   type FormEvent,
   type KeyboardEvent,
   type ReactElement,
-  ReactNode,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from "react";
-import useWindowSize from "../hooks/useWindowSize";
-import { AnimatePresence } from "framer-motion";
 import Sidebar from "../components/Sidebar";
-import Menu from "../components/Menu";
 import ChatsHeader from "../components/ChatsHeader";
 import { IoMdSend } from "react-icons/io";
 import ChatInputForm from "../components/ChatInputForm";
@@ -30,7 +26,6 @@ import { env } from "../env/client.mjs";
 import useSwr from "swr";
 import { type GetMessages } from "./api/chats/get-messages";
 import { type SendMessage } from "./api/chats/send-message";
-import useLocalStorage from "../hooks/useLocalStorage";
 import { type GetChats, getChats } from "../server/common/getChats";
 import SidebarWrapper from "../components/SidebarWrapper";
 
