@@ -5,13 +5,11 @@ import ThemeChanger from "./ThemeChanger";
 
 const Menu = ({
   children,
-  menuWidth,
   shouldAnimate,
   setShouldAnimate,
   setIsOpen,
 }: {
   children: React.ReactNode;
-  menuWidth: number;
   shouldAnimate: boolean;
   setShouldAnimate: (value: boolean | ((val: boolean) => boolean)) => void;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,7 +22,7 @@ const Menu = ({
     exit: "exit",
   };
   const slideInProps = {
-    initial: { x: menuWidth },
+    initial: { x: -300 },
     animate: {
       x: 0,
       transition: {

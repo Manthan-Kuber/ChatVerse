@@ -100,7 +100,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const wByN = (n: number) => screenWidth && screenWidth * n;
   const socket = useSocket();
   const [currentChat, setCurrentChat] = useState<GetChats[0]>();
   const [onlineUsers, setOnlineUsers] = useState<
@@ -217,7 +216,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             shouldAnimate={shouldAnimate}
             setShouldAnimate={setShouldAnimate}
             setIsOpen={setIsOpen}
-            menuWidth={-wByN(2 / 3)!}
           >
             {children}
           </Menu>
@@ -321,7 +319,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 messagesEndRef={messageEndRef}
               />
             ) : (
-              <div className="p-4 grid place-items-center" >
+              <div className="grid place-items-center p-4">
                 <Image
                   src="/undraw_quick_chat_re_bit5.svg"
                   width={240}
