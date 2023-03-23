@@ -51,8 +51,8 @@ const Sidebar = () => {
           <input
             className="w-full truncate rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
             placeholder="Search or start a new chat"
-            // value={value}
-            // onChange={handleSearch}
+            value={value}
+            onChange={handleSearch}
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
         </div>
