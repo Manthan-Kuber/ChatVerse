@@ -32,6 +32,7 @@ import { type GetMessages } from "./api/chats/get-messages";
 import { type SendMessage } from "./api/chats/send-message";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { type GetChats, getChats } from "../server/common/getChats";
+import SidebarWrapper from "../components/SidebarWrapper";
 
 type ChatProps = {
   chats: GetChats | null;
@@ -97,7 +98,6 @@ async function sendMessage(
 }
 
 const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
-  const { width: screenWidth } = useWindowSize();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const socket = useSocket();
@@ -108,10 +108,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
   //1st Arg is key,2nd Arg is value
-  const [shouldAnimate, setShouldAnimate] = useLocalStorage(
-    "shouldAnimate",
-    true
-  );
+
   const messageEndRef = useRef<HTMLDivElement>(null);
   const {
     data: MessagesArray,
@@ -206,23 +203,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     }
   };
 
-  const SideBarWrapper = ({ children }: { children: ReactNode }) =>
-    screenWidth && screenWidth >= 640 ? (
-      <section>{children}</section>
-    ) : (
-      <AnimatePresence>
-        {isOpen && (
-          <Menu
-            shouldAnimate={shouldAnimate}
-            setShouldAnimate={setShouldAnimate}
-            setIsOpen={setIsOpen}
-          >
-            {children}
-          </Menu>
-        )}
-      </AnimatePresence>
-    );
-
   const privateMessage = useCallback(
     (data: {
       message: string;
@@ -280,10 +260,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     scrollIntoView(messageEndRef);
   }, [MessagesArray]);
 
-  useEffect(() => {
-    if (!isOpen) setShouldAnimate(true);
-  }, [isOpen]);
-
   return (
     <motion.div
       className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_minmax(0,2fr)]" //For grid 1fr -> minmax(auto,1fr) meaning min is auto i.e based on width of content and max is 1fr that's 1 fraction of space. minmax(0,1fr) -> overrides this making the max width 1fr and not making min width, content based
@@ -291,13 +267,13 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <SideBarWrapper>
-        <GlobalStateProvider
-          value={{ chats, currentChat, setCurrentChat, setIsOpen }}
-        >
+      <GlobalStateProvider
+        value={{ chats, currentChat, setCurrentChat, setIsOpen, isOpen }}
+      >
+        <SidebarWrapper>
           <Sidebar />
-        </GlobalStateProvider>
-      </SideBarWrapper>
+        </SidebarWrapper>
+      </GlobalStateProvider>
       <div className="sm:px-2 sm:pt-8">
         {/* User will be signed out if no session. currentUserId will not be null */}
         <ChatsHeader

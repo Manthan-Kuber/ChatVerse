@@ -6,11 +6,13 @@ import ThemeChanger from "./ThemeChanger";
 const Menu = ({
   children,
   shouldAnimate,
+  screenWidth = 200,
   setShouldAnimate,
   setIsOpen,
 }: {
   children: React.ReactNode;
   shouldAnimate: boolean;
+  screenWidth: number | undefined;
   setShouldAnimate: (value: boolean | ((val: boolean) => boolean)) => void;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -22,7 +24,7 @@ const Menu = ({
     exit: "exit",
   };
   const slideInProps = {
-    initial: { x: -300 },
+    initial: { x: -screenWidth },
     animate: {
       x: 0,
       transition: {

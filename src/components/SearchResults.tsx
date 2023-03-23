@@ -134,7 +134,7 @@ const SearchResults = ({
   useEffect(() => {
     if (!chatsValidating) {
       const newChat = checkChatExists(newChatId);
-    if (newChat) setAsCurrentChat(newChat);
+      if (newChat) setAsCurrentChat(newChat);
     }
   }, [ChatsList, chatsValidating, newChatId, setAsCurrentChat]);
 
