@@ -6,9 +6,9 @@ function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
-    const socketInstance = io(env.NEXT_PUBLIC_CLIENT_URL, {
-      path: "/api/socketio",
-    });
+    //Do not use port number while making the  request
+    //Url should be wss://<domain>
+    const socketInstance = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
 
     setSocket(socketInstance);
 
