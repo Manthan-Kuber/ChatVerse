@@ -102,7 +102,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
-  //1st Arg is key,2nd Arg is value
 
   const messageEndRef = useRef<HTMLDivElement>(null);
   const {

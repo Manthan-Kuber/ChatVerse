@@ -5,18 +5,16 @@ import { env } from "../env/client.mjs";
 function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
-  const socketInitializer = async () => {
-    await fetch("/api/socket");
-    setSocket(io());
-  };
-
   useEffect(() => {
-    socketInitializer();
-    //Disconnect if socket already exists
-    if (socket)
-      return () => {
-        socket.disconnect();
-      };
+    const socketInstance = io(env.NEXT_PUBLIC_CLIENT_URL, {
+      path: "/api/socketio",
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
   }, []);
 
   return socket;
