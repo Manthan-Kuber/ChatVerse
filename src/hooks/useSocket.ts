@@ -5,14 +5,18 @@ import { env } from "../env/client.mjs";
 function useSocket() {
   const [socket, setSocket] = useState<Socket | null>(null);
 
+  const socketInitializer = async () => {
+    await fetch("/api/socket");
+    setSocket(io());
+  };
+
   useEffect(() => {
-    const socketInstance = io(env.NEXT_PUBLIC_SOCKET_SERVER_URL);
-
-    setSocket(socketInstance);
-
-    return () => {
-      socketInstance.disconnect();
-    };
+    socketInitializer();
+    //Disconnect if socket already exists
+    if (socket)
+      return () => {
+        socket.disconnect();
+      };
   }, []);
 
   return socket;
