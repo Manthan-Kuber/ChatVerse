@@ -50,6 +50,8 @@ const sortData = (a: UserSearch[0], b: UserSearch[0]) => {
   return Number(a.id) - Number(b.id); //Wont reach here, outputs NaN
 };
 
+const clientUrl = env.NEXT_PUBLIC_CLIENT_URL
+
 const SearchResults = ({
   searchQuery,
   setValue,
@@ -66,7 +68,7 @@ const SearchResults = ({
     isLoading,
   } = useSwr<UserSearch, { message: string }>(
     searchQuery
-      ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/search?searchQuery=${searchQuery}`
+      ? `${clientUrl}/api/search?searchQuery=${searchQuery}`
       : null,
     fetcher,
     {
@@ -78,7 +80,7 @@ const SearchResults = ({
     mutate: mutateChats,
     isValidating: chatsValidating,
   } = useSwr<GetChats | undefined>( //No undefined data is shown when data is logged as fallback data is set to ssr fetched data
-    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`,
+    `${clientUrl}/api/chats`,
     fetcher,
     {
       fallbackData: GlobalState?.chats ?? undefined, //Initial data for the cache
@@ -96,7 +98,7 @@ const SearchResults = ({
       GlobalState?.setIsOpen(false);
       return;
     }
-    const url = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/create`;
+    const url = `${clientUrl}/api/chats/create`;
     const createChatPromise: Promise<CreateChatResponse> = fetcher(url, {
       method: "POST",
       body: JSON.stringify({ userId }),

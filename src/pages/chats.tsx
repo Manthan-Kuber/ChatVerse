@@ -92,6 +92,8 @@ async function sendMessage(
   return [...(MessagesArray || []), newMessage]; //Cache will be swapped with the returned value on successful request
 }
 
+const clientUrl = env.NEXT_PUBLIC_CLIENT_URL;
+
 const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -111,11 +113,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     mutate,
   } = useSwr<GetMessages, { message: string }>(
     currentChat
-      ? `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`
+      ? `${clientUrl}/api/chats/get-messages?conversationId=${conversationId}&receiverId=${receiverId}`
       : null
   );
   const { mutate: mutateChats } = useSwr<GetChats | undefined>(
-    `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats`
+    `${clientUrl}/api/chats`
   );
 
   const updateLatestMessage = ({
@@ -163,7 +165,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           conversationId: conversationId!,
         });
         setMessage("");
-        const sendMessageUrl = `${env.NEXT_PUBLIC_CLIENT_URL}/api/chats/send-message`;
+        const sendMessageUrl = `${clientUrl}/api/chats/send-message`;
         const messageParams = {
           conversationId: conversationId!,
           messageBody: message,
