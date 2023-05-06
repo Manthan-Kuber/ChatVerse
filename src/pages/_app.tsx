@@ -12,6 +12,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { SWRConfig } from "swr";
 import { fetcher } from "../utils/functions";
+import NextNProgress from "nextjs-progressbar";
 
 export type NextPageWithLayout<P = Record<string, never>, IP = P> = NextPage<
   P,
@@ -39,6 +40,11 @@ const MyApp = ({
         <ThemeProvider attribute="class" enableSystem>
           <SWRConfig value={{ fetcher }}>
             <Toaster />
+            <NextNProgress
+              color="#bef264"
+              showOnShallow={false}
+              options={{ showSpinner: false }}
+            />
             {Component.auth ? (
               <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
             ) : (
