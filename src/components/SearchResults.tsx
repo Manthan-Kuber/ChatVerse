@@ -166,7 +166,7 @@ const SearchResults = ({
                   ) || <span className="invisible">Placeholder</span>
                 }
                 divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                  GlobalState?.currentChat?.id === chatId && "bg-neutral-400/10"
+                  GlobalState?.currentChat?.id === chatId && "bg-neutral-100/10"
                 }`}
                 onClick={() => {
                   setAsCurrentChat(chat);
