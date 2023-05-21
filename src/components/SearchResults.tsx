@@ -192,7 +192,7 @@ const SearchResults = ({
           field1={user.name}
           field2={`~ ${user.email}`}
           key={user.id}
-          divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200"
+          divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 border-transparent"
           onClick={() => {
             handleChatCreation(user.id);
           }}

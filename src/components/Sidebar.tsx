@@ -43,6 +43,7 @@ const Sidebar = () => {
           image={session?.user?.image}
           field1={session?.user?.name || <Skeleton />}
           field2={session?.user?.email || <Skeleton />}
+          divClassName="border-transparent"
           spanClassName1={`${spanClassName} sm:text-lg`}
           spanClassName2={`${spanClassName} sm:text-base`}
         />
