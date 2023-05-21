@@ -35,6 +35,7 @@ const Footer = () => {
         target="_blank"
         rel="noopener noreferrer"
       >
+        {/* TODO: Add underline animation on hover */}
         <span className="text-xs xs:text-sm  sm:text-lg">Manthan Kuber</span>
       </a>
     </footer>

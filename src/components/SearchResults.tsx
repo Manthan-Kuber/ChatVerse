@@ -50,7 +50,7 @@ const sortData = (a: UserSearch[0], b: UserSearch[0]) => {
   return Number(a.id) - Number(b.id); //Wont reach here, outputs NaN
 };
 
-const clientUrl = env.NEXT_PUBLIC_CLIENT_URL
+const clientUrl = env.NEXT_PUBLIC_CLIENT_URL;
 
 const SearchResults = ({
   searchQuery,
@@ -67,9 +67,7 @@ const SearchResults = ({
     error,
     isLoading,
   } = useSwr<UserSearch, { message: string }>(
-    searchQuery
-      ? `${clientUrl}/api/search?searchQuery=${searchQuery}`
-      : null,
+    searchQuery ? `${clientUrl}/api/search?searchQuery=${searchQuery}` : null,
     fetcher,
     {
       onSuccess: (data) => data.sort((a, b) => sortData(a, b)),
@@ -168,7 +166,8 @@ const SearchResults = ({
                   ) || <span className="invisible">Placeholder</span>
                 }
                 divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                  GlobalState?.currentChat?.id === chatId && "bg-neutral-100/10"
+                  GlobalState?.currentChat?.id === chatId ?
+                  "dark:bg-neutral-100/10 bg-neutral-300/10 border-lime-300" : "border-transparent"
                 }`}
                 onClick={() => {
                   setAsCurrentChat(chat);

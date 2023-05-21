@@ -271,7 +271,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         </SidebarWrapper>
       </GlobalStateProvider>
       <div className="sm:px-2 sm:pt-8">
-        {/* User will be signed out if no session. currentUserId will not be null */}
         <ChatsHeader
           setIsOpen={setIsOpen}
           currentChat={currentChat}

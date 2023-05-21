@@ -24,7 +24,7 @@ const ChatOrUserInfo = ({
 }) => {
   return (
     <div
-      className={`grid grid-cols-[auto_1fr] content-center items-center gap-4 rounded-md bg-neutral-500/10 px-4 py-2 outline-none backdrop-blur-lg transition-transform duration-200 ${divClassName}`}
+      className={`grid grid-cols-[auto_1fr] content-center items-center gap-4 rounded-md bg-neutral-500/10 px-4 py-2 outline-none backdrop-blur-lg transition-transform duration-200 border ${divClassName}`}
       onClick={props.onClick}
     >
       <ProfileImage image={props.image} />
