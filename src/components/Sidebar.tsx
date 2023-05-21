@@ -7,6 +7,7 @@ import useDebounce from "../hooks/useDebounce";
 import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import Skeleton from "react-loading-skeleton";
+import { Tooltip } from "react-tooltip";
 
 const spanClassName = "truncate font-mono text-sm";
 
@@ -39,14 +40,22 @@ const Sidebar = () => {
   return (
     <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between overflow-y-scroll px-2 py-8 sm:min-h-screen">
       <div>
-        <ChatOrUserInfo
-          image={session?.user?.image}
-          field1={session?.user?.name || <Skeleton />}
-          field2={session?.user?.email || <Skeleton />}
-          divClassName="border-transparent"
-          spanClassName1={`${spanClassName} sm:text-lg`}
-          spanClassName2={`${spanClassName} sm:text-base`}
-        />
+        <a data-tooltip-id="userInfo-tooltip">
+          <ChatOrUserInfo
+            image={session?.user?.image}
+            field1={session?.user?.name || <Skeleton />}
+            field2={session?.user?.email || <Skeleton />}
+            divClassName="border-transparent"
+            spanClassName1={`${spanClassName} sm:text-lg`}
+            spanClassName2={`${spanClassName} sm:text-base`}
+          />
+        </a>
+        <Tooltip id="userInfo-tooltip" place="bottom">
+          <span>
+            {session?.user?.name || <Skeleton />} <br />{" "}
+            {session?.user?.email || <Skeleton />}{" "}
+          </span>
+        </Tooltip>
         <div className="mt-4">
           <input
             className="w-full truncate rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
