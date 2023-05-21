@@ -8,8 +8,7 @@ import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import Skeleton from "react-loading-skeleton";
 
-const spanClassName =
-  "scroll-smooth truncate font-mono text-sm hover:overflow-x-scroll";
+const spanClassName = "truncate font-mono text-sm";
 
 const Sidebar = () => {
   const { data: session } = useSession();

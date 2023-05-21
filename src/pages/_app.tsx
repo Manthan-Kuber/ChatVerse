@@ -9,6 +9,7 @@ import CustomHead from "../components/CustomHead";
 import Auth from "../components/Auth";
 import { Toaster } from "react-hot-toast";
 import "react-loading-skeleton/dist/skeleton.css";
+import 'react-tooltip/dist/react-tooltip.css'
 import { SkeletonTheme } from "react-loading-skeleton";
 import { SWRConfig } from "swr";
 import { fetcher } from "../utils/functions";
