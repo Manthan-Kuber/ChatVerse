@@ -16,14 +16,28 @@ import ChatVerseLoader from "../../components/ChatVerseLoader";
 const callbackUrl = "/chats";
 
 const SocialIconsList = [
-  { id: 0, name: "google", iconType: FcGoogle, color: "#DB4437" },
-  { id: 1, name: "discord", iconType: FaDiscord, color: "#7289DA" },
-  { id: 2, name: "github", iconType: BsGithub, color: "" },
-].map(({ iconType, id, name, color }) => {
-  const borderColor = `border-[${color}]`;
+  {
+    name: "google",
+    iconType: FcGoogle,
+    color: "#DB4437",
+    borderColor: "border-[#DB4437]",
+  },
+  {
+    name: "discord",
+    iconType: FaDiscord,
+    color: "#7289DA",
+    borderColor: "border-[#7289DA]",
+  },
+  {
+    name: "github",
+    iconType: BsGithub,
+    color: "",
+    borderColor: "border-[#525252] dark:border-white",
+  },
+].map(({ iconType, name, color, borderColor }) => {
   return (
     <li
-      key={id}
+      key={name}
       onClick={async () => {
         try {
           const res = await signIn(name, { redirect: false, callbackUrl });
@@ -103,7 +117,7 @@ const Signin = () => {
     >
       <div className=" rounded-3xl p-4 md:p-8 md:shadow-lg  md:shadow-neutral-500 ">
         <div className="mb-8 flex items-center justify-center gap-1">
-          <h2 className="text-lg text-neutral-600 -mb-0.5 dark:text-white/50 md:text-xl">
+          <h2 className="-mb-0.5 text-lg text-neutral-600 dark:text-white/50 md:text-xl">
             Sign In to
           </h2>
           <ChatVerseText textSize="text-xl" mdTextSize="md:text-2xl" />
