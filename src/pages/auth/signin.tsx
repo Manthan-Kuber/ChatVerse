@@ -20,7 +20,7 @@ const SocialIconsList = [
   { id: 1, name: "discord", iconType: FaDiscord, color: "#7289DA" },
   { id: 2, name: "github", iconType: BsGithub, color: "" },
 ].map(({ iconType, id, name, color }) => {
-  const borderColor =`border-[${color}]`;
+  const borderColor = `border-[${color}]`;
   return (
     <li
       key={id}
@@ -102,10 +102,22 @@ const Signin = () => {
       exit={{ opacity: 0 }}
     >
       <div className=" rounded-3xl p-4 md:p-8 md:shadow-lg  md:shadow-neutral-500 ">
-        <ChatVerseText textSize="text-xl" mdTextSize="md:text-2xl" />
-        <h2 className="text-md mt-2 mb-6 text-neutral-600 dark:text-white/50 md:text-lg">
-          Start Chatting Now!
-        </h2>
+        <div className="mb-8 flex items-center justify-center gap-1">
+          <h2 className="text-lg text-neutral-600 -mb-0.5 dark:text-white/50 md:text-xl">
+            Sign In to
+          </h2>
+          <ChatVerseText textSize="text-xl" mdTextSize="md:text-2xl" />
+        </div>
+        <div>
+          <ul className="mx-auto mt-4 flex w-3/4 justify-evenly gap-4">
+            {SocialIconsList}
+          </ul>
+          <div className="my-6 flex items-center gap-2">
+            <div className="h-0.5 w-full bg-gradient-to-l from-black to-transparent dark:from-white" />
+            <p className="line">OR</p>
+            <div className="h-0.5 w-full bg-gradient-to-r from-black to-transparent dark:from-white " />
+          </div>
+        </div>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <Input
             inputName="email"
@@ -116,7 +128,7 @@ const Signin = () => {
             isError={!!errors.email?.message}
             errorMessage={errors.email?.message ? errors.email.message : ""}
           />
-          <div className="mt-8">
+          <div className="mt-4">
             <button
               className="mt-2 w-full rounded-lg bg-gradient-to-l from-lime-500 to-green-500  px-4 py-2 font-sans font-semibold tracking-wider text-white transition-all duration-200 hover:from-lime-600 hover:to-green-600 disabled:cursor-not-allowed disabled:from-lime-600 disabled:to-green-600"
               type="submit"
@@ -124,24 +136,11 @@ const Signin = () => {
             >
               {isSubmitting ? <Loader /> : "Sign In With Magic Link 🔮"}
             </button>
-            <p className="mt-2 w-full text-center text-sm text-neutral-500 dark:text-white/70 ">
+            <p className="my-4 w-full text-center text-sm text-neutral-500 dark:text-white/70 ">
               Please check spam folder as well for the email
             </p>
           </div>
         </form>
-        <div>
-          <div className=" mt-8 flex items-center gap-2">
-            <hr className="w-full" />
-            <p className="line">Or</p>
-            <hr className="w-full" />
-          </div>
-          <p className="mt-4 text-center text-neutral-500 dark:text-white/50">
-            Continue with your social profile
-          </p>
-          <ul className="mx-auto mt-4 flex w-3/4 justify-evenly gap-4">
-            {SocialIconsList}
-          </ul>
-        </div>
       </div>
     </motion.section>
   );
