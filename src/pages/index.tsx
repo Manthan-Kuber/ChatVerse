@@ -1,14 +1,17 @@
 import { type NextPage } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { BsGithub } from "react-icons/bs";
-import { AiOutlineRight } from "react-icons/ai";
 import ChatVerseText from "../components/ChatVerseText";
 import { motion } from "framer-motion";
 import { fadeInOut, fadeInUp, stagger } from "../animations/animations";
+import { useState } from "react";
+import { RotatingLines } from "react-loader-spinner";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
-  const MotionLink = motion(Link);
+  const [isDisabled, setIsDisabled] = useState(false);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const { push } = useRouter();
 
   return (
     <motion.section
@@ -31,7 +34,7 @@ const Home: NextPage = () => {
       <motion.div
         className="mt-4 flex gap-4 md:mt-8 "
         variants={stagger}
-        initial="initial"
+        initial={!hasAnimated && "initial"}
         animate="animate"
       >
         <motion.a
@@ -45,15 +48,26 @@ const Home: NextPage = () => {
           <BsGithub />
           Github
         </motion.a>
-        <MotionLink
+        <motion.button
           className="link-btn flex items-center gap-2"
-          href="/chats"
           variants={fadeInUp}
           whileTap={{ scale: 0.95 }}
+          disabled={isDisabled}
+          onClick={() => {
+            setIsDisabled(true);
+            setHasAnimated(true);
+            push("/chats");
+          }}
         >
+          <RotatingLines
+            strokeColor="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="24"
+            visible={isDisabled}
+          />
           Start Chatting
-          <AiOutlineRight className="animate-sideSway" />
-        </MotionLink>
+        </motion.button>
       </motion.div>
     </motion.section>
   );

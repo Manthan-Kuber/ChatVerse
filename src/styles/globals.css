@@ -4,7 +4,7 @@
 
 @layer components {
     .link-btn {
-        @apply rounded-md border border-black text-neutral-600 dark:bg-neutral-800 px-3 py-1 font-semibold dark:text-white transition-all duration-200 dark:hover:bg-neutral-700 hover:bg-neutral-100 dark:border-neutral-500
+        @apply rounded-md border border-black text-neutral-600 dark:bg-neutral-800 px-3 py-1 font-semibold dark:text-white transition-all duration-200 dark:hover:bg-neutral-700 hover:bg-neutral-100 dark:border-neutral-500 disabled:text-neutral-500 disabled:dark:text-neutral-500 disabled:hover:bg-transparent disabled:hover:dark:bg-neutral-800
     }
     .centered-section{
         @apply container mx-auto flex min-h-full flex-grow flex-col items-center justify-center
