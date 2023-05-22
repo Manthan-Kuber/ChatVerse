@@ -20,6 +20,7 @@ const SidebarWrapper = ({ children }: { children: ReactNode }) => {
   return screenWidth && screenWidth >= 640 ? (
     <section>{children}</section>
   ) : (
+    // Menu component is conditionally rendered. It needs to be surrounded by animate presence and needs to have an exit property to be defined on it. The parent element of Menu component needs to be a motion div.
     <AnimatePresence>
       {GlobalState?.isOpen && (
         <Menu

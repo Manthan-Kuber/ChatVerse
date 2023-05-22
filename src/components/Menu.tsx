@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { fadeInOut } from "../animations/animations";
 import { IoMdClose } from "react-icons/io";
 import ThemeChanger from "./ThemeChanger";
 
@@ -16,13 +15,6 @@ const Menu = ({
   setShouldAnimate: (value: boolean | ((val: boolean) => boolean)) => void;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const fadeInOutProps = {
-    key: "sidebar",
-    variants: { fadeInOut },
-    initial: "initial",
-    animate: "animate",
-    exit: "exit",
-  };
   const slideInProps = {
     initial: { x: -screenWidth },
     animate: {
@@ -35,7 +27,10 @@ const Menu = ({
   };
   return (
     <motion.div
-      {...(shouldAnimate ? fadeInOutProps : {})}
+      exit={{
+        x: slideInProps.initial.x,
+        transition: slideInProps.animate.transition,
+      }}
       className="fixed top-0 bottom-0 z-10 min-h-0 w-full overflow-y-scroll  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section

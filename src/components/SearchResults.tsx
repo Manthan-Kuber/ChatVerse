@@ -182,7 +182,7 @@ const SearchResults = ({
   }
 
   if (SearchedUsersArray?.length === 0)
-    return <p className="text-center">No results found</p>;
+    return <p className="text-center">No results found.</p>;
 
   return (
     <>
