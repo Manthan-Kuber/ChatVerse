@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import ChatVerseText from "../../components/ChatVerseText";
 import Input from "../../components/Input";
 import SocialIcon from "../../components/SocialIcon";
-import { BsGithub, BsGoogle } from "react-icons/bs";
+import { BsGithub } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
 import { FaDiscord } from "react-icons/fa";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,24 +16,34 @@ import ChatVerseLoader from "../../components/ChatVerseLoader";
 const callbackUrl = "/chats";
 
 const SocialIconsList = [
-  { id: 0, name: "google", iconType: BsGoogle },
-  { id: 1, name: "discord", iconType: FaDiscord },
-  { id: 2, name: "github", iconType: BsGithub },
-].map(({ iconType, id, name }) => (
-  <li
-    key={id}
-    onClick={async () => {
-      try {
-        const res = await signIn(name, { redirect: false, callbackUrl });
-        res && res.url && useRouter().push(res.url);
-      } catch (err) {
-        console.log(err);
-      }
-    }}
-  >
-    <SocialIcon Icon={iconType} />
-  </li>
-));
+  { id: 0, name: "google", iconType: FcGoogle, color: "#DB4437" },
+  { id: 1, name: "discord", iconType: FaDiscord, color: "#7289DA" },
+  { id: 2, name: "github", iconType: BsGithub, color: "" },
+].map(({ iconType, id, name, color }) => {
+  const borderColor =`border-[${color}]`;
+  return (
+    <li
+      key={id}
+      onClick={async () => {
+        try {
+          const res = await signIn(name, { redirect: false, callbackUrl });
+          res && res.url && useRouter().push(res.url);
+        } catch (err) {
+          console.log(err);
+        }
+      }}
+    >
+      <div
+        className={`flex w-fit cursor-pointer items-center gap-2 rounded-md border ${borderColor} p-2 transition-all duration-200 hover:bg-neutral-100 dark:hover:bg-neutral-600`}
+      >
+        <SocialIcon Icon={iconType} color={color} />
+        <span className="text-neutral-600 dark:text-white">
+          {name.charAt(0).toUpperCase() + name.slice(1)}
+        </span>
+      </div>
+    </li>
+  );
+});
 
 type FormValues = {
   email: string;
@@ -127,7 +138,7 @@ const Signin = () => {
           <p className="mt-4 text-center text-neutral-500 dark:text-white/50">
             Continue with your social profile
           </p>
-          <ul className="mx-auto mt-4 flex w-3/4 justify-evenly">
+          <ul className="mx-auto mt-4 flex w-3/4 justify-evenly gap-4">
             {SocialIconsList}
           </ul>
         </div>

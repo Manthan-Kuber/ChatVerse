@@ -1,10 +1,8 @@
 import type { IconType } from "react-icons";
 
-const SocialIcon = ({ Icon }: { Icon: IconType }) => {
+const SocialIcon = ({ Icon, color }: { Icon: IconType; color: string }) => {
   return (
-    <div className="w-fit cursor-pointer rounded-full border border-neutral-600 p-2 transition-all duration-200 hover:bg-neutral-100 dark:border-white dark:hover:bg-neutral-600">
-      <Icon className="text-neutral-600 w-5 h-5 dark:text-white" />
-    </div>
+    <Icon className="h-5 w-5 text-neutral-600 dark:text-white" color={color} />
   );
 };
 export default SocialIcon;
