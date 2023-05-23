@@ -264,7 +264,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       exit={{ opacity: 0 }}
     >
       <GlobalStateProvider
-        value={{ chats, currentChat, setCurrentChat, setIsOpen, isOpen }}
+        value={{ chats, currentChat, setCurrentChat, setIsOpen, isOpen,onlineUsers }}
       >
         <SidebarWrapper>
           <Sidebar />

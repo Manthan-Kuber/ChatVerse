@@ -10,6 +10,10 @@ type GlobalState = {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   isOpen: boolean;
   chats: Chats;
+  onlineUsers: {
+    userId: string;
+    socketId: string;
+  }[];
 } | null;
 
 const GlobalStateContext = createContext<GlobalState>(null);
