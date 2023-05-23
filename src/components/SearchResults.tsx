@@ -122,6 +122,14 @@ const SearchResults = ({
     GlobalState && GlobalState.setCurrentChat(chat);
   };
 
+  const isUserOnline = (userId: string | undefined) => {
+    const onlineUser = GlobalState?.onlineUsers.find(
+      (u) => u.userId === userId
+    );
+    if (onlineUser) return true;
+    return false;
+  };
+
   useEffect(() => {
     if (error) {
       toast.error(error.message);
@@ -166,9 +174,11 @@ const SearchResults = ({
                   ) || <span className="invisible">Placeholder</span>
                 }
                 divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                  GlobalState?.currentChat?.id === chatId ?
-                  "dark:bg-neutral-100/10 bg-neutral-300/10 border-lime-300" : "border-transparent"
+                  GlobalState?.currentChat?.id === chatId
+                    ? "dark:bg-neutral-100/10 bg-neutral-300/10 border-lime-300"
+                    : "border-transparent"
                 }`}
+                isOnline={isUserOnline(user?.id)}
                 onClick={() => {
                   setAsCurrentChat(chat);
                   GlobalState?.setIsOpen(false);
@@ -193,6 +203,7 @@ const SearchResults = ({
           field2={`~ ${user.email}`}
           key={user.id}
           divClassName="hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 border-transparent"
+          isOnline={isUserOnline(user.id)}
           onClick={() => {
             handleChatCreation(user.id);
           }}

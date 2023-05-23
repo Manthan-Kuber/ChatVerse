@@ -19,6 +19,7 @@ const ChatOrUserInfo = ({
   divClassName?: string;
   spanClassName1?: string;
   spanClassName2?: string;
+  isOnline?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
@@ -26,7 +27,12 @@ const ChatOrUserInfo = ({
       className={`grid grid-cols-[auto_1fr] content-center items-center gap-4 rounded-md border bg-neutral-500/10 px-4 py-2 outline-none backdrop-blur-lg transition-transform duration-200 ${divClassName}`}
       onClick={props.onClick}
     >
-      <ProfileImage image={props.image} />
+      <div className="relative">
+        <ProfileImage image={props.image} />
+        {props.isOnline && (
+          <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full border bg-green-400" />
+        )}
+      </div>
       <div className="max-w-full overflow-hidden ">
         <span className={`block truncate ${spanClassName1}`}>
           {props.field1}

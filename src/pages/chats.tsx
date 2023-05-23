@@ -228,8 +228,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   );
 
   const getUsers = useCallback(
-    (user: { userId: string; socketId: string }) => {
-      setOnlineUsers([...onlineUsers, user]);
+    (users: { userId: string; socketId: string }[]) => {
+      // TODO: update userlist on disconnect on client / socket server
+      setOnlineUsers(users);
     },
     [onlineUsers, setOnlineUsers]
   );
@@ -264,7 +265,14 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       exit={{ opacity: 0 }}
     >
       <GlobalStateProvider
-        value={{ chats, currentChat, setCurrentChat, setIsOpen, isOpen,onlineUsers }}
+        value={{
+          chats,
+          currentChat,
+          setCurrentChat,
+          setIsOpen,
+          isOpen,
+          onlineUsers,
+        }}
       >
         <SidebarWrapper>
           <Sidebar />
