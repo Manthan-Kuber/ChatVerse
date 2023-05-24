@@ -227,7 +227,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     [MessagesArray]
   );
 
-  const getUsers = useCallback(
+  const getOnlineUsers = useCallback(
     (users: { userId: string; socketId: string }[]) => {
       // TODO: update userlist on disconnect on client / socket server
       setOnlineUsers(users);
@@ -237,8 +237,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
 
   useEffect(() => {
     if (currentUserId) socket?.emit(events.ADD_NEW_USER, currentUserId);
-    socket?.on(events.GET_USERS, (user) => getUsers(user));
+    socket?.on(events.GET_USERS, (users) => getOnlineUsers(users));
     socket?.on(events.PRIVATE_MESSAGE, (data) => privateMessage(data));
+    socket?.on(events.disconnect, (users) => getOnlineUsers(users));
     return () => {
       socket?.off(events.GET_USERS);
       socket?.off(events.PRIVATE_MESSAGE);
