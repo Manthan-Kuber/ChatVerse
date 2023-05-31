@@ -11,12 +11,14 @@ import {
   useContext,
   useEffect,
   useState,
+  Suspense,
 } from "react";
 import { GlobalStateContext } from "../context/chats.context";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import type { Conversation } from "@prisma/client";
 import type { GetChats } from "../server/common/getChats";
 import { useSession } from "next-auth/react";
+import { RotatingLines } from "react-loader-spinner";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -162,28 +164,39 @@ const SearchResults = ({
             const { id: chatId, latestMessage } = chat;
             const user = chat.participants.map((c) => c.user)[0];
             return (
-              <ChatOrUserInfo
-                key={chatId}
-                image={user?.image}
-                field1={user?.name || <Skeleton />}
-                field2={
-                  (
-                    <small className="text-gray-400">
-                      {latestMessage?.body}
-                    </small>
-                  ) || <span className="invisible">Placeholder</span>
+              <Suspense
+                fallback={
+                  <RotatingLines
+                    strokeColor="grey"
+                    strokeWidth="5"
+                    animationDuration="0.75"
+                    width="24"
+                  />
                 }
-                divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
-                  GlobalState?.currentChat?.id === chatId
-                    ? "dark:bg-neutral-100/10 bg-neutral-300/10 border-lime-300"
-                    : "border-transparent"
-                }`}
-                isOnline={isUserOnline(user?.id)}
-                onClick={() => {
-                  setAsCurrentChat(chat);
-                  GlobalState?.setIsOpen(false);
-                }}
-              />
+              >
+                <ChatOrUserInfo
+                  key={chatId}
+                  image={user?.image}
+                  field1={user?.name || <Skeleton />}
+                  field2={
+                    (
+                      <small className="text-gray-400">
+                        {latestMessage?.body}
+                      </small>
+                    ) || <span className="invisible">Placeholder</span>
+                  }
+                  divClassName={`hover:cursor-pointer hover:bg-neutral-400/10 transition-colors duration-200 ${
+                    GlobalState?.currentChat?.id === chatId
+                      ? "dark:bg-neutral-100/10 bg-neutral-300/10 border-lime-300"
+                      : "border-transparent"
+                  }`}
+                  isOnline={isUserOnline(user?.id)}
+                  onClick={() => {
+                    setAsCurrentChat(chat);
+                    GlobalState?.setIsOpen(false);
+                  }}
+                />
+              </Suspense>
             );
           })
         )}
