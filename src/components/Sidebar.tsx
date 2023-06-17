@@ -17,25 +17,49 @@ const Sidebar = () => {
   const [value, setValue] = useState("");
   const debouncedValue = useDebounce(value);
 
-  function handleSignOut() {
-    const signOutPromise = signOut({
-      redirect: false,
-      callbackUrl: "/auth/signin",
-    });
-    toast.promise(signOutPromise, {
-      loading: "Signing Out...",
-      success: (data) => {
-        push(data.url);
-        return "Signed Out Successfully";
-      },
-      error: (err) =>
-        `Encountered an error while Signing Out: ${err.toString()}`,
-    });
-  }
-
   async function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
   }
+
+  const showDialogBox = () => {
+    function handleSignOut() {
+      const signOutPromise = signOut({
+        redirect: false,
+        callbackUrl: "/auth/signin",
+      });
+      toast.promise(signOutPromise, {
+        loading: "Signing Out...",
+        success: (data) => {
+          push(data.url);
+          return "Signed Out Successfully";
+        },
+        error: (err) =>
+          `Encountered an error while Signing Out: ${err.toString()}`,
+      });
+    }
+    toast(
+      ({ id }) => (
+        <div>
+          <span className="block">Are you sure you want to signout ?</span>
+          <div className="mt-4 flex justify-around">
+            <button
+              onClick={() => toast.dismiss(id)}
+              className="rounded-md border border-neutral-500 px-4 py-2 text-black"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSignOut}
+              className="rounded-md border border-transparent bg-red-500 px-4 py-2 text-white"
+            >
+              Signout
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: Infinity }
+    );
+  };
 
   return (
     <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between overflow-y-scroll px-2 py-8 sm:min-h-screen">
@@ -74,7 +98,7 @@ const Sidebar = () => {
       </div>
       <button
         className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white sm:mb-8 sm:text-lg"
-        onClick={handleSignOut}
+        onClick={showDialogBox}
       >
         <span>SignOut</span>
         <BiLogOut size={24} />
