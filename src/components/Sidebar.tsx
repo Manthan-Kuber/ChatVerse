@@ -38,20 +38,30 @@ const Sidebar = () => {
       });
     }
     toast.custom(
-      ({ id }) => (
-        <div className="flex min-h-screen min-w-full items-center justify-center backdrop-blur-md ">
-          <div className="w-fit rounded-lg bg-white p-8 text-black">
+      ({ id, visible }) => (
+        <div
+          className={`flex min-h-screen min-w-full items-center justify-center opacity-0  backdrop-blur-md  duration-200 ${
+            visible ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <div
+            className={`w-fit rounded-lg bg-white p-8 text-black duration-200 ${
+              visible ? "scale-100 delay-200" : "scale-0 "
+            } `}
+          >
             <span className="block">Are you sure you want to signout ?</span>
             <div className="mt-8 flex justify-around">
               <button
-                onClick={() => toast.dismiss(id)}
+                onClick={() => {
+                  toast.dismiss(id);
+                }}
                 className="rounded-md border border-neutral-500 px-4 py-2 text-black"
               >
                 Cancel
               </button>
               <button
                 onClick={() => {
-                  toast.dismiss(id);
+                  toast.remove(id);
                   handleSignOut();
                 }}
                 className="rounded-md border border-transparent bg-red-500 px-4 py-2 text-white"
