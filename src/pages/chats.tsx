@@ -153,7 +153,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   };
 
   const handleSubmit = async (
-    e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>
+    e: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLTextAreaElement>
   ) => {
     e.preventDefault();
     try {
@@ -321,7 +321,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 value={message}
                 setValue={setMessage}
                 Icon={IoMdSend}
-                placeholder="Message channel name"
+                placeholder="Message"
                 scrollIntoView={() => {
                   scrollIntoView(messageEndRef);
                 }}
