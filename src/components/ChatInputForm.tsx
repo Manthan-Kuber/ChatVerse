@@ -1,5 +1,5 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { type FormEvent, type KeyboardEvent, useState, useRef } from "react";
+import { motion } from "framer-motion";
+import { type FormEvent, type KeyboardEvent, useRef } from "react";
 import { type IconType } from "react-icons";
 import { appearIntoView } from "../animations/animations";
 
@@ -13,7 +13,6 @@ const ChatInputForm = (props: {
   placeholder: string;
   scrollIntoView: () => void;
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const isDisabled = !(props.value.length > 0);
 
@@ -30,11 +29,7 @@ const ChatInputForm = (props: {
         placeholder={props.placeholder}
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
-        onFocus={() => {
-          setIsFocused(true);
-          props.scrollIntoView();
-        }}
-        onBlur={() => setIsFocused(false)}
+        onFocus={props.scrollIntoView}
         ref={textAreaRef}
         onInput={() => {
           if (textAreaRef.current && textAreaRef.current.textLength <= 300) {
@@ -45,21 +40,17 @@ const ChatInputForm = (props: {
         }}
         rows={1}
       />
-      <AnimatePresence>
-        {(isFocused || !isDisabled) && (
-          <motion.button
-            className="absolute right-1 rounded-md bg-lime-400 p-2 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600"
-            type="submit"
-            disabled={isDisabled}
-            variants={appearIntoView}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <props.Icon className="h-4 w-4 text-white" />
-          </motion.button>
-        )}
-      </AnimatePresence>
+      <motion.button
+        className=" rounded-md bg-lime-400 p-3 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600"
+        type="submit"
+        disabled={isDisabled}
+        variants={appearIntoView}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
+        <props.Icon className="h-4 w-4 text-white" />
+      </motion.button>
     </form>
   );
 };
