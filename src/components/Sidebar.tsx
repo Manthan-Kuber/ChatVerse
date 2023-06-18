@@ -37,27 +37,35 @@ const Sidebar = () => {
           `Encountered an error while Signing Out: ${err.toString()}`,
       });
     }
-    toast(
+    toast.custom(
       ({ id }) => (
-        <div>
-          <span className="block">Are you sure you want to signout ?</span>
-          <div className="mt-4 flex justify-around">
-            <button
-              onClick={() => toast.dismiss(id)}
-              className="rounded-md border border-neutral-500 px-4 py-2 text-black"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSignOut}
-              className="rounded-md border border-transparent bg-red-500 px-4 py-2 text-white"
-            >
-              Signout
-            </button>
+        <div className="flex min-h-screen min-w-full items-center justify-center backdrop-blur-md ">
+          <div className="w-fit rounded-lg bg-white p-8 text-black">
+            <span className="block">Are you sure you want to signout ?</span>
+            <div className="mt-8 flex justify-around">
+              <button
+                onClick={() => toast.dismiss(id)}
+                className="rounded-md border border-neutral-500 px-4 py-2 text-black"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  toast.dismiss(id);
+                  handleSignOut();
+                }}
+                className="rounded-md border border-transparent bg-red-500 px-4 py-2 text-white"
+              >
+                Signout
+              </button>
+            </div>
           </div>
         </div>
       ),
-      { duration: Infinity }
+      {
+        duration: Infinity,
+        id: "signoutDialogBox",
+      }
     );
   };
 
