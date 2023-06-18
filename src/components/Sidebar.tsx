@@ -40,7 +40,7 @@ const Sidebar = () => {
     toast.custom(
       ({ id, visible }) => (
         <div
-          className={`flex min-h-screen min-w-full items-center justify-center opacity-0  backdrop-blur-md  duration-200 ${
+          className={`-m-4 flex min-h-screen w-screen items-center justify-center opacity-0 backdrop-blur-md duration-200 ${
             visible ? "opacity-100" : "opacity-0"
           }`}
         >
