@@ -18,7 +18,7 @@ const ChatInputForm = (props: {
 
   return (
     <form
-      className="relative flex items-center gap-4 "
+      className="relative flex items-end gap-4 "
       onSubmit={(e) => {
         if (textAreaRef.current) textAreaRef.current.style.height = "";
         props.handleSubmit(e);
