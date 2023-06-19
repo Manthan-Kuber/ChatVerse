@@ -125,10 +125,12 @@ const SearchResults = ({
   };
 
   const isUserOnline = (userId: string | undefined) => {
-    const onlineUser = GlobalState?.onlineUsers?.find(
-      (u) => u.userId === userId
-    );
-    if (onlineUser) return true;
+    if (GlobalState?.onlineUsers) {
+      const onlineUser = GlobalState.onlineUsers.find(
+        (u) => u.userId === userId
+      );
+      if (onlineUser) return true;
+    }
     return false;
   };
 
