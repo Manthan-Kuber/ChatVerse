@@ -110,7 +110,7 @@ const Sidebar = () => {
         <h3 className="mt-4 text-lg sm:text-xl">
           {value ? "Search Results" : "Chats"}
         </h3>
-        <div className="mt-4 max-h-80 space-y-2 overflow-scroll">
+        <div className="mt-4 max-h-80 space-y-2 overflow-scroll border-b border-t border-neutral-600  py-2">
           <SearchResults setValue={setValue} searchQuery={debouncedValue} />
         </div>
       </div>
