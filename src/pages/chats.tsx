@@ -104,8 +104,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
-
   const messageEndRef = useRef<HTMLDivElement>(null);
+
   const {
     data: MessagesArray,
     error,
@@ -184,6 +184,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           conversationId: currentChat.id,
           latestMessage: message,
         });
+        scrollIntoView(messageEndRef);
         await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
           optimisticData: (currentMessages) => [
             ...(currentMessages || []),
