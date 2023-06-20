@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
-import { type FormEvent, type KeyboardEvent, useRef } from "react";
+import { type FormEvent, type KeyboardEvent, useRef, ChangeEvent } from "react";
 import { type IconType } from "react-icons";
 import { appearIntoView } from "../animations/animations";
+
+const textAreaHeight = 43.6;
 
 const ChatInputForm = (props: {
   handleSubmit: (
@@ -16,28 +18,35 @@ const ChatInputForm = (props: {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const isDisabled = !(props.value.length > 0);
 
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    props.setValue(e.target.value);
+    if (
+      textAreaRef.current &&
+      textAreaRef.current.textLength <= textAreaHeight * 6
+    ) {
+      textAreaRef.current.style.height = "auto";
+      textAreaRef.current.style.height =
+        Math.max(textAreaRef.current.scrollHeight, textAreaHeight) + "px";
+    }
+  };
+
   return (
     <form
       className="relative flex items-end gap-4 "
       onSubmit={(e) => {
-        if (textAreaRef.current) textAreaRef.current.style.height = "";
+        if (textAreaRef.current) textAreaRef.current.style.height = "auto";
         props.handleSubmit(e);
       }}
     >
       <textarea
-        className="w-full resize-none rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
+        className="w-full resize-none rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200 focus:border-lime-300 no-scrollbar"
         placeholder={props.placeholder}
         value={props.value}
-        onChange={(e) => props.setValue(e.target.value)}
+        onChange={(e) => {
+          handleChange(e);
+        }}
         onFocus={props.scrollIntoView}
         ref={textAreaRef}
-        onInput={() => {
-          if (textAreaRef.current && textAreaRef.current.textLength <= 300) {
-            textAreaRef.current.style.height = "";
-            textAreaRef.current.style.height =
-              Math.min(textAreaRef.current?.scrollHeight, 300) + "px";
-          }
-        }}
         rows={1}
       />
       <motion.button

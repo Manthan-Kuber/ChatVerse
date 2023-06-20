@@ -99,7 +99,7 @@ const Sidebar = () => {
           </span>
         </Tooltip>
         <input
-          className="mt-4 w-full truncate rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
+          className="mt-4 w-full truncate rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 outline-none transition-all duration-200 focus:border-lime-300"
           placeholder="Search or start a new chat"
           value={value}
           onChange={handleSearch}
