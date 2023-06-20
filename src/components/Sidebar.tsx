@@ -107,11 +107,16 @@ const Sidebar = () => {
             onKeyDown={(e) => e.key === "Enter" && handleSearch}
           />
         </div>
-        <h3 className="mt-4 text-lg sm:text-xl">
-          {value ? "Search Results" : "Chats"}
-        </h3>
-        <div className="mt-4 max-h-80 space-y-2 overflow-scroll border-b border-t border-neutral-600  py-2">
-          <SearchResults setValue={setValue} searchQuery={debouncedValue} />
+        <div className="mt-4 rounded-md border border-neutral-600 ">
+          <div className=" border-b border-neutral-600 py-4 pl-2 text-lg sm:text-xl">
+            <div className="w-fit">
+              <h3>{value ? "Search Results" : "Chats"}</h3>
+              <div className="h-1 w-full bg-gradient-to-r from-lime-500 to-green-500" />
+            </div>
+          </div>
+          <div className="max-h-80 space-y-2 overflow-scroll p-2">
+            <SearchResults setValue={setValue} searchQuery={debouncedValue} />
+          </div>
         </div>
       </div>
       <button
