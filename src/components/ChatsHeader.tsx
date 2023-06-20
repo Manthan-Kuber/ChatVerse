@@ -18,7 +18,7 @@ const ChatsHeader = ({
     .filter((x) => x.user.id !== currentUserId)
     .map((x) => x.user.name)[0];
   return (
-    <header className="border-neutral-600 bg-neutral-500 bg-opacity-10 p-4 sm:rounded-t-xl sm:border-x sm:border-t">
+    <header className="border-neutral-600 bg-neutral-500 bg-opacity-10 p-4 sm:rounded-t-md sm:border-x sm:border-t">
       <div className="mx-auto grid max-w-7xl grid-cols-[auto_1fr] items-center gap-x-4">
         {screenWidth && screenWidth < 640 && (
           <div>
