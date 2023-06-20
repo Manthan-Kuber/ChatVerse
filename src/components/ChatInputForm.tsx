@@ -25,7 +25,7 @@ const ChatInputForm = (props: {
       }}
     >
       <textarea
-        className="w-full resize-none rounded-md bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
+        className="w-full resize-none rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200"
         placeholder={props.placeholder}
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
@@ -41,7 +41,7 @@ const ChatInputForm = (props: {
         rows={1}
       />
       <motion.button
-        className=" rounded-md bg-lime-400 p-3 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600"
+        className=" rounded-md bg-lime-400 p-3.5 transition-colors duration-200 hover:cursor-pointer hover:bg-lime-500 disabled:cursor-not-allowed disabled:bg-lime-600"
         type="submit"
         disabled={isDisabled}
         variants={appearIntoView}

@@ -87,7 +87,7 @@ const Sidebar = () => {
             image={session?.user?.image}
             field1={session?.user?.name || <Skeleton />}
             field2={session?.user?.email || <Skeleton />}
-            divClassName="border-transparent"
+            divClassName="border-neutral-600"
             spanClassName1={`${spanClassName} sm:text-lg`}
             spanClassName2={`${spanClassName} sm:text-base`}
           />
@@ -98,15 +98,13 @@ const Sidebar = () => {
             {session?.user?.email || <Skeleton />}{" "}
           </span>
         </Tooltip>
-        <div className="mt-4">
-          <input
-            className="w-full truncate rounded-md bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
-            placeholder="Search or start a new chat"
-            value={value}
-            onChange={handleSearch}
-            onKeyDown={(e) => e.key === "Enter" && handleSearch}
-          />
-        </div>
+        <input
+          className="mt-4 w-full truncate rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 outline-none transition-transform duration-200"
+          placeholder="Search or start a new chat"
+          value={value}
+          onChange={handleSearch}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch}
+        />
         <div className="mt-4 rounded-md border border-neutral-600 ">
           <div className=" border-b border-neutral-600 py-4 pl-2 text-lg sm:text-xl">
             <div className="w-fit">
