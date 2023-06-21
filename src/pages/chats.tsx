@@ -184,7 +184,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           conversationId: currentChat.id,
           latestMessage: message,
         });
-        scrollIntoView(messageEndRef);
+        scrollIntoView(messageEndRef); //TODO Remove later or fix on mobile screens
         await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
           optimisticData: (currentMessages) => [
             ...(currentMessages || []),
