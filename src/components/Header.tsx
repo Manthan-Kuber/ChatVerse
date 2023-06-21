@@ -8,7 +8,7 @@ const Header = () => {
       <Link href="/">
         <ChatVerseText textSize="text-2xl" mdTextSize="md:text-3xl" />
       </Link>
-      <ThemeChanger />
+      <ThemeChanger variant="small" />
     </header>
   );
 };
