@@ -1,6 +1,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { BsMoonFill, BsFillSunFill } from "react-icons/bs";
+import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
+import ThemeButton from "./ThemeButton";
 
 const ThemeChanger = () => {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -14,18 +15,25 @@ const ThemeChanger = () => {
 
   const currTheme = theme === "system" ? systemTheme : theme;
 
-  const CurrIcon = currTheme === "dark" ? BsFillSunFill : BsMoonFill;
-
   return (
-    <button
-      id="theme-changer"
-      aria-label="theme-changer"
-      onClick={() =>
-        currTheme === "dark" ? setTheme("light") : setTheme("dark")
-      }
-    >
-      <CurrIcon className="btn-with-hover" />
-    </button>
+    <div className="flex rounded-md border border-neutral-600 p-1 gap-1">
+      <ThemeButton
+        onClick={() => {
+          setTheme("light");
+        }}
+        ThemeIcon={MdOutlineLightMode}
+        ThemeLabel="Light"
+        isCurrentTheme={currTheme === "light"}
+      />
+      <ThemeButton
+        onClick={() => {
+          setTheme("dark");
+        }}
+        ThemeIcon={MdOutlineDarkMode}
+        ThemeLabel="Dark"
+        isCurrentTheme={currTheme === "dark"}
+      />
+    </div>
   );
 };
 

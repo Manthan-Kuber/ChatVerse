@@ -8,6 +8,7 @@ import SearchResults from "./SearchResults";
 import ChatOrUserInfo from "./ChatOrUserInfo";
 import Skeleton from "react-loading-skeleton";
 import { Tooltip } from "react-tooltip";
+import ThemeChanger from "./ThemeChanger";
 
 const spanClassName = "truncate font-mono text-sm";
 
@@ -117,13 +118,16 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <button
-        className=" flex w-fit items-center justify-center gap-4 rounded-md border border-neutral-600 py-2 px-4 font-medium tracking-wider text-white transition-colors duration-200 hover:border-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 sm:mb-8 sm:text-lg"
-        onClick={showDialogBox}
-      >
-        <span>SignOut</span>
-        <TbLogout size={24} className="text-red-500" />
-      </button>
+      <div className="flex gap-2 justify-between sm:mb-8">
+        <button
+          className="flex gap-2 items-center rounded-md border border-neutral-600 py-2 px-4 font-medium tracking-wider transition-colors duration-200 hover:border-red-500 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 sm:text-lg"
+          onClick={showDialogBox}
+        >
+          <span>SignOut</span>
+          <TbLogout size={24} className="text-red-500" />
+        </button>
+        <ThemeChanger />
+      </div>
     </div>
   );
 };
