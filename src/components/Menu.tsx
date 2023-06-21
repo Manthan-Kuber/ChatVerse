@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
-import ThemeChanger from "./ThemeChanger";
 
 const Menu = ({
   children,

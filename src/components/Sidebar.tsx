@@ -9,6 +9,7 @@ import ChatOrUserInfo from "./ChatOrUserInfo";
 import Skeleton from "react-loading-skeleton";
 import { Tooltip } from "react-tooltip";
 import ThemeChanger from "./ThemeChanger";
+import useWindowSize from "../hooks/useWindowSize";
 
 const spanClassName = "truncate font-mono text-sm";
 
@@ -17,6 +18,8 @@ const Sidebar = () => {
   const { push } = useRouter();
   const [value, setValue] = useState("");
   const debouncedValue = useDebounce(value);
+  const { width: screenWidth } = useWindowSize();
+  const isScreenMedium = screenWidth && screenWidth < 768;
 
   async function handleSearch(e: ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
@@ -81,7 +84,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between overflow-y-scroll px-2 py-8 sm:min-h-screen">
+    <div className="flex min-h-[calc(100vh-72px)] flex-col justify-between overflow-y-scroll p-2 sm:min-h-screen sm:py-8">
       <div>
         <a data-tooltip-id="userInfo-tooltip">
           <ChatOrUserInfo
@@ -118,15 +121,15 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <div className="flex gap-2 justify-between sm:mb-8">
+      <div className="flex justify-between gap-2 sm:mb-8">
         <button
-          className="flex gap-2 items-center rounded-md border border-neutral-600 py-2 px-4 font-medium tracking-wider transition-colors duration-200 hover:border-red-500 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 sm:text-lg"
+          className="flex items-center gap-2 rounded-md border border-neutral-600 py-2 px-4 font-medium tracking-wider transition-colors duration-200 hover:border-red-500 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 sm:text-lg"
           onClick={showDialogBox}
         >
           <span>SignOut</span>
           <TbLogout size={24} className="text-red-500" />
         </button>
-        <ThemeChanger />
+        <ThemeChanger variant={isScreenMedium ? "medium" : "large"} />
       </div>
     </div>
   );

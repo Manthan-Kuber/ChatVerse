@@ -4,9 +4,9 @@ import { MdOutlineLightMode, MdOutlineDarkMode } from "react-icons/md";
 import ThemeButton from "./ThemeButton";
 
 const ThemeChanger = ({
-  variant = "regular",
+  variant = "large",
 }: {
-  variant?: "regular" | "small";
+  variant?: "small" | "medium" | "large";
 }) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -22,7 +22,7 @@ const ThemeChanger = ({
   const CurrIcon =
     currTheme === "dark" ? MdOutlineLightMode : MdOutlineDarkMode;
 
-  if(variant === "small") {
+  if (variant === "small") {
     return (
       <button
         id="theme-changer"
@@ -45,6 +45,7 @@ const ThemeChanger = ({
         ThemeIcon={MdOutlineLightMode}
         ThemeLabel="Light"
         isCurrentTheme={currTheme === "light"}
+        paddingClassName={variant === "medium" ? "py-1 px-2" : "py-2 px-4"}
       />
       <ThemeButton
         onClick={() => {
@@ -53,6 +54,7 @@ const ThemeChanger = ({
         ThemeIcon={MdOutlineDarkMode}
         ThemeLabel="Dark"
         isCurrentTheme={currTheme === "dark"}
+        paddingClassName={variant === "medium" ? "py-1 px-2" : "py-2 px-4"}
       />
     </div>
   );
