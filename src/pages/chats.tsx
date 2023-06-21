@@ -286,7 +286,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           currentChat={currentChat}
           currentUserId={currentUserId!}
         />
-        <main className="flex h-[calc(100vh-4.6rem)] flex-col border-neutral-600 bg-neutral-300 bg-opacity-10 sm:h-[calc(100vh-6.6rem)] sm:border-x sm:border-t sm:pb-16">
+        <main
+          className={`flex h-[calc(100vh-4.6rem)] flex-col border-neutral-600 bg-neutral-300 bg-opacity-10 sm:h-[calc(100vh-10.6rem)] sm:rounded-b-md ${
+            currentChat ? "sm:border" : "sm:border-x sm:border-b"
+          }`}
+        >
           <div
             className={`flex-1 overflow-y-scroll  ${
               !currentChat && " flex items-center justify-center "
@@ -316,7 +320,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             )}
           </div>
           <div
-            className={`py-4 px-2 sm:my-0 sm:pb-0 ${
+            className={`py-4 px-2 sm:my-0 ${
               currentChat && "border-t border-neutral-600"
             }`}
           >
