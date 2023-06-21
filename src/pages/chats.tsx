@@ -316,7 +316,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             )}
           </div>
           <div
-            className={`my-4 py-4 px-2 sm:my-0 sm:pb-0 ${
+            className={`py-4 px-2 sm:my-0 sm:pb-0 ${
               currentChat && "border-t border-neutral-600"
             }`}
           >

@@ -1,6 +1,6 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { BiLogOut } from "react-icons/bi";
+import { TbLogout } from "react-icons/tb";
 import toast from "react-hot-toast";
 import { type ChangeEvent, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
@@ -118,11 +118,11 @@ const Sidebar = () => {
         </div>
       </div>
       <button
-        className="mx-auto flex w-full max-w-xs items-center justify-center gap-4 rounded-md border border-red-500 p-2 font-medium tracking-wider text-red-500 transition-colors duration-200 hover:bg-red-500 hover:text-white sm:mb-8 sm:text-lg"
+        className=" flex w-fit items-center justify-center gap-4 rounded-md border border-neutral-600 py-2 px-4 font-medium tracking-wider text-white transition-colors duration-200 hover:border-red-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 sm:mb-8 sm:text-lg"
         onClick={showDialogBox}
       >
         <span>SignOut</span>
-        <BiLogOut size={24} />
+        <TbLogout size={24} className="text-red-500" />
       </button>
     </div>
   );
