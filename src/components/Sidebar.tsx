@@ -49,7 +49,7 @@ const Sidebar = () => {
           }`}
         >
           <div
-            className={`w-fit rounded-lg bg-white p-8 text-black duration-200 ${
+            className={`w-fit rounded-lg border border-neutral-600 bg-white p-8 text-black duration-200 dark:bg-[#1c1b22] dark:text-white ${
               visible ? "scale-100 delay-200" : "scale-0 "
             } `}
           >
@@ -59,7 +59,7 @@ const Sidebar = () => {
                 onClick={() => {
                   toast.dismiss(id);
                 }}
-                className="rounded-md border border-neutral-500 px-4 py-2 text-black"
+                className="rounded-md border border-neutral-500 px-4 py-2 transition-colors duration-200 hover:bg-neutral-100  dark:hover:bg-neutral-800"
               >
                 Cancel
               </button>
@@ -68,7 +68,7 @@ const Sidebar = () => {
                   toast.remove(id);
                   handleSignOut();
                 }}
-                className="rounded-md border border-transparent bg-red-500 px-4 py-2 text-white"
+                className="rounded-md border border-transparent bg-red-500 px-4 py-2 text-white transition-colors duration-200 hover:bg-red-600"
               >
                 Signout
               </button>
