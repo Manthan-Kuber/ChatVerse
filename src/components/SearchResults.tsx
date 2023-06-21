@@ -125,7 +125,7 @@ const SearchResults = ({
   };
 
   const isUserOnline = (userId: string | undefined) => {
-    if (GlobalState?.onlineUsers) {
+    if (GlobalState?.onlineUsers && Array.isArray(GlobalState.onlineUsers)) {
       const onlineUser = GlobalState.onlineUsers.find(
         (u) => u.userId === userId
       );
