@@ -31,24 +31,21 @@ const Menu = ({
         x: slideInProps.initial.x,
         transition: slideInProps.animate.transition,
       }}
-      className="fixed top-0 bottom-0 z-10 min-h-0 w-full overflow-y-scroll  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
+      className="fixed inset-y--0 z-10 min-h-0 w-full overflow-y-scroll  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         {...(shouldAnimate ? slideInProps : {})}
         onAnimationComplete={() => {
           setShouldAnimate(false);
         }}
-        className="w-full overflow-y-scroll bg-white py-4 dark:bg-black "
+        className="w-full overflow-y-scroll bg-white py-4 dark:bg-[#1c1b22] "
       >
-        <div className="flex items-center justify-between px-2">
-          <ThemeChanger />
-          <IoMdClose
-            className="btn-with-hover"
-            onClick={() => {
-              setIsOpen(false);
-            }}
-          />
-        </div>
+        <IoMdClose
+          className="btn-with-hover ml-2"
+          onClick={() => {
+            setIsOpen(false);
+          }}
+        />
         {children}
       </motion.section>
     </motion.div>
