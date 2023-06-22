@@ -24,10 +24,10 @@ const scrollIntoView = (ref: RefObject<HTMLDivElement>) => {
 
 const getChatName = (
   currentChat: GetChats[0] | undefined,
-  currentUserId: string
+  currentUserId: string | null
 ) =>
   currentChat?.participants
     .filter((x) => x.user.id !== currentUserId)
     .map((x) => x.user.name)[0];
 
-export { resetScroll, fetcher, scrollIntoView,getChatName };
+export { resetScroll, fetcher, scrollIntoView, getChatName };

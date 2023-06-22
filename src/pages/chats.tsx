@@ -298,6 +298,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           >
             {currentChat ? (
               <MessageList
+                currentChat={currentChat}
                 currentUserId={currentUserId}
                 messageList={MessagesArray}
                 isLoading={isLoading}
