@@ -1,9 +1,10 @@
 import { type RefObject } from "react";
+import { GetChats } from "../server/common/getChats";
 
-export const resetScroll = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) =>
+const resetScroll = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) =>
   (e.currentTarget.scrollLeft = 0);
 
-export const fetcher = async (input: RequestInfo, init: RequestInit) => {
+const fetcher = async (input: RequestInfo, init: RequestInit) => {
   const res = await fetch(input, init);
   if (!res.ok) {
     const error = new Error("An error occurred while fetching the data.");
@@ -17,6 +18,16 @@ export const fetcher = async (input: RequestInfo, init: RequestInit) => {
   return data;
 };
 
-export const scrollIntoView = (ref: RefObject<HTMLDivElement>) => {
+const scrollIntoView = (ref: RefObject<HTMLDivElement>) => {
   ref.current?.scrollIntoView({ behavior: "smooth" });
 };
+
+const getChatName = (
+  currentChat: GetChats[0] | undefined,
+  currentUserId: string
+) =>
+  currentChat?.participants
+    .filter((x) => x.user.id !== currentUserId)
+    .map((x) => x.user.name)[0];
+
+export { resetScroll, fetcher, scrollIntoView,getChatName };

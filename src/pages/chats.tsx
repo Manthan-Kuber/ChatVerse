@@ -283,7 +283,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       <div className="sm:px-2 sm:pt-8">
         <ChatsHeader
           setIsOpen={setIsOpen}
-          isCurrentChat={!!currentChat}
+          CurrentChat={currentChat}
           currentUserId={currentUserId!}
         />
         <main
