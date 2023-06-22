@@ -283,12 +283,12 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       <div className="sm:px-2 sm:pt-8">
         <ChatsHeader
           setIsOpen={setIsOpen}
-          currentChat={currentChat}
+          isCurrentChat={!!currentChat}
           currentUserId={currentUserId!}
         />
         <main
           className={`flex h-[calc(100vh-4.6rem)] flex-col border-neutral-600 bg-neutral-300/10 sm:h-[calc(100vh-10.6rem)] sm:rounded-b-md ${
-            currentChat ? "sm:border border-t" : "sm:border-x sm:border-b"
+            currentChat ? "border-t sm:border" : "sm:border-x sm:border-b"
           }`}
         >
           <div
