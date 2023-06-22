@@ -15,24 +15,11 @@ const Message = ({ message, currentUserId }: MessageProps) => {
     .replace(",", " ");
   return (
     <div
-      className={`m-2 flex flex-col ${isSender ? "items-end" : "items-start"} `}
+      className={`m-2 flex flex-col ${isSender ? "items-end" : "items-start"}`}
     >
-      <span
-        className={`${
-          isSender
-            ? " rounded-br-none bg-lime-400 dark:bg-lime-500"
-            : " rounded-bl-none bg-gray-400 dark:bg-gray-500 "
-        }  max-w-full break-words rounded-md p-4`}
-      >
+      <span className="dark:shadow- max-w-[75%] break-words rounded-md  p-4 shadow-lg dark:shadow-[#1c1b22]">
         {message.body}
       </span>
-      <div
-        className={`h-0 w-0 border-t-8 ${
-          isSender
-            ? "border-l-8 border-l-transparent border-t-lime-400 dark:border-t-lime-500"
-            : "border-r-8 border-r-transparent border-t-gray-400 dark:border-t-gray-500"
-        }`}
-      />
       <small className="max-w-full break-words">{messageCreationDate}</small>
     </div>
   );
