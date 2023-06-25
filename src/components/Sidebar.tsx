@@ -10,6 +10,7 @@ import Skeleton from "react-loading-skeleton";
 import { Tooltip } from "react-tooltip";
 import ThemeChanger from "./ThemeChanger";
 import useWindowSize from "../hooks/useWindowSize";
+import GradientUnderline from "./GradientUnderline";
 
 const spanClassName = "truncate font-mono text-sm";
 
@@ -113,7 +114,7 @@ const Sidebar = () => {
           <div className=" border-b border-neutral-600 py-4 pl-2 text-lg sm:text-xl">
             <div className="w-fit">
               <h3>{value ? "Search Results" : "Chats"}</h3>
-              <div className="h-1 w-full bg-gradient-to-r from-lime-500 to-green-500 -skew-x-[36deg] " />
+              <GradientUnderline />
             </div>
           </div>
           <div className="max-h-80 space-y-2 overflow-scroll p-2">

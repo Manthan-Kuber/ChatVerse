@@ -3,6 +3,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import useWindowSize from "../hooks/useWindowSize";
 import type { GetChats } from "../server/common/getChats";
 import { getChatName } from "../utils/functions";
+import GradientUnderline from "./GradientUnderline";
 
 const ChatsHeader = ({
   setIsOpen,
@@ -30,7 +31,12 @@ const ChatsHeader = ({
             />
           </div>
         )}
-        <h2>{chatName}</h2>
+        {CurrentChat && (
+          <div>
+            <h2>{chatName}</h2>
+            <GradientUnderline />
+          </div>
+        )}
       </div>
     </header>
   );
