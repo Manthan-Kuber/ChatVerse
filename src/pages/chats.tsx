@@ -184,7 +184,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           conversationId: currentChat.id,
           latestMessage: message,
         });
-        scrollIntoView(messageEndRef); //TODO Remove later or fix on mobile screens
         await mutate(sendMessage(sendMessageUrl, { ...messageParams }), {
           optimisticData: (currentMessages) => [
             ...(currentMessages || []),
@@ -256,7 +255,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   }, [fetchError, error]);
 
   useEffect(() => {
-    scrollIntoView(messageEndRef);
+    scrollIntoView(messageEndRef,"instant");
   }, [MessagesArray]);
 
   return (
@@ -333,7 +332,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 Icon={IoMdSend}
                 placeholder="Message"
                 scrollIntoView={() => {
-                  scrollIntoView(messageEndRef);
+                  scrollIntoView(messageEndRef,"instant");
                 }}
               />
             )}

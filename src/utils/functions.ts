@@ -18,8 +18,11 @@ const fetcher = async (input: RequestInfo, init: RequestInit) => {
   return data;
 };
 
-const scrollIntoView = (ref: RefObject<HTMLDivElement>) => {
-  ref.current?.scrollIntoView({ behavior: "smooth" });
+const scrollIntoView = (
+  ref: RefObject<HTMLDivElement>,
+  behavior: ScrollBehavior
+) => {
+  ref.current?.scrollIntoView({ behavior });
 };
 
 const getChatName = (
