@@ -255,7 +255,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   }, [fetchError, error]);
 
   useEffect(() => {
-    scrollIntoView(messageEndRef,"instant");
+    scrollIntoView(messageEndRef,"auto");
   }, [MessagesArray]);
 
   return (
@@ -332,7 +332,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 Icon={IoMdSend}
                 placeholder="Message"
                 scrollIntoView={() => {
-                  scrollIntoView(messageEndRef,"instant");
+                  scrollIntoView(messageEndRef,"auto");
                 }}
               />
             )}
