@@ -13,7 +13,6 @@ const ChatInputForm = (props: {
   value: string;
   Icon: IconType;
   placeholder: string;
-  scrollIntoView: () => void;
 }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const isDisabled = !(props.value.length > 0);
@@ -39,13 +38,12 @@ const ChatInputForm = (props: {
       }}
     >
       <textarea
-        className="w-full resize-none rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200 focus:border-lime-300 no-scrollbar"
+        className="no-scrollbar w-full resize-none rounded-md border-2 border-neutral-600 bg-neutral-500/10 px-4 py-2 pr-10 outline-none transition-transform duration-200 focus:border-lime-300"
         placeholder={props.placeholder}
         value={props.value}
         onChange={(e) => {
           handleChange(e);
         }}
-        onFocus={props.scrollIntoView}
         ref={textAreaRef}
         rows={1}
       />

@@ -331,9 +331,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 setValue={setMessage}
                 Icon={IoMdSend}
                 placeholder="Message"
-                scrollIntoView={() => {
-                  scrollIntoView(messageEndRef,"auto");
-                }}
               />
             )}
           </div>
