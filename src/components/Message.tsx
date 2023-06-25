@@ -18,7 +18,7 @@ const Message = ({ message, currentUserId, chatName }: MessageProps) => {
     <div
       className={`m-2 flex flex-col ${isSender ? "items-end" : "items-start"}`}
     >
-      <div className="max-w-[75%] break-words rounded-md  p-4 shadow-lg dark:shadow-[#1c1b22]">
+      <div className="max-w-[75%] break-words rounded-md  p-4 shadow-lg dark:shadow-neutral-500/30">
         <div className="">
           <span className={`block ${isSender ? "text-lime-500" : "text-sky-500"}`}>
             {isSender ? "You" : chatName}
