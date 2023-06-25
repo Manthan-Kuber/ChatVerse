@@ -32,7 +32,7 @@ const ChatsHeader = ({
           </div>
         )}
         {CurrentChat && (
-          <div>
+          <div className="w-fit">
             <h2>{chatName}</h2>
             <GradientUnderline />
           </div>
