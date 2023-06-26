@@ -21,7 +21,7 @@ import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { GlobalStateProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
-import { fetcher, scrollIntoView } from "../utils/functions";
+import { fetcher, scrollIntoView, shimmer, toBase64 } from "../utils/functions";
 import { env } from "../env/client.mjs";
 import useSwr from "swr";
 import { type GetMessages } from "./api/chats/get-messages";
@@ -307,10 +307,12 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
               <div className="grid place-items-center p-4">
                 <Image
                   src="/undraw_quick_chat_re_bit5.svg"
+                  placeholder="blur"
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(240, 240))}`}
                   width={240}
                   height={240}
                   alt="logo"
-                  className="md:mb-4 md:w-[320px] "
+                  className="md:mb-4 md:w-[320px]"
                   priority
                 />
                 <span className="block text-center font-mono text-lg">

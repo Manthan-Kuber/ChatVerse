@@ -7,6 +7,7 @@ import { fadeInOut, fadeInUp, stagger } from "../animations/animations";
 import { useState } from "react";
 import { RotatingLines } from "react-loader-spinner";
 import { useRouter } from "next/router";
+import { shimmer, toBase64 } from "../utils/functions";
 
 const Home: NextPage = () => {
   const [isDisabled, setIsDisabled] = useState(false);
@@ -24,11 +25,13 @@ const Home: NextPage = () => {
     >
       <Image
         src="/undraw_group_chat_re_frmo.svg"
+        priority
+        blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(240, 240))}`}
+        placeholder="blur"
         width={240}
         height={240}
         alt="logo"
         className="mx-auto md:mb-4 md:w-[320px] "
-        priority
       />
       <ChatVerseText />
       <motion.div
