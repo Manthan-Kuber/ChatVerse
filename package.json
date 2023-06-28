@@ -27,6 +27,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-loading-skeleton": "^3.1.0",
     "react-tooltip": "^5.13.1",
+    "react-virtualized-auto-sizer": "^1.0.20",
     "react-window": "^1.8.9",
     "socket.io-client": "^4.5.4",
     "swr": "^2.0.3",
