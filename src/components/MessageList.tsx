@@ -1,10 +1,12 @@
 import { type Message as MessageType } from "@prisma/client";
 import Skeleton from "react-loading-skeleton";
-import MessageComponent from "./Message";
 import { GetChats } from "../server/common/getChats";
 import { getChatName } from "../utils/functions";
-import { FixedSizeList as List } from "react-window";
+import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { useCallback, useRef } from "react";
+import useWindowSize from "../hooks/useWindowSize";
+import Row from "./Row";
 
 const MessageListSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -50,6 +52,16 @@ const MessageList = ({
 
   if (!messageList || messageList.length === 0) return <></>;
 
+  const listRef = useRef<List>(null);
+  const sizeMap = useRef({});
+  const setSize = useCallback((index: any, size: any) => {
+    sizeMap.current = { ...sizeMap.current, [index]: size };
+    listRef.current?.resetAfterIndex(index);
+  }, []);
+  const itemSize = (index: any) =>
+    (sizeMap as { current: any }).current[index] || 110;
+  const { width: windowWidth } = useWindowSize();
+
   return (
     <AutoSizer>
       {({ height, width }) => (
@@ -57,17 +69,20 @@ const MessageList = ({
           className="List"
           height={height}
           itemCount={messageList.length}
-          itemSize={100} //Height of a single message
+          itemSize={itemSize} //Height of a single message
           width={width}
           outerElementType="ul"
+          ref={listRef}
         >
           {({ index, style }) => (
             <li style={style}>
-              <MessageComponent
-                key={messageList[index]!.id}
+              <Row
+                index={index}
+                messageList={messageList}
+                setSize={setSize}
+                windowWidth={windowWidth}
                 chatName={chatName}
-                message={messageList[index]!}
-                currentUserId={currentUserId!}
+                currentUserId={currentUserId}
               />
             </li>
           )}
