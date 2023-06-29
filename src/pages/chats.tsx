@@ -104,7 +104,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   >([]);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
-  const messageEndRef = useRef<HTMLDivElement>(null);
 
   const {
     data: MessagesArray,
@@ -254,10 +253,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     };
   }, [fetchError, error]);
 
-  useEffect(() => {
-    scrollIntoView(messageEndRef,"auto");
-  }, [MessagesArray]);
-
   return (
     <motion.div
       className="mx-auto max-w-7xl sm:grid sm:grid-cols-[1fr_minmax(0,2fr)]" //For grid 1fr -> minmax(auto,1fr) meaning min is auto i.e based on width of content and max is 1fr that's 1 fraction of space. minmax(0,1fr) -> overrides this making the max width 1fr and not making min width, content based
@@ -301,14 +296,15 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                 currentUserId={currentUserId}
                 messageList={MessagesArray}
                 isLoading={isLoading}
-                messagesEndRef={messageEndRef}
               />
             ) : (
               <div className="grid place-items-center p-4">
                 <Image
                   src="/undraw_quick_chat_re_bit5.svg"
                   placeholder="blur"
-                  blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(240, 240))}`}
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                    shimmer(240, 240)
+                  )}`}
                   width={240}
                   height={240}
                   alt="logo"
