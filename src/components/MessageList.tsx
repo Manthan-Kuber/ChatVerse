@@ -7,6 +7,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { useCallback, useRef } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import Row from "./Row";
+import MessageComponent from "./Message";
 
 const MessageListSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -74,14 +75,14 @@ const MessageList = ({
         >
           {({ index, style }) => (
             <li style={style}>
-              <Row
-                index={index}
-                messageList={messageList}
-                setSize={setSize}
-                windowWidth={windowWidth}
-                chatName={chatName}
-                currentUserId={currentUserId}
-              />
+              <Row index={index} setSize={setSize} windowWidth={windowWidth}>
+                <MessageComponent
+                  key={messageList[index]!.id}
+                  chatName={chatName}
+                  message={messageList[index]!}
+                  currentUserId={currentUserId!}
+                />
+              </Row>
             </li>
           )}
         </List>
