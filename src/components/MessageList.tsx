@@ -67,7 +67,7 @@ const MessageList = ({
 
   return (
     <AutoSizer>
-      {({ height, width }) => (
+      {({ height, width }: { height: number; width: number }) => (
         <List
           className="List"
           height={height}
