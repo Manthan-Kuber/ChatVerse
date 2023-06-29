@@ -4,7 +4,7 @@ import { GetChats } from "../server/common/getChats";
 import { getChatName } from "../utils/functions";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import Row from "./Row";
 import MessageComponent from "./Message";
@@ -60,6 +60,10 @@ const MessageList = ({
   const itemSize = (index: any) =>
     (sizeMap as { current: any }).current[index] + 8 || 110; // Added 8 to compensate for margin between 2 messages
   const { width: windowWidth } = useWindowSize();
+
+  useEffect(() => {
+    listRef.current?.scrollToItem(messageList.length - 1, "smart"); //Passed index of the last item which will be len - 1
+  }, [messageList]);
 
   return (
     <AutoSizer>
