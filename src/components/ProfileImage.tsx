@@ -19,20 +19,19 @@ export const ProfileImageSkeleton = () => {
 
 const ProfileImage = ({ image }: { image: string | null | undefined }) => {
   return (
-    <>
+    <div className="h-12 w-12">
       {image ? (
         <Image
           src={image}
-          width={36}
-          height={36}
-          className="rounded-lg sm:h-12 sm:w-12"
+          fill
+          className="rounded-lg"
           alt="profile photo"
           referrerPolicy="no-referrer"
         />
       ) : (
         <ProfileImageSkeleton />
       )}
-    </>
+    </div>
   );
 };
 export default ProfileImage;
