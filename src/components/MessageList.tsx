@@ -36,13 +36,11 @@ type MessageListProps = {
   isLoading: boolean;
   currentUserId: string | null;
   currentChat: GetChats[0] | undefined;
-  messagesEndRef: React.MutableRefObject<HTMLDivElement | null>;
 };
 
 const MessageList = ({
   messageList,
   isLoading,
-  messagesEndRef,
   currentUserId,
   currentChat,
 }: MessageListProps) => {
@@ -59,7 +57,7 @@ const MessageList = ({
     listRef.current?.resetAfterIndex(index);
   }, []);
   const itemSize = (index: any) =>
-    (sizeMap as { current: any }).current[index] || 110;
+    (sizeMap as { current: any }).current[index] + 8 || 110; // Added 8 to compensate for margin between 2 messages
   const { width: windowWidth } = useWindowSize();
 
   return (
@@ -89,7 +87,6 @@ const MessageList = ({
         </List>
       )}
     </AutoSizer>
-    // TODO: Scroll to end of div
   );
 };
 export default MessageList;

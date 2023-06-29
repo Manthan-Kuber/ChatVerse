@@ -255,7 +255,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   }, [fetchError, error]);
 
   useEffect(() => {
-    scrollIntoView(messageEndRef,"auto");
+    scrollIntoView(messageEndRef, "auto");
   }, [MessagesArray]);
 
   return (
@@ -296,19 +296,23 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             }`}
           >
             {currentChat ? (
-              <MessageList
-                currentChat={currentChat}
-                currentUserId={currentUserId}
-                messageList={MessagesArray}
-                isLoading={isLoading}
-                messagesEndRef={messageEndRef}
-              />
+              <>
+                <MessageList
+                  currentChat={currentChat}
+                  currentUserId={currentUserId}
+                  messageList={MessagesArray}
+                  isLoading={isLoading}
+                />
+                <div ref={messageEndRef} />
+              </>
             ) : (
               <div className="grid place-items-center p-4">
                 <Image
                   src="/undraw_quick_chat_re_bit5.svg"
                   placeholder="blur"
-                  blurDataURL={`data:image/svg+xml;base64,${toBase64(shimmer(240, 240))}`}
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                    shimmer(240, 240)
+                  )}`}
                   width={240}
                   height={240}
                   alt="logo"
