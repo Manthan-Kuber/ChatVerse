@@ -110,9 +110,9 @@ const Sidebar = () => {
           onChange={handleSearch}
           onKeyDown={(e) => e.key === "Enter" && handleSearch}
         />
-        <div className="mt-4 rounded-md border border-neutral-600 ">
-          <div className=" border-b border-neutral-600 py-4 pl-2 text-lg sm:text-xl">
-            <div className="w-fit">
+        <div className="mt-4 rounded-md border  border-neutral-600 ">
+          <div className=" border-b border-neutral-600 py-4 pl-2 text-lg sm:text-xl bg-[#f1f1f1] dark:bg-[#25242b] rounded-t-md">
+            <div className="w-fit ">
               <h3>{value ? "Search Results" : "Chats"}</h3>
               <GradientUnderline />
             </div>

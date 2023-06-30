@@ -302,9 +302,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                   setIsVisible={setIsVisible}
                 />
                 <button
-                  className={`rounded-full bg-neutral-700 ${
-                    isVisible ? "opacity-1" : "opacity-0 pointer-events-none"
-                  } absolute bottom-2 right-4 p-2 text-neutral-400 transition-opacity duration-200`}
+                  className={`rounded-full border border-neutral-600 bg-neutral-200 text-neutral-600 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-400 ${
+                    isVisible ? "opacity-1" : "pointer-events-none opacity-0"
+                  } absolute bottom-2 right-4 p-2 transition-opacity duration-200 `}
                 >
                   <BsChevronDoubleDown className="h-4 w-4" />
                 </button>
