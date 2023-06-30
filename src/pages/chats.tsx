@@ -288,7 +288,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           }`}
         >
           <div
-            className={`flex-1 overflow-y-scroll  ${
+            className={`relative flex-1 overflow-y-scroll  ${
               !currentChat && " flex items-center justify-center "
             }`}
           >
@@ -299,11 +299,12 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
                   currentUserId={currentUserId}
                   messageList={MessagesArray}
                   isLoading={isLoading}
+                  setIsVisible={setIsVisible}
                 />
                 <button
                   className={`rounded-full bg-neutral-700 ${
-                    isVisible ? "visible" : "invisible"
-                  } absolute bottom-2 right-4 p-2 text-neutral-400 `}
+                    isVisible ? "opacity-1" : "opacity-0 pointer-events-none"
+                  } absolute bottom-2 right-4 p-2 text-neutral-400 transition-opacity duration-200`}
                 >
                   <BsChevronDoubleDown className="h-4 w-4" />
                 </button>
