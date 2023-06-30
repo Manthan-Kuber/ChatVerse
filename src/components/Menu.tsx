@@ -30,7 +30,7 @@ const Menu = ({
         x: slideInProps.initial.x,
         transition: slideInProps.animate.transition,
       }}
-      className="fixed inset-y--0 z-10 min-h-0 w-full overflow-y-scroll  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
+      className="fixed inset-y-0 z-10 min-h-0 w-full overflow-y-scroll  bg-black/10 shadow-md backdrop-blur-sm dark:bg-white/10"
     >
       <motion.section
         {...(shouldAnimate ? slideInProps : {})}

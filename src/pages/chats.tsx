@@ -290,8 +290,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           }`}
         >
           <div
-            className={`relative flex-1 overflow-y-scroll  ${
-              !currentChat && " flex items-center justify-center "
+            className={`relative flex-1  ${
+              !currentChat ? "flex items-center justify-center " : ""
             }`}
           >
             {currentChat ? (
