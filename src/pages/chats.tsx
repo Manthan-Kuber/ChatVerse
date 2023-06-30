@@ -28,6 +28,8 @@ import { type GetMessages } from "./api/chats/get-messages";
 import { type SendMessage } from "./api/chats/send-message";
 import { type GetChats, getChats } from "../server/common/getChats";
 import SidebarWrapper from "../components/SidebarWrapper";
+import { BsChevronDoubleDown } from "react-icons/bs";
+import { type VariableSizeList as List } from "react-window";
 
 type ChatProps = {
   chats: GetChats | null;
@@ -102,8 +104,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const [onlineUsers, setOnlineUsers] = useState<
     { userId: string; socketId: string }[]
   >([]);
+  const [isVisible, setIsVisible] = useState(true);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
+  const listRef = useRef<List>(null); //Ref for react window's variable size list
 
   const {
     data: MessagesArray,
@@ -286,17 +290,34 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           }`}
         >
           <div
-            className={`flex-1 overflow-y-scroll  ${
+            className={`relative flex-1 overflow-y-scroll  ${
               !currentChat && " flex items-center justify-center "
             }`}
           >
             {currentChat ? (
-              <MessageList
-                currentChat={currentChat}
-                currentUserId={currentUserId}
-                messageList={MessagesArray}
-                isLoading={isLoading}
-              />
+              <>
+                <MessageList
+                  currentChat={currentChat}
+                  currentUserId={currentUserId}
+                  messageList={MessagesArray}
+                  isLoading={isLoading}
+                  setIsVisible={setIsVisible}
+                  listRef={listRef}
+                />
+                <button
+                  className={`rounded-full border border-neutral-600 bg-neutral-200 text-neutral-600 dark:border-neutral-400 dark:bg-neutral-800 dark:text-neutral-400 ${
+                    isVisible ? "opacity-1" : "pointer-events-none opacity-0"
+                  } absolute bottom-2 right-4 p-2 transition-opacity duration-200 `}
+                  onClick={() => {
+                    listRef.current?.scrollToItem(
+                      (MessagesArray || []).length - 1,
+                      "smart"
+                    );
+                  }}
+                >
+                  <BsChevronDoubleDown className="h-4 w-4" />
+                </button>
+              </>
             ) : (
               <div className="grid place-items-center p-4">
                 <Image

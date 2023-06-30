@@ -4,7 +4,7 @@ import { GetChats } from "../server/common/getChats";
 import { getChatName } from "../utils/functions";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { useCallback, useEffect, useRef } from "react";
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useRef, RefObject } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import Row from "./Row";
 import MessageComponent from "./Message";
@@ -37,6 +37,8 @@ type MessageListProps = {
   isLoading: boolean;
   currentUserId: string | null;
   currentChat: GetChats[0] | undefined;
+  setIsVisible: Dispatch<SetStateAction<boolean>>
+  listRef: RefObject<List<any>>
 };
 
 const MessageList = ({
@@ -44,6 +46,8 @@ const MessageList = ({
   isLoading,
   currentUserId,
   currentChat,
+  setIsVisible,
+  listRef
 }: MessageListProps) => {
   const chatName = getChatName(currentChat, currentUserId);
 
@@ -51,8 +55,8 @@ const MessageList = ({
 
   if (!messageList || messageList.length === 0) return <></>;
 
-  const listRef = useRef<List>(null);
   const sizeMap = useRef({});
+  const outerElementRef = useRef<HTMLUListElement>(null);
   const setSize = useCallback((index: any, size: any) => {
     sizeMap.current = { ...sizeMap.current, [index]: size };
     listRef.current?.resetAfterIndex(index);
@@ -60,6 +64,15 @@ const MessageList = ({
   const itemSize = (index: any) =>
     (sizeMap as { current: any }).current[index] + 8 || 110; // Added 8 to compensate for margin between 2 messages
   const { width: windowWidth } = useWindowSize();
+
+  const handleScroll = () => {
+    setIsVisible(true)
+    if(outerElementRef.current){
+      const { scrollTop, scrollHeight, clientHeight } = outerElementRef.current;
+      const bottom = scrollHeight - scrollTop - clientHeight <= 10
+      if(bottom) setIsVisible(false) 
+    }
+  }
 
   useEffect(() => {
     listRef.current?.scrollToItem(messageList.length - 1, "smart"); //Passed index of the last item which will be len - 1
@@ -75,7 +88,9 @@ const MessageList = ({
           itemSize={itemSize} //Height of a single message
           width={width}
           outerElementType="ul"
+          outerRef={outerElementRef}
           ref={listRef}
+          onScroll={handleScroll}
         >
           {({ index, style }) => (
             <li style={style}>
