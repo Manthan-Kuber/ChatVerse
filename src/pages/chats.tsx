@@ -232,7 +232,6 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
 
   const getOnlineUsers = useCallback(
     (users: { userId: string; socketId: string }[]) => {
-      // TODO: update userlist on disconnect on client / socket server
       setOnlineUsers(users);
     },
     [onlineUsers, setOnlineUsers]

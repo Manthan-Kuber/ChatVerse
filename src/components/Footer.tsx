@@ -2,6 +2,7 @@ import { SiTailwindcss } from "react-icons/si";
 import { SiNextdotjs } from "react-icons/si";
 import { SiPrisma } from "react-icons/si";
 import { SiTypescript } from "react-icons/si";
+import GradientUnderline from "./GradientUnderline";
 
 const techStackList = [
   {
@@ -36,7 +37,10 @@ const Footer = () => {
         rel="noopener noreferrer"
       >
         {/* TODO: Add underline animation on hover */}
-        <span className="text-xs xs:text-sm  sm:text-lg">Manthan Kuber</span>
+        <div className="group w-fit">
+          <span className="text-xs xs:text-sm sm:text-lg">Manthan Kuber</span>
+          <GradientUnderline className="h-0.5 w-0 transition-all duration-200 group-hover:w-full" />
+        </div>
       </a>
     </footer>
   );
