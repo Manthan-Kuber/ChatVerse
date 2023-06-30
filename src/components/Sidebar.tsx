@@ -26,22 +26,23 @@ const Sidebar = () => {
     setValue(e.target.value);
   }
 
+  function handleSignOut() {
+    const signOutPromise = signOut({
+      redirect: false,
+      callbackUrl: "/auth/signin",
+    });
+    toast.promise(signOutPromise, {
+      loading: "Signing Out...",
+      success: (data) => {
+        push(data.url);
+        return "Signed Out Successfully";
+      },
+      error: (err) =>
+        `Encountered an error while Signing Out: ${err.toString()}`,
+    });
+  }
+
   const showDialogBox = () => {
-    function handleSignOut() {
-      const signOutPromise = signOut({
-        redirect: false,
-        callbackUrl: "/auth/signin",
-      });
-      toast.promise(signOutPromise, {
-        loading: "Signing Out...",
-        success: (data) => {
-          push(data.url);
-          return "Signed Out Successfully";
-        },
-        error: (err) =>
-          `Encountered an error while Signing Out: ${err.toString()}`,
-      });
-    }
     toast.custom(
       ({ id, visible }) => (
         <div
@@ -50,7 +51,7 @@ const Sidebar = () => {
           }`}
         >
           <div
-            className={`w-fit rounded-lg border border-neutral-600 bg-white p-8 text-black duration-200 dark:bg-[#1c1b22] dark:text-white ${
+            className={`custom-toast w-fit ${
               visible ? "scale-100 delay-200" : "scale-0 "
             } `}
           >
@@ -111,7 +112,7 @@ const Sidebar = () => {
           onKeyDown={(e) => e.key === "Enter" && handleSearch}
         />
         <div className="mt-4 rounded-md border  border-neutral-600 ">
-          <div className=" border-b border-neutral-600 py-4 pl-2 text-lg sm:text-xl bg-[#f1f1f1] dark:bg-[#25242b] rounded-t-md">
+          <div className=" rounded-t-md border-b border-neutral-600 bg-[#f1f1f1] py-4 pl-2 text-lg dark:bg-[#25242b] sm:text-xl">
             <div className="w-fit ">
               <h3>{value ? "Search Results" : "Chats"}</h3>
               <GradientUnderline />
