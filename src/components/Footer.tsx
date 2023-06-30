@@ -1,7 +1,10 @@
-import { SiTailwindcss } from "react-icons/si";
-import { SiNextdotjs } from "react-icons/si";
-import { SiPrisma } from "react-icons/si";
-import { SiTypescript } from "react-icons/si";
+import {
+  SiTailwindcss,
+  SiNextdotjs,
+  SiPrisma,
+  SiTypescript,
+  SiSupabase,
+} from "react-icons/si";
 import GradientUnderline from "./GradientUnderline";
 
 const techStackList = [
@@ -16,8 +19,9 @@ const techStackList = [
     Icon: SiNextdotjs,
     className: "rounded-full border bg-white text-black",
   },
-  { id: 2, Icon: SiPrisma, className: "" },
-  { id: 3, Icon: SiTailwindcss, className: "text-sky-500" },
+  { id: 2, Icon: SiSupabase, className: "text-[#3dcf8f]" },
+  { id: 3, Icon: SiPrisma, className: "" },
+  { id: 4, Icon: SiTailwindcss, className: "text-sky-500" },
 ].map(({ Icon, id, className }) => (
   <li key={id}>
     <Icon className={className} />
