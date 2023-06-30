@@ -4,7 +4,7 @@ import { GetChats } from "../server/common/getChats";
 import { getChatName } from "../utils/functions";
 import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { type Dispatch, type SetStateAction, useCallback, useEffect, useRef } from "react";
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useRef, RefObject } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import Row from "./Row";
 import MessageComponent from "./Message";
@@ -38,6 +38,7 @@ type MessageListProps = {
   currentUserId: string | null;
   currentChat: GetChats[0] | undefined;
   setIsVisible: Dispatch<SetStateAction<boolean>>
+  listRef: RefObject<List<any>>
 };
 
 const MessageList = ({
@@ -45,7 +46,8 @@ const MessageList = ({
   isLoading,
   currentUserId,
   currentChat,
-  setIsVisible
+  setIsVisible,
+  listRef
 }: MessageListProps) => {
   const chatName = getChatName(currentChat, currentUserId);
 
@@ -53,7 +55,6 @@ const MessageList = ({
 
   if (!messageList || messageList.length === 0) return <></>;
 
-  const listRef = useRef<List>(null);
   const sizeMap = useRef({});
   const outerElementRef = useRef<HTMLUListElement>(null);
   const setSize = useCallback((index: any, size: any) => {
