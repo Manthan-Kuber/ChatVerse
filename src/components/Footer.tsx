@@ -43,7 +43,10 @@ const Footer = () => {
         {/* TODO: Add underline animation on hover */}
         <div className="group w-fit">
           <span className="text-xs xs:text-sm sm:text-lg">Manthan Kuber</span>
-          <GradientUnderline className="h-0.5 w-0 transition-all duration-200 group-hover:w-full" />
+          <GradientUnderline
+            className="w-0 transition-all duration-200 group-hover:w-full"
+            height="h-0.5"
+          />
         </div>
       </a>
     </footer>
