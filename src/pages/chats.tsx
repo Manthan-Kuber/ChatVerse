@@ -28,6 +28,7 @@ import { type GetMessages } from "./api/chats/get-messages";
 import { type SendMessage } from "./api/chats/send-message";
 import { type GetChats, getChats } from "../server/common/getChats";
 import SidebarWrapper from "../components/SidebarWrapper";
+import { BsChevronDoubleDown } from "react-icons/bs";
 
 type ChatProps = {
   chats: GetChats | null;
@@ -102,6 +103,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const [onlineUsers, setOnlineUsers] = useState<
     { userId: string; socketId: string }[]
   >([]);
+  const [isVisible, setIsVisible] = useState(true);
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
 
@@ -291,12 +293,21 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
             }`}
           >
             {currentChat ? (
-              <MessageList
-                currentChat={currentChat}
-                currentUserId={currentUserId}
-                messageList={MessagesArray}
-                isLoading={isLoading}
-              />
+              <>
+                <MessageList
+                  currentChat={currentChat}
+                  currentUserId={currentUserId}
+                  messageList={MessagesArray}
+                  isLoading={isLoading}
+                />
+                <button
+                  className={`rounded-full bg-neutral-700 ${
+                    isVisible ? "visible" : "invisible"
+                  } absolute bottom-2 right-4 p-2 text-neutral-400 `}
+                >
+                  <BsChevronDoubleDown className="h-4 w-4" />
+                </button>
+              </>
             ) : (
               <div className="grid place-items-center p-4">
                 <Image
