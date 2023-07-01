@@ -123,7 +123,7 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <div className="flex justify-between gap-2 sm:mb-8">
+      <div className="flex justify-between gap-2 sm:mb-7">
         <button
           className="flex items-center gap-2 rounded-md border border-neutral-600 py-2 px-4 font-medium tracking-wider transition-colors duration-200 hover:border-red-500 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-800 sm:text-lg"
           onClick={showDialogBox}

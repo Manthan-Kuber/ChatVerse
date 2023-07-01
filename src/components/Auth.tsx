@@ -7,12 +7,12 @@ function Auth({ children }: { children: React.ReactNode }) {
   const { replace } = useRouter();
 
   if (status === "loading") {
-    return <ChatVerseLoader />;
+    return <ChatVerseLoader fullScreen />;
   }
 
   if (status === "unauthenticated") {
     replace("/auth/signin");
-    return <ChatVerseLoader />;
+    return <ChatVerseLoader fullScreen />;
   }
 
   return <>{children}</>;
