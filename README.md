@@ -1,27 +1,33 @@
-# Create T3 App
+# ChatVerse
 
-This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
+[ChatVerse](https://chat-verse-omega.vercel.app/) is a real-time chat app powered by web sockets<br>
+Entirely made by yours truly from UI/UX to Deployment with minute attention to detail<br>
+Built with my absolute favourite programming language - TypeScript<br>
+Here's the [Socket Server GitHub Repo](https://github.com/Manthan-Kuber/ChatVerseSocketServer)<br>  
+Don't forget to ⭐ the repo 
 
-## What's next? How do I make an app with this?
+## Tech Stack
 
-We try to keep this project as simple as possible, so you can start with the most basic configuration and then move on to more advanced configuration.
+[![My Skills](https://skillicons.dev/icons?i=ts)](https://www.typescriptlang.org/)
+[![My Skills](https://skillicons.dev/icons?i=next)](https://nextjs.org/)
+[![My Skills](https://skillicons.dev/icons?i=tailwind)](https://tailwindcss.com/)
+[![My Skills](https://skillicons.dev/icons?i=nodejs)](https://nodejs.org)
+[![My Skills](https://skillicons.dev/icons?i=express)](https://expressjs.com)
+[![My Skills](https://skillicons.dev/icons?i=supabase)](https://supabase.com/)
+[![My Skills](https://skillicons.dev/icons?i=prisma)](https://www.prisma.io/)
+[![My Skills](https://skillicons.dev/icons?i=vercel)](https://vercel.com/)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+- Built with `create-t3-app` i.e the T3 stack minus tRPC. 
+- Built Entirely in **TypeScript**
+- Uses **NextJS** for FullStack development framework
+- Uses **TailwindCSS** as a CSS framework 
+- Uses **Supabase** as BaaS which use **PostgreSQL** under the hood
+- Uses **Prisma** as ORM
+- Uses a **hybrid backend architecture** consisting of:
+    1. NextJS's **serverless functions** to perform database queries
+    2. **NodeJs + ExpressJs** server to facilitate realtime websocket based **full duplex** communication
+- Uses [Socket.IO](https://socket.io/) for managaing websocket communication
+- Uses [NextAuth](https://next-auth.js.org/) for managing authentication
+- Uses a SMTP server for password-less e-mail based authentication
+- Uses vercel's [SWR](https://swr.vercel.app/)(stale-while-revalidate) react hooks for data fetching,caching and (re)validation
 
-- [Next-Auth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [TailwindCSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-We also [roll our own docs](https://beta.create.t3.gg) with some summary information and links to the respective documentation.
-
-Also checkout these awesome tutorials on `create-t3-app`.
-
-- [Build a Blog With the T3 Stack - tRPC, TypeScript, Next.js, Prisma & Zod](https://www.youtube.com/watch?v=syEWlxVFUrY)
-- [Build a Live Chat Application with the T3 Stack - TypeScript, Tailwind, tRPC](https://www.youtube.com/watch?v=dXRRY37MPuk)
-- [Build a full stack app with create-t3-app](https://www.nexxel.dev/blog/ct3a-guestbook)
-- [A first look at create-t3-app](https://dev.to/ajcwebdev/a-first-look-at-create-t3-app-1i8f)
-
-## How do I deploy this?
-
-Follow our deployment guides for [Vercel](https://beta.create.t3.gg/en/deployment/vercel) and [Docker](https://beta.create.t3.gg/en/deployment/docker) for more information.
