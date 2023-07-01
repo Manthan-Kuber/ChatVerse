@@ -4,7 +4,7 @@
 Entirely made by yours truly from UI/UX to Deployment with minute attention to detail<br>
 Built with my absolute favourite programming language - TypeScript<br>
 Here's the [Socket Server GitHub Repo](https://github.com/Manthan-Kuber/ChatVerseSocketServer)<br>  
-Don't forget to ⭐ the repo 
+Don't forget to ⭐ the repo
 
 ## Tech Stack
 
@@ -17,17 +17,22 @@ Don't forget to ⭐ the repo
 [![My Skills](https://skillicons.dev/icons?i=prisma)](https://www.prisma.io/)
 [![My Skills](https://skillicons.dev/icons?i=vercel)](https://vercel.com/)
 
-- Built with `create-t3-app` i.e the T3 stack minus tRPC. 
+- Built with `create-t3-app` i.e the T3 stack minus tRPC.
 - Built Entirely in **TypeScript**
 - Uses **NextJS** for FullStack development framework
-- Uses **TailwindCSS** as a CSS framework 
+- Uses **TailwindCSS** as a CSS framework
+- Uses [Framer Motion](https://www.framer.com/motion/) for animations
 - Uses **Supabase** as BaaS which use **PostgreSQL** under the hood
 - Uses **Prisma** as ORM
+- Uses [Zod](https://zod.dev/) from schema validation
 - Uses a **hybrid backend architecture** consisting of:
-    1. NextJS's **serverless functions** to perform database queries
-    2. **NodeJs + ExpressJs** server to facilitate realtime websocket based **full duplex** communication
+  1. NextJS's **serverless functions** to perform database queries
+  2. **NodeJs + ExpressJs** server to facilitate realtime websocket based **full duplex** communication
 - Uses [Socket.IO](https://socket.io/) for managaing websocket communication
 - Uses [NextAuth](https://next-auth.js.org/) for managing authentication
 - Uses a SMTP server for password-less e-mail based authentication
 - Uses vercel's [SWR](https://swr.vercel.app/)(stale-while-revalidate) react hooks for data fetching,caching and (re)validation
 
+## Page Quality Insights
+
+![screenshot](page-qual-ss.png)
