@@ -58,11 +58,12 @@ Don't forget to ⭐ the repo
 - Online user status
 - Clean,consistent and performance oriented codebase written in TS
 - Uses best practices avoiding any anti-patterns
+- SEO friendly
 - Clean and modular react TS components
 - Well documented codebase with comments written to explain the logic behind anything written
 - Semantic commits
 
-## Approaches Used
+## Approaches Used / Decisions / Thought Process 
 
 ### NextJs and Realtime Communication
 
@@ -78,13 +79,13 @@ Approach 3. and 4. both require a separate server app. I went with creating a we
 
 ### PostgreSQL over MongoDB
 
-All real world applications have a relation between it's data sources. Using a RDBMS such as postgreSQL makes more sense in such regards over a no-sql database like MongoDB. Morever it has a master slave configuration which might incur some problems in case we were to scale the application.PostgreSQL has a strong reputation for being performant and robust, making it a great choice for a chat application involving lots of relations between different tables.Writing database schemas and SQL queries might prove to be a tedious task for many.<br>
+All real world applications generally consist of a relation between it's entities. Using a RDBMS such as postgreSQL makes more sense in such regards especially in a chat app, over a no-sql database like MongoDB. Morever it has a master slave configuration which might incur some problems in case we were to scale the application.PostgreSQL has a strong reputation for being performant and robust, making it a great choice for a chat application involving lots of relations between different tables.Writing database schemas and SQL queries might prove to be a tedious task for many.<br>
 I have used prisma ORM in order to write database schemas and complex SQL queries making it a tad-bit easier to do so. The initial effort required for writing schemas is all worth it because in the subsquent phases of development, SQL queries can be made much more efficiently. Moreover, making entries in the database is much easier as you dont have to populate other than the document currently being operated on like in MongoDB, all the required changes in related tables are done by a single query. PostgreSQL being an object relational database almost provides the same flexibility a document based no-sql database like MongoDB provides. Also, instead of hosting a database , using a BaaS such as supabase, improves DX, shifts the focus to the engineering problem at hand and provides handy additional features as well.
 
-### Data Fetching and integration with server side data
+### Data fetching and integration with server side data
 
 I have used SWR react hooks for data fetching, caching and cache revalidation.Caching is supposedly one of the hardest problems to crack in the realm of software engineering.Cache invalidation proves to be challenging but is instrumental to a good UX.<br>
-All the data being fetched is being stored in a global cache and is also shared across all the components which uses the same cache key.Cache invalidation can be done is tons of ways, generally done in a smart way by comparing the individual items in the cache and only replacing the updated item. I find this approach of caching quite brilliant; Redux Toolkit Query aka RTKQuery , which I have used extensively in past projects also uses a similar approach.<br>
+All the data being fetched is being stored in a global cache and is also shared across all the components which uses the same cache key.Cache invalidation can be done is tons of ways, generally done in a smart way by comparing the individual items in the cache and only replacing the updated item. I find this approach of caching quite brilliant; Redux Toolkit Query aka  RTK Query , which I have used extensively in past projects also uses a similar approach.<br>
 The main page `/chats`, where the core functionality of the application lies, is a server side generated page. The 'chats data' in the sidebar of the app is fetched from the server side itself. This data is used as a fallback data in a SWR hook that I am using. This allows me to cache and invalidate server side data in the same way as for other data such as search results from search API and message lists from the messages API. When a user creates a new chat, this chats data is invalidated, explaining the integration between client side cache and server side data.
 
 ### Rendering large number of messages and optimizations
@@ -92,6 +93,11 @@ The main page `/chats`, where the core functionality of the application lies, is
 A chat application is bound to have a large number of messages. Rendering a lists containing a large amount of data always leads to performance issues and fps drops. In order to make rendering the same more performant, I have used the concept of windowing. Windowing is a technique that ensures that lists only render items that are visible in the current specified view port. As the user scrolls, the items out of the current viewport are removed and are added back only when they are present in the current view port.I have used a library called react-window for the same which optimizes rendering a large amount of messages. This approach can be used to maintain constant 60 fps, however, the problem of the API fetching large number of messages still persists. List virtulization or Windowing only optimizes rendering of large amounts of data.<br>
 Another approach is to use an infinite scroll + paginated APIs , this virtualizes the list, as well as fetches data in chunks instead of fetching the entire data, solving both the problems. However, invalidating such cached data may not work effectively and may lead to inconsistencies in the data as realtime communication is involved.
 
-### Variable lists and message sizes
+### Variable size lists and dynamic message sizes
 
-The variable virtualized lists HOC provided by react-window takes in an argument which requires to estimate the height of each element (or provide a function to do so) in the list before hand in order to render the list effectively. Now each message is of variable length - there might be a few characters in the message or a large amount of characters (kept as 2^13 for maximum message size). Morever the height of message changes as the window is resized. Calculating the exact height while virtualizing the list proved to be a challenging component of the project. But I managed to tackle the same using event-listeners, refs and some of the APIs of react-window.
+The variable sized virtualized lists HOC provided by react-window takes in an argument which requires to estimate the height of each element (or provide a function to do so) in the list before hand in order to render the list effectively. Now each message is of variable length - there might be a few characters in the message or a large amount of characters (kept 2^12 as maximum message size). Morever the height of message changes as the window is resized. Calculating the exact height while virtualizing the list proved to be a challenging component of the project. But I managed to tackle the same using event-listeners, refs and some of the APIs of react-window.
+
+### Optimistic UI
+
+Optimistic UI is an approach where the client state is prematurely updated with new data before it is sent to the backend server. We are "optimistic" that the request that'll be sent to the backend would be successful.<br>
+Optimistic UI are used to simulate the results that'll be obtained after the database is updated. A request to the backend server is made and once the response is received from the server, the optimistic result is discarded and replaced with the actual result. In case the request fails, the changes currently being made to the client state are rolled back.
