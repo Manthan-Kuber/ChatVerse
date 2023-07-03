@@ -22,13 +22,13 @@ const ChatInputForm = (props: {
     if (textAreaRef.current) {
       const numberOfLines =
         textAreaRef.current.value.split(/\r\n|\r|\n/).length;
-      console.log(textAreaRef.current.textLength);
       //count number of lines to handle whitespace and textlength to handle overflow with number of characters
+      if (textAreaRef.current.textLength === 0)
+        textAreaRef.current.style.height === "auto";
       if (
         numberOfLines < 7 &&
-        textAreaRef.current.textLength <= textAreaHeight * 6
+        textAreaRef.current.scrollHeight <= textAreaHeight * 5
       ) {
-        console.log(numberOfLines < 7);
         textAreaRef.current.style.height = "auto";
         textAreaRef.current.style.height =
           Math.max(textAreaRef.current.scrollHeight, textAreaHeight) + "px";
