@@ -289,7 +289,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           }`}
         >
           <div
-            className={`relative flex-1  ${
+            className={`relative flex-1 overflow-y-hidden  ${
               !currentChat ? "flex items-center justify-center " : ""
             }`}
           >
