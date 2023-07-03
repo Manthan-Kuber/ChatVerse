@@ -20,7 +20,17 @@ const CustomHead = () => {
     <Head>
       {/* Title element should strictly have a single child */}
       <title>{`ChatVerse ${getCurrTitle()}`}</title>
-      <meta name="description" content="ChatVerse - a chat app by Manthan Kuber" />
+      <meta name="description" content="A chat app built by Manthan Kuber" />
+      <meta
+        property="og:description"
+        content="A chat app built by Manthan Kuber"
+      />
+      <meta property="og:image" content="/favicon.ico"></meta>
+      <meta property="og:title" content="ChatVerse"></meta>
+      <meta
+        property="og:url"
+        content="https://chat-verse-omega.vercel.app/"
+      ></meta>
       <link rel="icon" href="/favicon.ico" />
     </Head>
   );
