@@ -20,10 +20,13 @@ const CustomHead = () => {
     <Head>
       {/* Title element should strictly have a single child */}
       <title>{`ChatVerse ${getCurrTitle()}`}</title>
-      <meta name="description" content="A chat app built by Manthan Kuber" />
+      <meta
+        name="description"
+        content="A chat app built by Manthan Kuber with TypeScript, Next.js, and Socket.IO"
+      />
       <meta
         property="og:description"
-        content="A chat app built by Manthan Kuber"
+        content="A chat app built by Manthan Kuber with TypeScript, Next.js, and Socket.IO"
       />
       <meta property="og:image" content="/favicon.ico"></meta>
       <meta property="og:title" content="ChatVerse"></meta>
