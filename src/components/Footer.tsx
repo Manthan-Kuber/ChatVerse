@@ -34,21 +34,21 @@ const Footer = () => {
       <span className="text-xs xs:text-sm  sm:text-lg">Made with</span>
       <ul className="mx-2 flex items-center gap-2">{techStackList}</ul>
       <span className="text-xs xs:text-sm  sm:text-lg">by</span>
-      <a
+      <div
         className="ml-1 italic"
-        href="https://github.com/Manthan-Kuber"
-        target="_blank"
-        rel="noopener noreferrer"
+        // href="https://github.com/Manthan-Kuber"
+        // target="_blank"
+        // rel="noopener noreferrer"
       >
         {/* TODO: Add underline animation on hover */}
         <div className="group w-fit">
-          <span className="text-xs xs:text-sm sm:text-lg">Manthan Kuber</span>
+          <span className="text-xs xs:text-sm sm:text-lg">Siuussy Bakas</span>
           <GradientUnderline
             className="w-0 transition-all duration-200 group-hover:w-full"
             height="h-0.5"
           />
         </div>
-      </a>
+      </div>
     </footer>
   );
 };
