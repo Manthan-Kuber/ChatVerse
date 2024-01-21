@@ -42,7 +42,7 @@ const Home: NextPage = () => {
       >
         <motion.a
           className="link-btn flex items-center gap-2"
-          href="https://github.com/Manthan-Kuber/ChatVerse"
+          href="https://github.com/Manthan-Kuber/DevFest3.0"
           target="_blank"
           rel="noreferer"
           variants={fadeInUp}
