@@ -39,10 +39,10 @@ model User {
   email         String?                   @unique
   emailVerified DateTime?
   image         String?
-  conversations ConversationParticipant[]
   accounts      Account[]
-  sessions      Session[]
+  conversations ConversationParticipant[]
   messages      Message[]
+  sessions      Session[]
 }
 
 model VerificationToken {
@@ -55,30 +55,30 @@ model VerificationToken {
 
 model Conversation {
   id              String                    @id @default(cuid())
-  participants    ConversationParticipant[]
-  messages        Message[]                 @relation("conversationMessages")
-  latestMessage   Message?                  @relation(name: "latestConversationMessage", fields: [latestMessageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   latestMessageId String?                   @unique
   createdAt       DateTime                  @default(now())
   updatedAt       DateTime                  @updatedAt
+  latestMessage   Message?                  @relation("latestConversationMessage", fields: [latestMessageId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  participants    ConversationParticipant[]
+  messages        Message[]                 @relation("conversationMessages")
 }
 
 model ConversationParticipant {
   id             String       @id @default(cuid())
-  user           User         @relation(fields: [userId], references: [id])
   userId         String
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
   conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  user           User         @relation(fields: [userId], references: [id])
 }
 
 model Message {
   id             String        @id @default(cuid())
-  conversation   Conversation  @relation(name: "conversationMessages", fields: [conversationId], references: [id])
-  conversationId String
-  isLatestIn     Conversation? @relation("latestConversationMessage")
-  sender         User          @relation(fields: [senderId], references: [id])
-  senderId       String
-  body           String
   createdAt      DateTime      @default(now())
+  body           String
+  conversationId String
+  senderId       String
   updatedAt      DateTime      @updatedAt
+  isLatestIn     Conversation? @relation("latestConversationMessage")
+  conversation   Conversation  @relation("conversationMessages", fields: [conversationId], references: [id])
+  sender         User          @relation(fields: [senderId], references: [id])
 }
