@@ -21,7 +21,7 @@ import { getServerAuthSession } from "../server/common/get-server-auth-session";
 import { GlobalStateProvider } from "../context/chats.context";
 import Image from "next/image";
 import MessageList from "../components/MessageList";
-import { fetcher, scrollIntoView, shimmer, toBase64 } from "../utils/functions";
+import { fetcher, shimmer, toBase64 } from "../utils/functions";
 import { env } from "../env/client.mjs";
 import useSwr from "swr";
 import { type GetMessages } from "./api/chats/get-messages";
@@ -30,6 +30,8 @@ import { type GetChats, getChats } from "../server/common/getChats";
 import SidebarWrapper from "../components/SidebarWrapper";
 import { BsChevronDoubleDown } from "react-icons/bs";
 import { type VariableSizeList as List } from "react-window";
+import ChatVerseLoader from "../components/ChatVerseLoader";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 type ChatProps = {
   chats: GetChats | null;
@@ -108,6 +110,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
   const listRef = useRef<List>(null); //Ref for react window's variable size list
+  const [publicKey, setPublicKey] = useLocalStorage("publicKey", "");
+  const [privateKey, setPrivateKey] = useLocalStorage("privateKey", "");
 
   const {
     data: MessagesArray,
@@ -255,6 +259,26 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       toast.remove();
     };
   }, [fetchError, error]);
+
+  const initializeKeyPair = async () => {
+    try {
+      if (!publicKey || !privateKey) {
+        const JSEncrypt = (await import("jsencrypt")).default; // Dynamic import to avoid window object error
+        const crypt = new JSEncrypt({ default_key_size: "2048" }); // Encryption object
+        // Use crypt.setPublicKey() and set value from localstorage while encryption / decryption
+        setPublicKey(crypt.getPublicKey());
+        setPrivateKey(crypt.getPrivateKey());
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    initializeKeyPair();
+  }, [publicKey,privateKey]);
+
+  if (!publicKey) return <ChatVerseLoader fullScreen />;
 
   return (
     <motion.div
