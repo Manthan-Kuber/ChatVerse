@@ -263,7 +263,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const initializeKeyPair = async () => {
     try {
       if (!publicKey || !privateKey) {
-        const JSEncrypt = (await import("jsencrypt")).default; // Dynamic import to avoid window object error
+        const JSEncrypt = (await import("jsencrypt")).default; // Dynamic import to avoid window object undefined error
         const crypt = new JSEncrypt({ default_key_size: "2048" }); // Encryption object
         // Use crypt.setPublicKey() and set value from localstorage while encryption / decryption
         setPublicKey(crypt.getPublicKey());
