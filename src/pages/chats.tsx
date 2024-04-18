@@ -32,6 +32,7 @@ import { BsChevronDoubleDown } from "react-icons/bs";
 import { type VariableSizeList as List } from "react-window";
 import ChatVerseLoader from "../components/ChatVerseLoader";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { type UpdatePublicKey } from "./api/publickey/set";
 
 type ChatProps = {
   chats: GetChats | null;
@@ -95,6 +96,29 @@ async function sendMessage(
   });
   return [...(MessagesArray || []), newMessage]; //Cache will be swapped with the returned value on successful request
 }
+
+const updatePublicKey = async ({
+  url,
+  publicKey,
+  userId,
+}: {
+  url: string;
+  publicKey: string;
+  userId: string;
+}) => {
+  const options: RequestInit = {
+    method: "POST",
+    body: JSON.stringify({
+      publicKey,
+      userId,
+    }),
+  };
+  const { message, publicKey: newPublicKey }: UpdatePublicKey = await fetcher(
+    url,
+    options
+  );
+  console.table({ message, newPublicKey }); //TODO Remove later
+};
 
 const clientUrl = env.NEXT_PUBLIC_CLIENT_URL;
 
@@ -266,8 +290,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         const JSEncrypt = (await import("jsencrypt")).default; // Dynamic import to avoid window object undefined error
         const crypt = new JSEncrypt({ default_key_size: "2048" }); // Encryption object
         // Use crypt.setPublicKey() and set value from localstorage while encryption / decryption
-        setPublicKey(crypt.getPublicKey());
+        const publicKey = crypt.getPublicKey();
+        setPublicKey(publicKey);
         setPrivateKey(crypt.getPrivateKey());
+        const url = `${clientUrl}/api/publickey/set`;
+        updatePublicKey({ publicKey, userId: currentUserId!, url });
       }
     } catch (error) {
       console.log(error);
@@ -276,7 +303,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
 
   useEffect(() => {
     initializeKeyPair();
-  }, [publicKey,privateKey]);
+  }, [publicKey, privateKey]);
 
   if (!publicKey) return <ChatVerseLoader fullScreen />;
 

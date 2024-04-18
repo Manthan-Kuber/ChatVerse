@@ -23,7 +23,7 @@ export default async function handler(
     });
   }
 
-  const parsedSchema = reqBodySchema.safeParse(req.body);
+  const parsedSchema = reqBodySchema.safeParse(JSON.parse(req.body));
 
   if (!parsedSchema.success)
     return res.status(400).json({
@@ -49,3 +49,8 @@ export default async function handler(
     return res.status(500).json({ message: "Internal server error" });
   }
 }
+
+export type UpdatePublicKey = {
+  message: string;
+  publicKey?: string;
+};
