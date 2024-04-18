@@ -134,8 +134,14 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   const receiverId = currentChat?.participants.map((p) => p.user.id)[0];
   const conversationId = currentChat?.id;
   const listRef = useRef<List>(null); //Ref for react window's variable size list
-  const [publicKey, setPublicKey] = useLocalStorage("publicKey", "");
-  const [privateKey, setPrivateKey] = useLocalStorage("privateKey", "");
+  const [publicKey, setPublicKey] = useLocalStorage(
+    `publicKey_${currentUserId!}`,
+    ""
+  );
+  const [privateKey, setPrivateKey] = useLocalStorage(
+    `privateKey_${currentUserId!}`,
+    ""
+  );
 
   const {
     data: MessagesArray,
