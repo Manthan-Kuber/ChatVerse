@@ -60,6 +60,7 @@ model Conversation {
   messages        Message[]                 @relation("conversationMessages")
   latestMessage   Message?                  @relation(name: "latestConversationMessage", fields: [latestMessageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   latestMessageId String?                   @unique
+  symmetricKey    String                    @default("symmetricKey")
   createdAt       DateTime                  @default(now())
   updatedAt       DateTime                  @updatedAt
 }
@@ -82,4 +83,5 @@ model Message {
   body           String
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+  isEncrypted    Boolean       @default(false)
 }
