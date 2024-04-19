@@ -39,7 +39,7 @@ model User {
   email         String?                   @unique
   emailVerified DateTime?
   image         String?
-  publicKey     String                    @default("publicKey")
+  publicKey     String?
   conversations ConversationParticipant[]
   accounts      Account[]
   sessions      Session[]
@@ -60,7 +60,7 @@ model Conversation {
   messages        Message[]                 @relation("conversationMessages")
   latestMessage   Message?                  @relation(name: "latestConversationMessage", fields: [latestMessageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   latestMessageId String?                   @unique
-  symmetricKey    String                    @default("symmetricKey")
+  symmetricKey    String?
   createdAt       DateTime                  @default(now())
   updatedAt       DateTime                  @updatedAt
 }
