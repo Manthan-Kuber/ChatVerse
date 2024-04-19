@@ -19,6 +19,7 @@ import type { Conversation } from "@prisma/client";
 import type { GetChats } from "../server/common/getChats";
 import { useSession } from "next-auth/react";
 import { RotatingLines } from "react-loader-spinner";
+import { type UpdateSymmetricKey } from "../pages/api/symmetrickey/set";
 
 const SearchResultSkeleton = ({ count }: { count?: number }) => {
   return (
@@ -64,6 +65,7 @@ const SearchResults = ({
   const GlobalState = useContext(GlobalStateContext);
   const { data: session } = useSession();
   const [newChatId, setNewChatId] = useState("");
+
   const {
     data: SearchedUsersArray,
     error,
@@ -88,7 +90,7 @@ const SearchResults = ({
     }
   );
 
-  const handleChatCreation = (userId: string) => {
+  const handleChatCreation = async (userId: string) => {
     //Conv id is combination of either
     const comb_1 = checkChatExists(session?.user?.id + userId);
     const comb_2 = checkChatExists(userId + session?.user?.id);
@@ -106,10 +108,48 @@ const SearchResults = ({
     toast.promise(createChatPromise, {
       loading: "Creating Chat...",
       success: (data) => {
+        exchangeSymmetricKey(data.chat.id, userId);
         mutateChats();
         setValue("");
         setNewChatId(data.chat.id);
         return "Created chat successfully";
+      },
+      error: (err) => `${(err as { message: string }).message}`,
+    });
+  };
+
+  const exchangeSymmetricKey = async (
+    converstionId: string,
+    userId: string
+  ) => {
+    const JSEncrypt = (await import("jsencrypt")).default;
+    const crypt = new JSEncrypt({ default_key_size: "2048" });
+    console.log(userId);
+    let url = `${clientUrl}/api/publickey/?userId=${userId}`;
+    const { publicKey }: { publicKey: string } = await fetcher(url, {});
+    console.log(publicKey);
+    crypt.setPublicKey(publicKey);
+    url = `${clientUrl}/api/symmetrickey/set`;
+    const symmKey = crypto.randomUUID();
+    console.log(symmKey);
+    localStorage.setItem(`symmetricKey_${converstionId}`, symmKey);
+    const encryptedSymmetricKey = crypt.encrypt(symmKey);
+    console.table({ encryptedSymmetricKey, converstionId });
+    const updateSymmetricKeyPromise: Promise<UpdateSymmetricKey> = fetcher(
+      url,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          conversationId: newChatId,
+          symmetricKey: encryptedSymmetricKey!,
+        }),
+      }
+    );
+    toast.promise(updateSymmetricKeyPromise, {
+      loading: "Exchanging Symmetric Key...",
+      success: ({ message, symmetricKey }) => {
+        console.table({ message, symmetricKey });
+        return "Exchanged Symmetric Key successfully";
       },
       error: (err) => `${(err as { message: string }).message}`,
     });

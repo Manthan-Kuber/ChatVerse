@@ -142,6 +142,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     `privateKey_${currentUserId!}`,
     ""
   );
+  const [symmetricKey, setSymmetricKey] = useLocalStorage(
+    `symmetricKey_${conversationId!}`,
+    ""
+  );
 
   const {
     data: MessagesArray,
@@ -306,6 +310,30 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       console.log(error);
     }
   };
+
+  const getSymmetricKey = async () => {
+    try {
+      //add if
+      if(conversationId && !symmetricKey){
+        const url = `${clientUrl}/api/symmetrickey/?conversationId=${conversationId}&userId=${currentUserId}`;
+        const { symmetricKey: symmKey }: { symmetricKey: string } =
+          await fetcher(url, {});
+        const JSEncrypt = (await import("jsencrypt")).default;
+        const crypt = new JSEncrypt({ default_key_size: "2048" });
+        crypt.setPrivateKey(privateKey);
+        crypt.setPublicKey(publicKey)
+        const dec = crypt.decrypt(symmKey);
+        console.log(dec);
+        setSymmetricKey(symmKey);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getSymmetricKey();
+  }, [symmetricKey,conversationId]);
 
   useEffect(() => {
     initializeKeyPair();
