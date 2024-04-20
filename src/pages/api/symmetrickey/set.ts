@@ -32,6 +32,8 @@ export default async function handler(
 
   const { conversationId, symmetricKey } = parsedSchema.data;
 
+  console.table({ conversationId, symmetricKey });
+
   //TODO Uncomment later
   // if (userId !== session.user.id)
   //   return res.status(403).json({ message: "Forbidden Operation" });

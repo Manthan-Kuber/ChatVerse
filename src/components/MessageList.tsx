@@ -100,6 +100,7 @@ const MessageList = ({
                   chatName={chatName}
                   message={messageList[index]!}
                   currentUserId={currentUserId!}
+                  conversationId={currentChat?.id!}
                 />
               </Row>
             </li>

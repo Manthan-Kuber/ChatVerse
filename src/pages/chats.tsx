@@ -199,6 +199,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     e.preventDefault();
     try {
       if (socket && currentChat) {
+        const CryptoJS = (await import("crypto-js")).default;
+        const cipherText = CryptoJS.AES.encrypt(
+          message,
+          symmetricKey
+        ).toString();
         socket.emit(events.PRIVATE_MESSAGE, {
           message,
           from: currentUserId,
@@ -209,7 +214,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         const sendMessageUrl = `${clientUrl}/api/chats/send-message`;
         const messageParams = {
           conversationId: conversationId!,
-          messageBody: message,
+          messageBody: cipherText,
           receiverId: receiverId!,
           MessagesArray: MessagesArray,
         };
@@ -217,7 +222,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
           id: crypto.randomUUID(),
           conversationId: conversationId!,
           senderId: currentUserId!,
-          body: message,
+          body: cipherText,
           createdAt: new Date(), //Make new message date as current time
           updatedAt: new Date(),
         };
@@ -247,11 +252,18 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       from: string;
       conversationId: string;
     }) => {
+      const CryptoJS = (await import("crypto-js")).default;
+      // const cipherText = CryptoJS.AES.encrypt(
+      //   data.message,
+      //   symmetricKey
+      // ).toString();
+      const bytes  = CryptoJS.AES.decrypt(data.message,symmetricKey);
+      const plainText = bytes.toString(CryptoJS.enc.Utf8); 
       const newMessage: Message = {
         id: crypto.randomUUID(),
         conversationId: data.conversationId,
         senderId: data.from,
-        body: data.message,
+        body: plainText,
         createdAt: new Date(), //Make new message date as current time
         updatedAt: new Date(),
       };
@@ -262,16 +274,9 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       }); //Pass a function to obtain current data in the cache as param
       updateLatestMessage({
         conversationId: data.conversationId,
-        latestMessage: data.message,
+        latestMessage: plainText,
       });
-      const CryptoJS = (await import("crypto-js")).default;
-      const cipherText = CryptoJS.AES.encrypt(
-        data.message,
-        symmetricKey
-      ).toString();
-      const bytes  = CryptoJS.AES.decrypt(cipherText,symmetricKey);
-      const plainText = bytes.toString(CryptoJS.enc.Utf8); 
-      console.table({ cipherText, plainText });
+      console.table({ cipherText:data.message, plainText });
     },
     [MessagesArray]
   );

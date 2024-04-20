@@ -108,10 +108,12 @@ const SearchResults = ({
     toast.promise(createChatPromise, {
       loading: "Creating Chat...",
       success: (data) => {
-        exchangeSymmetricKey(data.chat.id, userId);
         mutateChats();
         setValue("");
         setNewChatId(data.chat.id);
+        setTimeout(() => {
+          exchangeSymmetricKey(data.chat.id, userId);
+        }, 1000);
         return "Created chat successfully";
       },
       error: (err) => `${(err as { message: string }).message}`,
@@ -136,7 +138,7 @@ const SearchResults = ({
     const encryptedSymmetricKey = crypt.encrypt(symmKey);
     console.log(encryptedSymmetricKey);
     console.table({ encryptedSymmetricKey, converstionId });
-    console.log(converstionId)
+    console.log(converstionId);
     const updateSymmetricKeyPromise: Promise<UpdateSymmetricKey> = fetcher(
       url,
       {
