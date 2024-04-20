@@ -241,7 +241,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
   };
 
   const privateMessage = useCallback(
-    (data: {
+    async (data: {
       message: string;
       to: string;
       from: string;
@@ -264,6 +264,14 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         conversationId: data.conversationId,
         latestMessage: data.message,
       });
+      const CryptoJS = (await import("crypto-js")).default;
+      const cipherText = CryptoJS.AES.encrypt(
+        data.message,
+        symmetricKey
+      ).toString();
+      const bytes  = CryptoJS.AES.decrypt(cipherText,symmetricKey);
+      const plainText = bytes.toString(CryptoJS.enc.Utf8); 
+      console.table({ cipherText, plainText });
     },
     [MessagesArray]
   );
@@ -313,18 +321,17 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
 
   const getSymmetricKey = async () => {
     try {
-      //add if
-      if(conversationId && !symmetricKey){
+      if (conversationId && !symmetricKey) {
         const url = `${clientUrl}/api/symmetrickey/?conversationId=${conversationId}&userId=${currentUserId}`;
         const { symmetricKey: symmKey }: { symmetricKey: string } =
           await fetcher(url, {});
         const JSEncrypt = (await import("jsencrypt")).default;
         const crypt = new JSEncrypt({ default_key_size: "2048" });
         crypt.setPrivateKey(privateKey);
-        crypt.setPublicKey(publicKey)
-        const dec = crypt.decrypt(symmKey);
-        console.log(dec);
+        // crypt.setPublicKey(publicKey)
         setSymmetricKey(symmKey);
+        const decryptedKey = crypt.decrypt(symmKey);
+        console.log(decryptedKey);
       }
     } catch (error) {
       console.log(error);
@@ -333,7 +340,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
 
   useEffect(() => {
     getSymmetricKey();
-  }, [symmetricKey,conversationId]);
+  }, [symmetricKey, conversationId]);
 
   useEffect(() => {
     initializeKeyPair();

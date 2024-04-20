@@ -134,14 +134,16 @@ const SearchResults = ({
     console.log(symmKey);
     localStorage.setItem(`symmetricKey_${converstionId}`, symmKey);
     const encryptedSymmetricKey = crypt.encrypt(symmKey);
+    console.log(encryptedSymmetricKey);
     console.table({ encryptedSymmetricKey, converstionId });
+    console.log(converstionId)
     const updateSymmetricKeyPromise: Promise<UpdateSymmetricKey> = fetcher(
       url,
       {
         method: "POST",
         body: JSON.stringify({
           conversationId: newChatId,
-          symmetricKey: encryptedSymmetricKey!,
+          symmetricKey: symmKey,
         }),
       }
     );
