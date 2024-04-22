@@ -80,7 +80,6 @@ model Message {
   conversationId String
   senderId       String
   updatedAt      DateTime      @updatedAt
-  isEncrypted    Boolean       @default(false)
   isLatestIn     Conversation? @relation("latestConversationMessage")
   conversation   Conversation  @relation("conversationMessages", fields: [conversationId], references: [id])
   sender         User          @relation(fields: [senderId], references: [id])

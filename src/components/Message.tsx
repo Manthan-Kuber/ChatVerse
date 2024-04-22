@@ -31,7 +31,7 @@ const Message = ({
     const CryptoJS = (await import("crypto-js")).default;
     const bytes = CryptoJS.AES.decrypt(message, symmetricKey);
     setplainText(bytes.toString(CryptoJS.enc.Utf8))
-    console.table({message,plainText});
+    console.table({message,decryptedMessage:bytes.toString(CryptoJS.enc.Utf8)});
   };
 
   useEffect(() => {
