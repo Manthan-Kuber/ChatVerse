@@ -257,7 +257,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       //   data.message,
       //   symmetricKey
       // ).toString();
-      const bytes  = CryptoJS.AES.decrypt(data.message,symmetricKey);
+      const bytes  = CryptoJS.AES.decrypt(data.message,symmetricKey.toString());
       const plainText = bytes.toString(CryptoJS.enc.Utf8); 
       const newMessage: Message = {
         id: crypto.randomUUID(),
