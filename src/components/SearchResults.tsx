@@ -133,7 +133,7 @@ const SearchResults = ({
     crypt.setPublicKey(publicKey);
     url = `${clientUrl}/api/symmetrickey/set`;
     const symmKey = crypto.randomUUID();
-    console.log(symmKey);
+    console.log(symmKey); //FIXME JSON.stringify(symmKey)
     localStorage.setItem(`symmetricKey_${converstionId}`, symmKey);
     const encryptedSymmetricKey = crypt.encrypt(symmKey);
     console.log(encryptedSymmetricKey);

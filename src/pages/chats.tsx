@@ -146,6 +146,11 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     `symmetricKey_${conversationId!}`,
     ""
   );
+  const [encryptedSymmKey, setEncryptedSymmKey] = useLocalStorage(
+    "encryptedSymmetricKey",
+    ""
+  );
+  const [signature, setSignature] = useLocalStorage("signature", "");
 
   const {
     data: MessagesArray,
@@ -257,8 +262,8 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       //   data.message,
       //   symmetricKey
       // ).toString();
-      const bytes  = CryptoJS.AES.decrypt(data.message,symmetricKey.toString());
-      const plainText = bytes.toString(CryptoJS.enc.Utf8); 
+      const bytes = CryptoJS.AES.decrypt(data.message, symmetricKey);
+      const plainText = bytes.toString(CryptoJS.enc.Utf8);
       const newMessage: Message = {
         id: crypto.randomUUID(),
         conversationId: data.conversationId,
@@ -276,7 +281,7 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
         conversationId: data.conversationId,
         latestMessage: plainText,
       });
-      console.table({ cipherText:data.message, plainText });
+      console.table({ cipherText: data.message, plainText });
     },
     [MessagesArray]
   );
@@ -324,6 +329,19 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
     }
   };
 
+  const getSecurityParams = async () => {
+    const JSEncrypt = (await import("jsencrypt")).default;
+    const CryptoJS = (await import("crypto-js")).default;
+    const crypt = new JSEncrypt({ default_key_size: "2048" });
+    crypt.setPublicKey(publicKey);
+    const encrypted = crypt.encrypt(symmetricKey);
+    setEncryptedSymmKey(encrypted);
+    const sign = new JSEncrypt();
+    sign.setPrivateKey(privateKey);
+    const signature = sign.sign(privateKey, CryptoJS.SHA256,"sha256");
+    setSignature(signature);
+  };
+
   const getSymmetricKey = async () => {
     try {
       if (conversationId && !symmetricKey) {
@@ -342,6 +360,10 @@ const chats = ({ chats, fetchError, currentUserId }: ChatProps) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!encryptedSymmKey || !signature) getSecurityParams();
+  }, [encryptedSymmKey, signature]);
 
   useEffect(() => {
     getSymmetricKey();
